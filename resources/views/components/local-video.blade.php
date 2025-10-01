@@ -1,13 +1,13 @@
 @props(['lesson', 'title' => 'Video'])
 
-<div class="relative w-full h-screen bg-black group flex items-center justify-center"
+<div class="relative w-full h-full bg-black group flex items-center justify-center"
      x-data="videoPlayer('{{ route('lessons.stream', $lesson) }}')"
      @mousemove="showControls"
      @mouseleave="hideControlsDelayed">
     <!-- Video Element -->
     <video
         x-ref="video"
-        class="h-full w-auto max-w-full"
+        class="w-full h-full object-contain"
         :class="{ 'scale-x-[-1]': mirrored }"
         preload="metadata"
         :src="videoSrc"

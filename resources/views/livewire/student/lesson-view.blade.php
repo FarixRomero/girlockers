@@ -1,22 +1,22 @@
 <div>
     <!-- Top Navigation Bar -->
-    <div class="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/90 to-transparent px-6 py-4">
-        <nav class="flex items-center justify-between text-sm">
-            <div class="flex items-center space-x-2 text-cream/70">
+    <div class="fixed top-0 left-0 right-0 z-50 bg-purple-darker/95 backdrop-blur-sm border-b border-pink-vibrant/10 px-6 h-14">
+        <div class="flex items-center justify-between h-full">
+            <div class="flex items-center space-x-2 text-xs text-cream/70">
                 <a href="{{ route('courses.index') }}" wire:navigate class="hover:text-pink-vibrant transition">Cursos</a>
                 <span>/</span>
                 <a href="{{ route('courses.show', $lesson->module->course) }}" wire:navigate class="hover:text-pink-vibrant transition">{{ $lesson->module->course->title }}</a>
                 <span>/</span>
                 <span class="text-cream">{{ $lesson->title }}</span>
             </div>
-            <div class="text-cream font-display text-lg">
+            <div class="text-cream font-display text-base">
                 {{ $lesson->title }}
             </div>
-        </nav>
+        </div>
     </div>
 
-    <!-- Video Player Section - Full Height -->
-    <div class="h-screen bg-black sticky top-0 z-10">
+    <!-- Video Player Section - calc(100vh - navbar height) -->
+    <div class="fixed top-14 left-0 right-0 bg-black z-10" style="height: calc(100vh - 3.5rem);">
         @if($lesson->video_type === 'youtube' && $lesson->youtube_id)
             <x-youtube-embed :youtube-id="$lesson->youtube_id" :title="$lesson->title" />
         @elseif($lesson->video_type === 'local' && $lesson->video_path)
@@ -34,7 +34,7 @@
     </div>
 
     <!-- Lesson Info & Content Below Video -->
-    <div class="relative z-20 bg-purple-darkest">
+    <div class="relative z-20 bg-purple-darkest" style="margin-top: 100vh;">
         <div class="container mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Content -->

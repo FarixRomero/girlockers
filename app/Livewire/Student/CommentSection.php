@@ -12,18 +12,18 @@ class CommentSection extends Component
     use AuthorizesRequests;
 
     public Lesson $lesson;
-    public $body = '';
+    public $content = '';
     public $editingCommentId = null;
-    public $editingBody = '';
+    public $editingContent = '';
 
     protected $rules = [
-        'body' => 'required|string|min:3|max:1000',
+        'content' => 'required|string|min:3|max:1000',
     ];
 
     protected $messages = [
-        'body.required' => 'El comentario no puede estar vacío.',
-        'body.min' => 'El comentario debe tener al menos 3 caracteres.',
-        'body.max' => 'El comentario no puede exceder 1000 caracteres.',
+        'content.required' => 'El comentario no puede estar vacío.',
+        'content.min' => 'El comentario debe tener al menos 3 caracteres.',
+        'content.max' => 'El comentario no puede exceder 1000 caracteres.',
     ];
 
     public function mount(Lesson $lesson)
@@ -39,10 +39,10 @@ class CommentSection extends Component
         Comment::create([
             'lesson_id' => $this->lesson->id,
             'user_id' => auth()->id(),
-            'body' => $this->body,
+            'content' => $this->content,
         ]);
 
-        $this->body = '';
+        $this->content = '';
         $this->dispatch('comment-posted');
 
         session()->flash('comment-success', 'Comentario publicado exitosamente.');
@@ -57,16 +57,16 @@ class CommentSection extends Component
         session()->flash('comment-success', 'Comentario eliminado.');
     }
 
-    public function startEditing($commentId, $body)
+    public function startEditing($commentId, $content)
     {
         $this->editingCommentId = $commentId;
-        $this->editingBody = $body;
+        $this->editingContent = $content;
     }
 
     public function cancelEditing()
     {
         $this->editingCommentId = null;
-        $this->editingBody = '';
+        $this->editingContent = '';
     }
 
     public function updateComment(Comment $comment)
@@ -74,15 +74,15 @@ class CommentSection extends Component
         $this->authorize('update', $comment);
 
         $this->validate([
-            'editingBody' => 'required|string|min:3|max:1000',
+            'editingContent' => 'required|string|min:3|max:1000',
         ]);
 
         $comment->update([
-            'body' => $this->editingBody,
+            'content' => $this->editingContent,
         ]);
 
         $this->editingCommentId = null;
-        $this->editingBody = '';
+        $this->editingContent = '';
 
         session()->flash('comment-success', 'Comentario actualizado.');
     }

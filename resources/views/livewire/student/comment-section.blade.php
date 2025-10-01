@@ -21,21 +21,21 @@
     <!-- Comment Form -->
     <form wire:submit="postComment" class="mb-8">
         <div class="mb-4">
-            <label for="comment-body" class="block text-cream/80 text-sm mb-2">Deja tu comentario</label>
+            <label for="comment-content" class="block text-cream/80 text-sm mb-2">Deja tu comentario</label>
             <textarea
-                wire:model="body"
-                id="comment-body"
+                wire:model="content"
+                id="comment-content"
                 rows="4"
                 class="w-full bg-purple-darker border border-pink-vibrant/20 rounded-lg px-4 py-3 text-cream placeholder-cream/40 focus:outline-none focus:border-pink-vibrant transition resize-none"
                 placeholder="Comparte tus pensamientos sobre esta lección..."></textarea>
-            @error('body')
+            @error('content')
                 <p class="text-red-400 text-sm mt-2">{{ $message }}</p>
             @enderror
         </div>
 
         <div class="flex items-center justify-between">
             <span class="text-cream/60 text-sm">
-                {{ strlen($body) }}/1000 caracteres
+                {{ strlen($content) }}/1000 caracteres
             </span>
             <button
                 type="submit"
@@ -73,7 +73,7 @@
                         <div class="flex items-center space-x-2">
                             @if(auth()->id() === $comment->user_id && $editingCommentId !== $comment->id)
                                 <button
-                                    wire:click="startEditing({{ $comment->id }}, '{{ addslashes($comment->body) }}')"
+                                    wire:click="startEditing({{ $comment->id }}, '{{ addslashes($comment->content) }}')"
                                     class="text-cream/60 hover:text-pink-vibrant transition p-2"
                                     title="Editar">
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -99,10 +99,10 @@
                     <!-- Edit Form -->
                     <form wire:submit="updateComment({{ $comment->id }})" class="space-y-3">
                         <textarea
-                            wire:model="editingBody"
+                            wire:model="editingContent"
                             rows="3"
                             class="w-full bg-purple-darker border border-pink-vibrant/20 rounded-lg px-3 py-2 text-cream placeholder-cream/40 focus:outline-none focus:border-pink-vibrant transition resize-none text-sm"></textarea>
-                        @error('editingBody')
+                        @error('editingContent')
                             <p class="text-red-400 text-sm">{{ $message }}</p>
                         @enderror
                         <div class="flex items-center space-x-2">
@@ -118,8 +118,8 @@
                         </div>
                     </form>
                 @else
-                    <!-- Comment Body -->
-                    <p class="text-cream/90 leading-relaxed whitespace-pre-wrap">{{ $comment->body }}</p>
+                    <!-- Comment Content -->
+                    <p class="text-cream/90 leading-relaxed whitespace-pre-wrap">{{ $comment->content }}</p>
 
                     @if($comment->created_at != $comment->updated_at)
                         <p class="text-cream/50 text-xs mt-2 italic">(editado)</p>

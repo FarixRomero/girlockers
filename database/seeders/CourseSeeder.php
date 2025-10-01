@@ -17,8 +17,9 @@ class CourseSeeder extends Seeder
         // Locking Básico Course
         $lockingBasico = Course::create([
             'title' => 'Locking Básico',
+            'slug' => 'locking-basico',
             'description' => 'Aprende los fundamentos del Locking desde cero. Este curso te enseñará las técnicas básicas y movimientos esenciales del estilo Locking, perfecto para principiantes que quieren dominar esta técnica de baile funk.',
-            'level' => 'beginner',
+            'level' => 'principiante',
             'image' => null,
             'is_published' => true,
         ]);
@@ -77,13 +78,15 @@ class CourseSeeder extends Seeder
             ]);
 
             $lessonOrder = 1;
+            // Video de locking dance
+            $youtubeIds = ['7QFSRcIN2EY'];
             foreach ($moduloData['lessons'] as $lessonData) {
                 Lesson::create([
                     'module_id' => $module->id,
                     'title' => $lessonData['title'],
                     'description' => $lessonData['description'],
                     'video_type' => 'youtube',
-                    'youtube_id' => null,
+                    'youtube_id' => $youtubeIds[array_rand($youtubeIds)],
                     'video_path' => null,
                     'duration' => 0,
                     'is_trial' => $lessonData['is_trial'] ?? false,
@@ -95,8 +98,9 @@ class CourseSeeder extends Seeder
         // Locking Intermedio Course
         $lockingIntermedio = Course::create([
             'title' => 'Locking Intermedio',
+            'slug' => 'locking-intermedio',
             'description' => 'Lleva tu Locking al siguiente nivel con variaciones avanzadas. Aprende a agregar estilo personal y complejidad a los movimientos básicos que ya dominas.',
-            'level' => 'intermediate',
+            'level' => 'intermedio',
             'image' => null,
             'is_published' => true,
         ]);
@@ -159,13 +163,15 @@ class CourseSeeder extends Seeder
             ]);
 
             $lessonOrder = 1;
+            // Video de locking dance
+            $youtubeIds = ['7QFSRcIN2EY'];
             foreach ($moduloData['lessons'] as $lessonData) {
                 Lesson::create([
                     'module_id' => $module->id,
                     'title' => $lessonData['title'],
                     'description' => $lessonData['description'],
                     'video_type' => 'youtube',
-                    'youtube_id' => null,
+                    'youtube_id' => $youtubeIds[array_rand($youtubeIds)],
                     'video_path' => null,
                     'duration' => 0,
                     'is_trial' => $lessonData['is_trial'] ?? false,

@@ -35,8 +35,8 @@
         </button>
     </div>
 
-    <!-- Controls Bar -->
-    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transform transition-transform duration-300"
+    <!-- Controls Bar - Adjusted for mobile bottom nav (80px = nav height) -->
+    <div class="absolute left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 transform transition-transform duration-300 bottom-20 lg:bottom-0"
          :class="controlsVisible ? 'translate-y-0' : 'translate-y-full'">
         <!-- Progress Bar -->
         <div class="mb-3">

@@ -33,8 +33,8 @@
         @endif
     </div>
 
-    <!-- Lesson Info & Content Below Video -->
-    <div class="relative z-20 bg-purple-darkest" style="margin-top: 100vh;">
+    <!-- Lesson Info & Content Below Video - Hidden on mobile -->
+    <div class="hidden md:block relative z-20 bg-purple-darkest" style="margin-top: 100vh;">
         <div class="max-w-7xl mx-auto px-4 py-8">
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <!-- Main Content -->

@@ -9,14 +9,15 @@
         x-ref="video"
         class="w-full h-full object-contain"
         :class="{ 'scale-x-[-1]': mirrored }"
-        preload="metadata"
+        preload="auto"
         :src="videoSrc"
         @click="togglePlay"
         @play="isPlaying = true"
         @pause="isPlaying = false"
         @timeupdate="updateProgress"
         @loadedmetadata="onMetadataLoaded"
-        @ended="onEnded">
+        @ended="onEnded"
+        playsinline>
         <p class="text-cream/70 p-4">Tu navegador no soporta la reproducción de video HTML5.</p>
     </video>
 

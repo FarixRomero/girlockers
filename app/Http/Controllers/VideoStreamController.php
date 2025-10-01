@@ -45,7 +45,7 @@ class VideoStreamController extends Controller
                 $stream = fopen($path, 'rb');
                 fseek($stream, $start);
 
-                $buffer = 1024 * 8; // 8KB buffer
+                $buffer = 1024 * 256; // 256KB buffer for faster streaming
                 $remaining = $length;
 
                 while ($remaining > 0 && !feof($stream)) {
@@ -62,20 +62,28 @@ class VideoStreamController extends Controller
             $response->headers->set('Content-Length', $length);
             $response->headers->set('Content-Range', "bytes {$start}-{$end}/{$fileSize}");
             $response->headers->set('Accept-Ranges', 'bytes');
-            $response->headers->set('Cache-Control', 'public, max-age=3600');
+            $response->headers->set('Cache-Control', 'public, max-age=86400'); // Cache for 24 hours
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
 
         } else {
-            // No range requested, stream entire file
+            // No range requested, return initial chunk to allow quick playback
             $response = new StreamedResponse(function () use ($path) {
                 $stream = fopen($path, 'rb');
-                fpassthru($stream);
+                $buffer = 1024 * 256; // 256KB buffer
+
+                while (!feof($stream)) {
+                    echo fread($stream, $buffer);
+                    flush();
+                }
+
                 fclose($stream);
             }, 200);
 
             $response->headers->set('Content-Type', $mime);
             $response->headers->set('Content-Length', $fileSize);
             $response->headers->set('Accept-Ranges', 'bytes');
-            $response->headers->set('Cache-Control', 'public, max-age=3600');
+            $response->headers->set('Cache-Control', 'public, max-age=86400'); // Cache for 24 hours
+            $response->headers->set('X-Content-Type-Options', 'nosniff');
         }
 
         return $response;

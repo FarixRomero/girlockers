@@ -7,6 +7,9 @@
 
         <title>Admin - {{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/girllockers.jpg') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -15,7 +18,7 @@
             <!-- Sidebar (Desktop) -->
             <aside class="hidden lg:flex lg:flex-col lg:w-64 bg-purple-darker border-r border-pink-vibrant/20">
                 <div class="p-6">
-                    <h1 class="font-accent text-3xl text-pink-vibrant">Girl Lockers</h1>
+                    <h1 class="font-accent text-3xl text-pink-vibrant">Girls Lockers</h1>
                     <p class="text-cream/60 text-sm mt-1">Admin Panel</p>
                 </div>
 

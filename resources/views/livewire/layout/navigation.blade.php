@@ -24,7 +24,7 @@ new class extends Component
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('dashboard') }}" wire:navigate>
-                        <h1 class="font-accent text-2xl text-pink-vibrant">Girl Lockers</h1>
+                        <h1 class="font-accent text-2xl text-pink-vibrant">Girls Lockers</h1>
                     </a>
                 </div>
 

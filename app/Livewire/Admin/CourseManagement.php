@@ -36,7 +36,6 @@ class CourseManagement extends Component
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
-        'slug' => 'required|unique:courses,slug',
         'description' => 'required|min:10',
         'level' => 'required|in:principiante,intermedio,avanzado',
         'image' => 'nullable|image|max:2048',
@@ -45,9 +44,8 @@ class CourseManagement extends Component
 
     public function updatedTitle()
     {
-        if (!$this->isEditing) {
-            $this->slug = Str::slug($this->title);
-        }
+        // Generar slug automáticamente cada vez que cambia el título
+        $this->slug = Str::slug($this->title);
     }
 
     public function openCreateModal()
@@ -96,11 +94,20 @@ class CourseManagement extends Component
 
     public function saveCourse()
     {
-        if ($this->isEditing) {
-            $this->rules['slug'] = 'required|unique:courses,slug,' . $this->courseId;
-        }
+        // Generar slug antes de validar
+        $this->slug = Str::slug($this->title);
 
         $this->validate();
+
+        // Verificar unicidad del slug
+        $slugExists = Course::where('slug', $this->slug)
+            ->when($this->isEditing, fn($q) => $q->where('id', '!=', $this->courseId))
+            ->exists();
+
+        if ($slugExists) {
+            $this->addError('title', 'Ya existe un curso con un título similar.');
+            return;
+        }
 
         $data = [
             'title' => $this->title,

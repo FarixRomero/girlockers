@@ -7,6 +7,9 @@
 
         <title>{{ config('app.name', 'Laravel') }}</title>
 
+        <!-- Favicon -->
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/girllockers.jpg') }}">
+
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
@@ -14,7 +17,7 @@
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4">
             <div class="mb-8">
                 <a href="/" wire:navigate>
-                    <h1 class="font-accent text-4xl text-pink-vibrant">Girl Lockers</h1>
+                    <h1 class="font-accent text-4xl text-pink-vibrant">Girls Lockers</h1>
                 </a>
             </div>
 

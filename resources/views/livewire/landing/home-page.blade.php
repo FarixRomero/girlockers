@@ -3,7 +3,7 @@
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
         <!-- Background Image -->
         <div class="absolute inset-0">
-            <img src="{{ asset('images/girllockers.jpg') }}" alt="Girl Lockers" class="w-full h-full object-cover">
+            <img src="{{ asset('images/girllockers.jpg') }}" alt="Girls Lockers" class="w-full h-full object-cover">
             <div class="absolute inset-0 bg-black/50"></div>
         </div>
         <div class="absolute inset-0 bg-gradient-hero opacity-60"></div>
@@ -39,7 +39,7 @@
                     Nuestra Visión
                 </h2>
                 <p class="text-cream/80 text-lg leading-relaxed mb-8">
-                    En <span class="text-pink-vibrant font-accent">Girl Lockers</span>, creemos que cada chica tiene el poder de dominar el locking y convertirse en una fuerza imparable en el street dance mundial. Nuestra misión es empoderar a lockers de todo el mundo con contenido premium, instructores top y una comunidad global de apoyo.
+                    En <span class="text-pink-vibrant font-accent">Girls Lockers</span>, creemos que cada chica tiene el poder de dominar el locking y convertirse en una fuerza imparable en el street dance mundial. Nuestra misión es empoderar a lockers de todo el mundo con contenido premium, instructores top y una comunidad global de apoyo.
                 </p>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mt-12">
                     <div class="card-glass text-center p-6">
@@ -66,7 +66,7 @@
     <section class="py-20 bg-purple-deep">
         <div class="container mx-auto px-4">
             <h2 class="font-display text-3xl md:text-4xl text-center text-cream mb-12">
-                ¿Por qué <span class="text-pink-gradient">Girl Lockers</span>?
+                ¿Por qué <span class="text-pink-gradient">Girls Lockers</span>?
             </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
                 <div class="card-premium hover-lift">
@@ -172,7 +172,7 @@
                         <div class="text-pink-vibrant text-5xl mb-4">👯‍♀️</div>
                         <h3 class="font-display text-2xl text-cream mb-4">Más que una Escuela</h3>
                         <p class="text-cream/80 leading-relaxed mb-6">
-                            Girl Lockers es una comunidad global de chicas apasionadas por el locking. Comparte tu progreso, recibe feedback, haz amigas y crece junto a otras lockers de todo el mundo.
+                            Girls Lockers es una comunidad global de chicas apasionadas por el locking. Comparte tu progreso, recibe feedback, haz amigas y crece junto a otras lockers de todo el mundo.
                         </p>
                         <ul class="space-y-3">
                             <li class="flex items-start">
@@ -236,7 +236,7 @@
     <!-- Footer -->
     <footer class="py-8 bg-purple-darkest border-t border-pink-vibrant/20">
         <div class="container mx-auto px-4 text-center text-cream/60 text-sm">
-            <p class="mb-2">© 2025 <span class="font-accent text-pink-vibrant">Girl Lockers</span>. Todos los derechos reservados.</p>
+            <p class="mb-2">© 2025 <span class="font-accent text-pink-vibrant">Girls Lockers</span>. Todos los derechos reservados.</p>
             <p>Empoderando chicas lockers en todo el mundo 💪✨</p>
         </div>
     </footer>

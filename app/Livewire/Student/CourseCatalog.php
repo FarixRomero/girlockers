@@ -8,7 +8,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
 #[Layout('layouts.app')]
-#[Title('Cursos - Girl Lockers')]
+#[Title('Cursos - Girls Lockers')]
 class CourseCatalog extends Component
 {
     public $selectedLevel = 'all';

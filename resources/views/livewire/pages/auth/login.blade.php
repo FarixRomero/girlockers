@@ -72,4 +72,13 @@ new #[Layout('layouts.guest')] class extends Component
             </x-primary-button>
         </div>
     </form>
+
+    <div class="mt-6 text-center">
+        <p class="text-sm text-cream/70">
+            ¿No tienes una cuenta?
+            <a href="{{ route('register') }}" wire:navigate class="font-medium text-pink-vibrant hover:text-pink-vibrant/80 underline focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-vibrant rounded">
+                Regístrate aquí
+            </a>
+        </p>
+    </div>
 </div>

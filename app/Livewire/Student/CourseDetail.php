@@ -46,6 +46,6 @@ class CourseDetail extends Component
         ]);
 
         return view('livewire.student.course-detail')
-            ->title($this->course->title . ' - Girl Lockers');
+            ->title($this->course->title . ' - Girls Lockers');
     }
 }

@@ -12,18 +12,18 @@
                 Todos
             </button>
             <button
-                wire:click="filterByLevel('beginner')"
-                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'beginner' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
+                wire:click="filterByLevel('principiante')"
+                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'principiante' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
                 🌱 Principiante
             </button>
             <button
-                wire:click="filterByLevel('intermediate')"
-                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'intermediate' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
+                wire:click="filterByLevel('intermedio')"
+                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'intermedio' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
                 🔥 Intermedio
             </button>
             <button
-                wire:click="filterByLevel('advanced')"
-                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'advanced' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
+                wire:click="filterByLevel('avanzado')"
+                class="px-6 py-2 rounded-full font-medium transition {{ $selectedLevel === 'avanzado' ? 'bg-pink-vibrant text-cream' : 'bg-purple-darker text-cream/70 hover:bg-purple-deep' }}">
                 💎 Avanzado
             </button>
         </div>

@@ -1,8 +1,13 @@
 <div class="min-h-screen bg-purple-deep">
     <!-- Hero Section -->
     <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
-        <div class="absolute inset-0 bg-gradient-hero"></div>
-        <div class="absolute inset-0 opacity-30" style="background: var(--gradient-glow);"></div>
+        <!-- Background Image -->
+        <div class="absolute inset-0">
+            <img src="{{ asset('images/girllockers.jpg') }}" alt="Girl Lockers" class="w-full h-full object-cover">
+            <div class="absolute inset-0 bg-black/50"></div>
+        </div>
+        <div class="absolute inset-0 bg-gradient-hero opacity-60"></div>
+        <div class="absolute inset-0 opacity-20" style="background: var(--gradient-glow);"></div>
 
         <div class="relative z-10 container mx-auto px-4 py-20 text-center">
             <h1 class="font-display text-4xl md:text-5xl lg:text-6xl mb-6 page-enter">

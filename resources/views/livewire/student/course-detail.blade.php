@@ -1,4 +1,4 @@
-<div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     @php
         $levelConfig = [
             'beginner' => ['name' => 'Principiante', 'icon' => '🌱', 'color' => 'bg-green-500/20 text-green-400'],

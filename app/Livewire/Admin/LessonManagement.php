@@ -4,6 +4,8 @@ namespace App\Livewire\Admin;
 
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Models\Instructor;
+use App\Models\Tag;
 use App\Services\BunnyService;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -25,6 +27,8 @@ class LessonManagement extends Component
     public $lessonId = null;
     public $title = '';
     public $description = '';
+    public $instructor_id = null;
+    public $selectedTags = [];
     public $video_type = 'youtube'; // youtube, local or bunny
     public $youtube_id = '';
     public $video_file;
@@ -45,6 +49,9 @@ class LessonManagement extends Component
         $rules = [
             'title' => 'required|min:3|max:255',
             'description' => 'required|min:10',
+            'instructor_id' => 'nullable|exists:instructors,id',
+            'selectedTags' => 'nullable|array',
+            'selectedTags.*' => 'exists:tags,id',
             'video_type' => 'required|in:youtube,local,bunny',
             'duration' => 'nullable|integer|min:0',
             'order' => 'required|integer|min:1',
@@ -148,11 +155,13 @@ class LessonManagement extends Component
 
     public function openEditModal($lessonId)
     {
-        $lesson = Lesson::findOrFail($lessonId);
+        $lesson = Lesson::with(['tags'])->findOrFail($lessonId);
 
         $this->lessonId = $lesson->id;
         $this->title = $lesson->title;
         $this->description = $lesson->description;
+        $this->instructor_id = $lesson->instructor_id;
+        $this->selectedTags = $lesson->tags->pluck('id')->toArray();
         $this->video_type = $lesson->video_type;
         $this->youtube_id = $lesson->youtube_id ?? '';
         $this->video_path = $lesson->video_path ?? '';
@@ -178,6 +187,8 @@ class LessonManagement extends Component
             'lessonId',
             'title',
             'description',
+            'instructor_id',
+            'selectedTags',
             'video_type',
             'youtube_id',
             'video_file',
@@ -199,6 +210,7 @@ class LessonManagement extends Component
         $data = [
             'title' => $this->title,
             'description' => $this->description,
+            'instructor_id' => $this->instructor_id,
             'video_type' => $this->video_type,
             'duration' => $this->duration,
             'order' => $this->order,
@@ -231,9 +243,11 @@ class LessonManagement extends Component
         if ($this->isEditing) {
             $lesson = Lesson::findOrFail($this->lessonId);
             $lesson->update($data);
+            $lesson->tags()->sync($this->selectedTags ?? []);
             session()->flash('success', "Lección '{$this->title}' actualizada exitosamente.");
         } else {
-            Lesson::create($data);
+            $lesson = Lesson::create($data);
+            $lesson->tags()->sync($this->selectedTags ?? []);
             session()->flash('success', "Lección '{$this->title}' creada exitosamente.");
         }
 
@@ -318,6 +332,12 @@ class LessonManagement extends Component
 
     public function render()
     {
-        return view('livewire.admin.lesson-management');
+        $instructors = Instructor::orderBy('name')->get();
+        $tags = Tag::orderBy('name')->get();
+
+        return view('livewire.admin.lesson-management', [
+            'instructors' => $instructors,
+            'tags' => $tags,
+        ]);
     }
 }

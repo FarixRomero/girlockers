@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Course extends Model
@@ -14,6 +15,7 @@ class Course extends Model
         'title',
         'slug',
         'description',
+        'instructor_id',
         'level',
         'image',
         'is_published',
@@ -24,6 +26,14 @@ class Course extends Model
         return [
             'is_published' => 'boolean',
         ];
+    }
+
+    /**
+     * Get the instructor for this course
+     */
+    public function instructor(): BelongsTo
+    {
+        return $this->belongsTo(Instructor::class);
     }
 
     /**

@@ -18,7 +18,7 @@ class LessonController extends Controller
     public function index($moduleId)
     {
         $module = Module::with(['course', 'lessons' => function ($query) {
-            $query->orderBy('order');
+            $query->with(['instructor', 'tags'])->orderBy('order');
         }])->findOrFail($moduleId);
 
         return response()->json([
@@ -36,6 +36,9 @@ class LessonController extends Controller
             'module_id' => 'required|exists:modules,id',
             'title' => 'required|min:3|max:255',
             'description' => 'required|min:10',
+            'instructor_id' => 'nullable|exists:instructors,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
             'video_type' => 'required|in:youtube,local,bunny',
             'youtube_id' => 'required_if:video_type,youtube|string|max:20|nullable',
             'video_path' => 'nullable|string',
@@ -55,7 +58,16 @@ class LessonController extends Controller
             }
         }
 
+        $tags = $validated['tags'] ?? [];
+        unset($validated['tags']);
+
         $lesson = Lesson::create($validated);
+
+        if (!empty($tags)) {
+            $lesson->tags()->sync($tags);
+        }
+
+        $lesson->load(['instructor', 'tags']);
 
         return response()->json([
             'success' => true,
@@ -87,6 +99,9 @@ class LessonController extends Controller
         $validated = $request->validate([
             'title' => 'required|min:3|max:255',
             'description' => 'required|min:10',
+            'instructor_id' => 'nullable|exists:instructors,id',
+            'tags' => 'nullable|array',
+            'tags.*' => 'exists:tags,id',
             'video_type' => 'required|in:youtube,local,bunny',
             'youtube_id' => 'required_if:video_type,youtube|string|max:20|nullable',
             'video_path' => 'nullable|string',
@@ -123,7 +138,16 @@ class LessonController extends Controller
             }
         }
 
+        $tags = $validated['tags'] ?? [];
+        unset($validated['tags']);
+
         $lesson->update($validated);
+
+        if (isset($request->tags)) {
+            $lesson->tags()->sync($tags);
+        }
+
+        $lesson->load(['instructor', 'tags']);
 
         return response()->json([
             'success' => true,

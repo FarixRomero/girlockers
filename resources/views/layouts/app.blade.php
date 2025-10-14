@@ -18,7 +18,7 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-body antialiased bg-purple-deep">
+    <body class="font-body antialiased bg-white">
         <div class="min-h-screen pb-20 lg:pb-0">
             <!-- Desktop Navigation -->
             <div class="hidden lg:block">
@@ -27,9 +27,9 @@
 
             <!-- Page Heading -->
             @if (isset($header))
-                <header class="bg-purple-darker shadow-lg">
+                <header class="bg-gradient-to-r from-purple-primary to-purple-light shadow-lg">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
-                        <h2 class="font-display text-2xl text-cream">{{ $header }}</h2>
+                        <h2 class="font-display text-2xl text-white">{{ $header }}</h2>
                     </div>
                 </header>
             @endif

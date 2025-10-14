@@ -3,152 +3,177 @@
         Gestión de Cursos
     </x-slot>
 
-    <!-- Success/Error Messages -->
-    @if(session()->has('success'))
-        <div class="mb-6 p-4 bg-green-500/10 border border-green-500/30 rounded-lg">
-            <p class="text-green-400 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                </svg>
-                {{ session('success') }}
-            </p>
-        </div>
-    @endif
-
-    @if(session()->has('error'))
-        <div class="mb-6 p-4 bg-red-500/10 border border-red-500/30 rounded-lg">
-            <p class="text-red-400 flex items-center">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
-                </svg>
-                {{ session('error') }}
-            </p>
-        </div>
-    @endif
-
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Total Cursos</div>
-            <div class="text-2xl font-bold text-cream">{{ $stats['total'] }}</div>
-        </div>
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Publicados</div>
-            <div class="text-2xl font-bold text-green-400">{{ $stats['published'] }}</div>
-        </div>
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Borradores</div>
-            <div class="text-2xl font-bold text-orange-400">{{ $stats['draft'] }}</div>
-        </div>
-    </div>
-
-    <!-- Filters & Actions -->
-    <div class="card-premium mb-6">
-        <div class="flex flex-col md:flex-row gap-4 items-end">
-            <!-- Search -->
-            <div class="flex-1">
-                <input
-                    type="text"
-                    wire:model.live.debounce.300ms="search"
-                    placeholder="Buscar cursos..."
-                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream placeholder-cream/40 focus:outline-none focus:border-pink-vibrant transition">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white">
+        <!-- Success/Error Messages -->
+        @if(session()->has('success'))
+            <div class="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg shadow-sm">
+                <p class="text-green-700 flex items-center font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    {{ session('success') }}
+                </p>
             </div>
+        @endif
 
-            <!-- Level Filter -->
-            <div>
-                <select
-                    wire:model.live="filterLevel"
-                    class="bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition">
-                    <option value="all">Todos los niveles</option>
-                    <option value="principiante">Principiante</option>
-                    <option value="intermedio">Intermedio</option>
-                    <option value="avanzado">Avanzado</option>
-                </select>
+        @if(session()->has('error'))
+            <div class="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg shadow-sm">
+                <p class="text-red-700 flex items-center font-medium">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                    {{ session('error') }}
+                </p>
             </div>
+        @endif
 
-            <!-- Published Filter -->
-            <div>
-                <select
-                    wire:model.live="filterPublished"
-                    class="bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition">
-                    <option value="all">Todos los estados</option>
-                    <option value="published">Publicados</option>
-                    <option value="draft">Borradores</option>
-                </select>
+        <!-- Stats -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+            <div class="bg-white rounded-2xl p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="text-gray-dark text-sm mb-1 font-medium">Total Cursos</div>
+                <div class="text-3xl font-black text-black">{{ $stats['total'] }}</div>
             </div>
-
-            <!-- Create Button -->
-            <button wire:click="openCreateModal" class="btn-primary whitespace-nowrap">
-                + Nuevo Curso
-            </button>
+            <div class="bg-white rounded-2xl p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="text-gray-dark text-sm mb-1 font-medium">Publicados</div>
+                <div class="text-3xl font-black text-green-600">{{ $stats['published'] }}</div>
+            </div>
+            <div class="bg-white rounded-2xl p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300">
+                <div class="text-gray-dark text-sm mb-1 font-medium">Borradores</div>
+                <div class="text-3xl font-black text-orange-500">{{ $stats['draft'] }}</div>
+            </div>
         </div>
-    </div>
 
-    <!-- Courses Table -->
-    <div class="card-premium overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-pink-vibrant/20">
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Curso</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Nivel</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Contenido</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Estado</th>
-                        <th class="text-right py-4 px-4 text-cream/70 font-medium text-sm">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($courses as $course)
-                        <tr class="border-b border-pink-vibrant/10 hover:bg-purple-deep/50 transition" wire:key="course-{{ $course->id }}">
-                            <td class="py-4 px-4">
+        <!-- Filters & Actions -->
+        <div class="bg-gray-ultralight rounded-2xl p-6 border border-gray-light/50 shadow-sm mb-6">
+            <div class="flex flex-col md:flex-row gap-4 items-end">
+                <!-- Search -->
+                <div class="flex-1">
+                    <label class="block text-gray-dark text-sm mb-2 font-medium">Buscar</label>
+                    <input
+                        type="text"
+                        wire:model.live.debounce.300ms="search"
+                        placeholder="Buscar cursos..."
+                        class="w-full bg-white border border-purple-primary/20 rounded-lg px-4 py-3 text-black placeholder-gray-medium focus:outline-none focus:border-purple-primary focus:ring-2 focus:ring-purple-primary/10 transition shadow-sm">
+                </div>
+
+                <!-- Level Filter -->
+                <div>
+                    <label class="block text-gray-dark text-sm mb-2 font-medium">Nivel</label>
+                    <select
+                        wire:model.live="filterLevel"
+                        class="bg-white border border-purple-primary/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-purple-primary focus:ring-2 focus:ring-purple-primary/10 transition shadow-sm">
+                        <option value="all">Todos los niveles</option>
+                        <option value="principiante">Principiante</option>
+                        <option value="intermedio">Intermedio</option>
+                        <option value="avanzado">Avanzado</option>
+                    </select>
+                </div>
+
+                <!-- Published Filter -->
+                <div>
+                    <label class="block text-gray-dark text-sm mb-2 font-medium">Estado</label>
+                    <select
+                        wire:model.live="filterPublished"
+                        class="bg-white border border-purple-primary/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-purple-primary focus:ring-2 focus:ring-purple-primary/10 transition shadow-sm">
+                        <option value="all">Todos los estados</option>
+                        <option value="published">Publicados</option>
+                        <option value="draft">Borradores</option>
+                    </select>
+                </div>
+
+                <!-- Create Button -->
+                <button wire:click="openCreateModal" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm hover:shadow-md transition-all duration-300 whitespace-nowrap">
+                    <svg class="w-5 h-5 inline-block mr-2 -mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Nuevo Curso
+                </button>
+            </div>
+        </div>
+
+        <!-- Courses Table -->
+        <div class="bg-white rounded-2xl border border-gray-light/50 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-light bg-gray-ultralight">
+                            <th class="text-left py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Curso</th>
+                            <th class="text-left py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Instructor</th>
+                            <th class="text-left py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Nivel</th>
+                            <th class="text-left py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Contenido</th>
+                            <th class="text-left py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Estado</th>
+                            <th class="text-right py-4 px-6 text-gray-dark font-bold text-sm uppercase tracking-wide">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($courses as $course)
+                            <tr class="border-b border-gray-light/30 hover:bg-purple-ultralight/30 transition-colors" wire:key="course-{{ $course->id }}">
+                            <td class="py-4 px-6">
                                 <div class="flex items-center">
                                     @if($course->image)
-                                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg mr-3">
+                                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg mr-4 shadow-sm">
                                     @else
-                                        <div class="w-16 h-16 bg-gradient-pink rounded-lg flex items-center justify-center mr-3">
-                                            <svg class="w-8 h-8 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <div class="w-16 h-16 bg-gradient-to-br from-purple-primary to-purple-light rounded-lg flex items-center justify-center mr-4 shadow-sm">
+                                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                             </svg>
                                         </div>
                                     @endif
                                     <div>
-                                        <p class="text-cream font-medium">{{ $course->title }}</p>
-                                        <p class="text-cream/60 text-sm">{{ Str::limit($course->description, 60) }}</p>
+                                        <p class="text-black font-bold">{{ $course->title }}</p>
+                                        <p class="text-gray-dark text-sm">{{ Str::limit($course->description, 60) }}</p>
                                     </div>
                                 </div>
                             </td>
-                            <td class="py-4 px-4">
-                                <span class="px-3 py-1 rounded-full text-xs font-bold
-                                    {{ $course->level === 'principiante' ? 'bg-green-500/20 text-green-400' : '' }}
-                                    {{ $course->level === 'intermedio' ? 'bg-orange-500/20 text-orange-400' : '' }}
-                                    {{ $course->level === 'avanzado' ? 'bg-red-500/20 text-red-400' : '' }}">
+                            <td class="py-4 px-6">
+                                @if($course->instructor)
+                                    <div class="flex items-center">
+                                        @if($course->instructor->avatar)
+                                            <img src="{{ asset('storage/' . $course->instructor->avatar) }}" alt="{{ $course->instructor->name }}" class="w-8 h-8 rounded-full mr-2">
+                                        @else
+                                            <div class="w-8 h-8 rounded-full bg-purple-primary/20 flex items-center justify-center mr-2">
+                                                <svg class="w-4 h-4 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                                </svg>
+                                            </div>
+                                        @endif
+                                        <span class="text-sm text-gray-dark">{{ $course->instructor->name }}</span>
+                                    </div>
+                                @else
+                                    <span class="text-gray-medium text-sm italic">Sin instructor</span>
+                                @endif
+                            </td>
+                            <td class="py-4 px-6">
+                                <span class="px-3 py-1 rounded-full text-xs font-bold shadow-sm
+                                    {{ $course->level === 'principiante' ? 'bg-green-100 text-green-700 border border-green-200' : '' }}
+                                    {{ $course->level === 'intermedio' ? 'bg-orange-100 text-orange-700 border border-orange-200' : '' }}
+                                    {{ $course->level === 'avanzado' ? 'bg-red-100 text-red-700 border border-red-200' : '' }}">
                                     {{ ucfirst($course->level) }}
                                 </span>
                             </td>
-                            <td class="py-4 px-4">
-                                <div class="text-sm text-cream/70">
-                                    <p>{{ $course->modules_count }} módulos</p>
-                                    <p>{{ $course->modules->sum('lessons_count') }} lecciones</p>
+                            <td class="py-4 px-6">
+                                <div class="text-sm text-gray-dark">
+                                    <p class="font-medium">{{ $course->modules_count }} módulos</p>
+                                    <p class="text-gray-medium">{{ $course->modules->sum('lessons_count') }} lecciones</p>
                                 </div>
                             </td>
-                            <td class="py-4 px-4">
+                            <td class="py-4 px-6">
                                 @if($course->is_published)
-                                    <span class="px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">
+                                    <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-bold border border-green-200 shadow-sm">
                                         ✓ Publicado
                                     </span>
                                 @else
-                                    <span class="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">
+                                    <span class="px-3 py-1 bg-orange-100 text-orange-700 text-xs rounded-full font-bold border border-orange-200 shadow-sm">
                                         📝 Borrador
                                     </span>
                                 @endif
                             </td>
-                            <td class="py-4 px-4">
+                            <td class="py-4 px-6">
                                 <div class="flex items-center justify-end space-x-2">
                                     <a
                                         href="{{ route('admin.courses.modules', $course->id) }}"
                                         wire:navigate
-                                        class="px-4 py-2 bg-gradient-to-r from-pink-vibrant to-pink-light text-cream rounded-lg transition-all duration-300 font-medium flex items-center"
-                                        style="box-shadow: 0 15px 35px rgba(255, 123, 169, 0.6);"
+                                        class="px-4 py-2 bg-purple-primary hover:bg-purple-dark text-white rounded-lg transition-all duration-300 font-medium flex items-center shadow-sm hover:shadow"
                                         title="Gestionar módulos">
                                         <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                                             <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
@@ -158,9 +183,9 @@
 
                                     <button
                                         wire:click="togglePublished({{ $course->id }})"
-                                        class="p-2 hover:bg-purple-deep rounded-lg transition"
+                                        class="p-2 hover:bg-purple-ultralight rounded-lg transition"
                                         title="{{ $course->is_published ? 'Despublicar' : 'Publicar' }}">
-                                        <svg class="w-5 h-5 {{ $course->is_published ? 'text-green-400' : 'text-cream/40' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-5 h-5 {{ $course->is_published ? 'text-green-600' : 'text-gray-medium' }}" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
                                         </svg>
@@ -168,7 +193,7 @@
 
                                     <button
                                         wire:click="openEditModal({{ $course->id }})"
-                                        class="p-2 text-pink-vibrant hover:bg-purple-deep rounded-lg transition"
+                                        class="p-2 text-purple-primary hover:bg-purple-ultralight rounded-lg transition"
                                         title="Editar">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
@@ -178,7 +203,7 @@
                                     <button
                                         wire:click="deleteCourse({{ $course->id }})"
                                         wire:confirm="¿Estás seguro de eliminar el curso '{{ $course->title }}'?"
-                                        class="p-2 text-red-400 hover:bg-purple-deep rounded-lg transition"
+                                        class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
                                         title="Eliminar">
                                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -189,131 +214,136 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="py-12 text-center">
-                                <svg class="w-16 h-16 text-cream/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <td colspan="6" class="py-16 text-center">
+                                <svg class="w-20 h-20 text-gray-light mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                                 </svg>
-                                <p class="text-cream/70">No se encontraron cursos</p>
+                                <p class="text-gray-dark font-medium">No se encontraron cursos</p>
+                                <p class="text-gray-medium text-sm mt-2">Comienza creando tu primer curso</p>
                             </td>
                         </tr>
                     @endforelse
-                </tbody>
-            </table>
+                    </tbody>
+                </table>
+            </div>
         </div>
-    </div>
 
-    <!-- Pagination -->
-    @if($courses->hasPages())
-        <div class="mt-6">
-            {{ $courses->links() }}
-        </div>
-    @endif
+        <!-- Pagination -->
+        @if($courses->hasPages())
+            <div class="mt-6">
+                {{ $courses->links() }}
+            </div>
+        @endif
+    </div>
 
     <!-- Create/Edit Modal -->
     @if($showModal)
         <div class="fixed inset-0 z-50 overflow-y-auto" x-data="{ show: @entangle('showModal') }">
             <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
-                <div class="fixed inset-0 transition-opacity bg-black/80" wire:click="closeModal"></div>
+                <div class="fixed inset-0 transition-opacity bg-black/70 backdrop-blur-sm" wire:click="closeModal"></div>
 
                 <!-- Modal panel -->
-                <div class="inline-block overflow-hidden text-left align-bottom transition-all transform card-premium sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                <div class="inline-block overflow-hidden text-left align-bottom transition-all transform bg-white rounded-2xl shadow-2xl sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
                     <form wire:submit="saveCourse">
-                        <div class="px-6 py-4 border-b border-pink-vibrant/20">
-                            <h3 class="text-xl font-display text-cream">
+                        <div class="px-8 py-6 border-b border-gray-light bg-gradient-to-r from-purple-primary to-purple-light">
+                            <h3 class="text-2xl font-display font-bold text-white">
                                 {{ $isEditing ? 'Editar Curso' : 'Crear Nuevo Curso' }}
                             </h3>
                         </div>
 
-                        <div class="px-6 py-4 space-y-4">
+                        <div class="px-8 py-6 space-y-5 bg-gray-ultralight/30">
                             <!-- Title -->
                             <div>
-                                <label class="block text-cream/70 text-sm mb-2">Título *</label>
+                                <label class="block text-gray-dark text-sm mb-2 font-bold">Título *</label>
                                 <input
                                     type="text"
                                     wire:model.live.debounce.300ms="title"
-                                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition"
+                                    class="w-full"
                                     placeholder="Ej: Fundamentos del Hip-Hop">
-                                @error('title') <p class="mt-1 text-red-400 text-sm">{{ $message }}</p> @enderror
-                            </div>
-
-                            <!-- Slug -->
-                            <div>
-                                <label class="block text-cream/70 text-sm mb-2">Slug *</label>
-                                <input
-                                    type="text"
-                                    wire:model="slug"
-                                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition"
-                                    placeholder="fundamentos-del-hip-hop">
-                                @error('slug') <p class="mt-1 text-red-400 text-sm">{{ $message }}</p> @enderror
+                                @error('title') <p class="mt-1 text-red-600 text-sm font-medium">{{ $message }}</p> @enderror
                             </div>
 
                             <!-- Description -->
                             <div>
-                                <label class="block text-cream/70 text-sm mb-2">Descripción *</label>
+                                <label class="block text-gray-dark text-sm mb-2 font-bold">Descripción *</label>
                                 <textarea
                                     wire:model="description"
                                     rows="4"
-                                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition resize-none"
+                                    class="w-full resize-none"
                                     placeholder="Describe el contenido y objetivos del curso..."></textarea>
-                                @error('description') <p class="mt-1 text-red-400 text-sm">{{ $message }}</p> @enderror
+                                @error('description') <p class="mt-1 text-red-600 text-sm font-medium">{{ $message }}</p> @enderror
+                            </div>
+
+                            <!-- Instructor -->
+                            <div>
+                                <label class="block text-gray-dark text-sm mb-2 font-bold">Instructor</label>
+                                <select
+                                    wire:model="instructor_id"
+                                    class="w-full">
+                                    <option value="">Sin instructor asignado</option>
+                                    @foreach($instructors as $instructor)
+                                        <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+                                    @endforeach
+                                </select>
+                                @error('instructor_id') <p class="mt-1 text-red-600 text-sm font-medium">{{ $message }}</p> @enderror
                             </div>
 
                             <!-- Level -->
                             <div>
-                                <label class="block text-cream/70 text-sm mb-2">Nivel *</label>
+                                <label class="block text-gray-dark text-sm mb-2 font-bold">Nivel *</label>
                                 <select
                                     wire:model="level"
-                                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition">
+                                    class="w-full">
                                     <option value="principiante">Principiante</option>
                                     <option value="intermedio">Intermedio</option>
                                     <option value="avanzado">Avanzado</option>
                                 </select>
-                                @error('level') <p class="mt-1 text-red-400 text-sm">{{ $message }}</p> @enderror
+                                @error('level') <p class="mt-1 text-red-600 text-sm font-medium">{{ $message }}</p> @enderror
                             </div>
 
                             <!-- Image -->
                             <div>
-                                <label class="block text-cream/70 text-sm mb-2">Imagen del Curso</label>
+                                <label class="block text-gray-dark text-sm mb-2 font-bold">Imagen del Curso</label>
                                 <input
                                     type="file"
                                     wire:model="image"
                                     accept="image/*"
-                                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:bg-pink-vibrant file:text-cream file:cursor-pointer">
-                                @error('image') <p class="mt-1 text-red-400 text-sm">{{ $message }}</p> @enderror
+                                    class="w-full file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-purple-primary file:text-white hover:file:bg-purple-dark file:cursor-pointer file:transition">
+                                @error('image') <p class="mt-1 text-red-600 text-sm font-medium">{{ $message }}</p> @enderror
 
                                 @if ($image)
-                                    <div class="mt-2">
-                                        <p class="text-cream/70 text-sm mb-2">Vista previa:</p>
-                                        <img src="{{ $image->temporaryUrl() }}" class="w-32 h-32 object-cover rounded-lg">
+                                    <div class="mt-3 bg-white p-3 rounded-lg border border-gray-light">
+                                        <p class="text-gray-dark text-sm mb-2 font-medium">Vista previa:</p>
+                                        <img src="{{ $image->temporaryUrl() }}" class="w-32 h-32 object-cover rounded-lg shadow-sm">
                                     </div>
                                 @elseif ($existingImage)
-                                    <div class="mt-2">
-                                        <p class="text-cream/70 text-sm mb-2">Imagen actual:</p>
-                                        <img src="{{ asset('storage/' . $existingImage) }}" class="w-32 h-32 object-cover rounded-lg">
+                                    <div class="mt-3 bg-white p-3 rounded-lg border border-gray-light">
+                                        <p class="text-gray-dark text-sm mb-2 font-medium">Imagen actual:</p>
+                                        <img src="{{ asset('storage/' . $existingImage) }}" class="w-32 h-32 object-cover rounded-lg shadow-sm">
                                     </div>
                                 @endif
                             </div>
 
                             <!-- Published -->
-                            <div class="flex items-center">
+                            <div class="flex items-center bg-white p-4 rounded-lg border border-gray-light">
                                 <input
                                     type="checkbox"
                                     wire:model="is_published"
                                     id="is_published"
-                                    class="w-4 h-4 text-pink-vibrant bg-purple-deeper border-pink-vibrant/20 rounded focus:ring-pink-vibrant focus:ring-2">
-                                <label for="is_published" class="ml-2 text-cream/70 text-sm">Publicar curso</label>
+                                    class="w-5 h-5 text-purple-primary bg-white border-gray-light rounded focus:ring-purple-primary focus:ring-2">
+                                <label for="is_published" class="ml-3 text-gray-dark text-sm font-medium cursor-pointer">Publicar curso inmediatamente</label>
                             </div>
                         </div>
 
-                        <div class="px-6 py-4 border-t border-pink-vibrant/20 flex justify-end space-x-3">
+                        <div class="px-8 py-6 border-t border-gray-light bg-white flex justify-end space-x-3">
                             <button
                                 type="button"
                                 wire:click="closeModal"
-                                class="px-4 py-2 bg-purple-deep text-cream/70 rounded-lg hover:bg-purple-deeper transition">
+                                class="px-6 py-3 bg-gray-ultralight text-gray-dark font-medium rounded-lg hover:bg-gray-light transition-colors">
                                 Cancelar
                             </button>
-                            <button type="submit" class="btn-primary">
+                            <button type="submit" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm hover:shadow transition-all">
                                 {{ $isEditing ? 'Actualizar' : 'Crear' }} Curso
                             </button>
                         </div>

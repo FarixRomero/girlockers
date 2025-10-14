@@ -69,8 +69,8 @@
 
     body {
         font-family: var(--font-body);
-        background-color: var(--gl-purple-deep);
-        color: var(--gl-cream-white);
+        background-color: #FFFFFF;
+        color: #000000;
     }
 
     h1, h2, h3, h4, h5, h6 {
@@ -129,24 +129,22 @@
 
     /* Card Components */
     .card-premium {
-        background: var(--gradient-card);
-        border-radius: 1.5rem;
+        background: #FFFFFF;
+        border-radius: 1rem;
         padding: 2rem;
-        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-        border: 1px solid rgba(255, 123, 169, 0.1);
-        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        border: 1px solid rgba(229, 231, 235, 0.5);
+        transition: all 0.3s ease;
     }
 
     .card-premium:hover {
-        transform: translateY(-8px);
-        box-shadow: 0 25px 70px rgba(255, 123, 169, 0.2);
+        border-color: rgba(139, 92, 246, 0.3);
+        background-color: rgba(237, 233, 254, 0.2);
     }
 
     .card-glass {
-        background: rgba(61, 68, 100, 0.6);
-        backdrop-filter: blur(20px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 1.5rem;
+        background: #FFFFFF;
+        border: 1px solid rgba(229, 231, 235, 0.5);
+        border-radius: 1rem;
         padding: 2rem;
     }
 
@@ -156,24 +154,25 @@
         bottom: 0;
         left: 0;
         right: 0;
-        background: rgba(42, 46, 71, 0.95);
+        background: rgba(255, 255, 255, 0.98);
         backdrop-filter: blur(20px);
-        border-top: 1px solid rgba(255, 123, 169, 0.2);
+        border-top: 1px solid rgba(229, 231, 235, 0.8);
         padding: 1rem;
         z-index: 50;
+        box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
     }
 
     .nav-item {
         min-height: 44px;
         min-width: 44px;
-        color: var(--gl-cream-white);
+        color: #4B5563;
         opacity: 0.6;
-        transition: opacity 0.2s, transform 0.2s;
+        transition: opacity 0.2s, transform 0.2s, color 0.2s;
     }
 
     .nav-item.active {
         opacity: 1;
-        color: var(--gl-pink-vibrant);
+        color: #8B5CF6;
         transform: scale(1.1);
     }
 
@@ -196,9 +195,9 @@
     .skeleton {
         background: linear-gradient(
             90deg,
-            var(--gl-purple-darker) 0%,
-            var(--gl-purple-deep) 50%,
-            var(--gl-purple-darker) 100%
+            #F3F4F6 0%,
+            #E5E7EB 50%,
+            #F3F4F6 100%
         );
         background-size: 1000px 100%;
         animation: shimmer 2s infinite;
@@ -212,9 +211,11 @@
     input[type="file"],
     textarea,
     select {
-        background-color: var(--gl-purple-darker) !important;
-        color: var(--gl-cream-white) !important;
-        border-color: rgba(255, 123, 169, 0.2) !important;
+        background-color: #FFFFFF !important;
+        color: #000000 !important;
+        border-color: rgba(139, 92, 246, 0.2) !important;
+        border-width: 1px !important;
+        border-radius: 0.5rem !important;
     }
 
     input[type="text"]::placeholder,
@@ -222,7 +223,7 @@
     input[type="password"]::placeholder,
     input[type="number"]::placeholder,
     textarea::placeholder {
-        color: rgba(255, 251, 240, 0.4) !important;
+        color: rgba(75, 85, 99, 0.5) !important;
     }
 
     input[type="text"]:focus,
@@ -232,8 +233,20 @@
     input[type="file"]:focus,
     textarea:focus,
     select:focus {
-        border-color: var(--gl-pink-vibrant) !important;
-        ring-color: var(--gl-pink-vibrant) !important;
+        background-color: rgba(237, 233, 254, 0.3) !important;
+        border-color: #8B5CF6 !important;
+        ring-color: #8B5CF6 !important;
+        box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1) !important;
+    }
+
+    input[type="text"]:hover,
+    input[type="email"]:hover,
+    input[type="password"]:hover,
+    input[type="number"]:hover,
+    input[type="file"]:hover,
+    textarea:hover,
+    select:hover {
+        border-color: rgba(139, 92, 246, 0.3) !important;
     }
 }
 

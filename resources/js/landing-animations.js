@@ -364,14 +364,14 @@ document.addEventListener('DOMContentLoaded', () => {
             animate(featureCard1, {
                 y: -16,
                 scale: 1.02
-            }, { duration: 0.4, easing: [0.34, 1.56, 0.64, 1] });
+            }, { duration: 0.2, easing: "ease-out" });
         });
 
         featureCard1.addEventListener('mouseleave', () => {
             animate(featureCard1, {
                 y: 0,
                 scale: 1
-            }, { duration: 0.3, easing: "ease-out" });
+            }, { duration: 0.15, easing: "ease-out" });
         });
     }
 

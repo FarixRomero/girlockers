@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Course;
+use App\Models\Instructor;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -25,6 +26,7 @@ class CourseManagement extends Component
     public $title = '';
     public $slug = '';
     public $description = '';
+    public $instructor_id = null;
     public $level = 'principiante';
     public $existingImage = '';
     public $image;
@@ -37,6 +39,7 @@ class CourseManagement extends Component
     protected $rules = [
         'title' => 'required|min:3|max:255',
         'description' => 'required|min:10',
+        'instructor_id' => 'nullable|exists:instructors,id',
         'level' => 'required|in:principiante,intermedio,avanzado',
         'image' => 'nullable|image|max:2048',
         'is_published' => 'boolean',
@@ -63,6 +66,7 @@ class CourseManagement extends Component
         $this->title = $course->title;
         $this->slug = $course->slug;
         $this->description = $course->description;
+        $this->instructor_id = $course->instructor_id;
         $this->level = $course->level;
         $this->existingImage = $course->image;
         $this->is_published = $course->is_published;
@@ -84,6 +88,7 @@ class CourseManagement extends Component
             'title',
             'slug',
             'description',
+            'instructor_id',
             'level',
             'existingImage',
             'image',
@@ -113,6 +118,7 @@ class CourseManagement extends Component
             'title' => $this->title,
             'slug' => $this->slug,
             'description' => $this->description,
+            'instructor_id' => $this->instructor_id,
             'level' => $this->level,
             'is_published' => $this->is_published,
         ];
@@ -162,7 +168,7 @@ class CourseManagement extends Component
         $query = Course::withCount('modules')
             ->with(['modules' => function ($query) {
                 $query->withCount('lessons');
-            }]);
+            }, 'instructor']);
 
         if ($this->search) {
             $query->where(function ($q) {
@@ -187,9 +193,12 @@ class CourseManagement extends Component
             'draft' => Course::where('is_published', false)->count(),
         ];
 
+        $instructors = Instructor::orderBy('name')->get();
+
         return view('livewire.admin.course-management', [
             'courses' => $courses,
             'stats' => $stats,
+            'instructors' => $instructors,
         ]);
     }
 }

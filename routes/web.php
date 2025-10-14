@@ -12,6 +12,8 @@ use App\Livewire\Admin\AccessRequests;
 use App\Livewire\Admin\CommentModeration;
 use App\Livewire\Admin\CourseManagement;
 use App\Livewire\Admin\ModuleManagement;
+use App\Livewire\Admin\InstructorManagement;
+use App\Livewire\Admin\TagManagement;
 use App\Http\Controllers\VideoStreamController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,8 +49,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');
     Route::get('modules/{moduleId}/lessons', function ($moduleId) {
-        return view('livewire.admin.lesson-management', ['moduleId' => $moduleId]);
+        $instructors = \App\Models\Instructor::orderBy('name')->get();
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        return view('livewire.admin.lesson-management', [
+            'moduleId' => $moduleId,
+            'instructors' => $instructors,
+            'tags' => $tags
+        ]);
     })->name('modules.lessons');
+    Route::get('instructors', InstructorManagement::class)->name('instructors.index');
+    Route::get('tags', TagManagement::class)->name('tags.index');
     Route::get('modules/{moduleId}/lessons-pure', function ($moduleId) {
         return view('admin.lesson-management-pure', ['moduleId' => $moduleId]);
     })->name('modules.lessons-pure');

@@ -14,6 +14,7 @@ class Lesson extends Model
 
     protected $fillable = [
         'module_id',
+        'instructor_id',
         'title',
         'description',
         'video_type',
@@ -43,6 +44,22 @@ class Lesson extends Model
     public function module(): BelongsTo
     {
         return $this->belongsTo(Module::class);
+    }
+
+    /**
+     * Get the instructor for this lesson
+     */
+    public function instructor(): BelongsTo
+    {
+        return $this->belongsTo(Instructor::class);
+    }
+
+    /**
+     * Get the tags for this lesson
+     */
+    public function tags(): BelongsToMany
+    {
+        return $this->belongsToMany(Tag::class, 'lesson_tag');
     }
 
     /**

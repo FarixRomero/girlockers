@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->unique();
             $table->text('description');
-            $table->enum('level', ['beginner', 'intermediate', 'advanced']);
+            $table->enum('level', ['principiante', 'intermedio', 'avanzado']);
             $table->string('image', 500)->nullable();
             $table->boolean('is_published')->default(false);
             $table->timestamps();

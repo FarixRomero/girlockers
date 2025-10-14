@@ -23,3 +23,4 @@ PHP 8.1+ (Laravel 10.x or 11.x): Follow standard conventions
 
 <!-- MANUAL ADDITIONS START -->
 <!-- MANUAL ADDITIONS END -->
+- no necesitas compilar cada vez que haces un cambio

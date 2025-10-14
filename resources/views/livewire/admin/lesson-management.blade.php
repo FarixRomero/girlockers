@@ -67,37 +67,58 @@
     </div>
 
     <!-- Modal -->
-    <div id="lesson-modal" class="fixed inset-0 bg-dark/80 backdrop-blur-sm hidden items-center justify-center z-50" style="display: none;">
-        <div class="bg-gradient-to-br from-dark via-purple-deep to-dark border border-pink-vibrant/30 rounded-xl p-8 max-w-2xl w-full mx-4 max-h-[90vh] overflow-y-auto">
-            <div class="flex items-center justify-between mb-6">
-                <h3 class="font-display text-2xl text-cream" id="modal-title">Nueva Lección</h3>
-                <button onclick="LessonManager.closeModal()" class="text-cream/60 hover:text-cream">
+    <div id="lesson-modal" class="fixed inset-0 bg-black/70 backdrop-blur-sm hidden items-center justify-center z-50" style="display: none;">
+        <div class="bg-white rounded-2xl shadow-2xl max-w-2xl w-full mx-4 max-h-[90vh] overflow-hidden">
+            <div class="bg-gradient-to-r from-purple-primary to-purple-light px-8 py-6 flex items-center justify-between">
+                <h3 class="font-display text-2xl font-bold text-white" id="modal-title">Nueva Lección</h3>
+                <button onclick="LessonManager.closeModal()" class="text-white/80 hover:text-white transition-colors">
                     <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
                     </svg>
                 </button>
             </div>
 
-            <form id="lesson-form" onsubmit="LessonManager.saveLesson(event)" class="space-y-4">
+            <form id="lesson-form" onsubmit="LessonManager.saveLesson(event)" class="px-8 py-6 space-y-5 bg-gray-ultralight/30 overflow-y-auto" style="max-height: calc(90vh - 200px);">
                 <!-- Title -->
                 <div>
-                    <label class="block text-cream/80 text-sm font-medium mb-2">Título</label>
-                    <input type="text" id="lesson-title" required
-                        class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none">
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Título *</label>
+                    <input type="text" id="lesson-title" required class="w-full">
                 </div>
 
                 <!-- Description -->
                 <div>
-                    <label class="block text-cream/80 text-sm font-medium mb-2">Descripción</label>
-                    <textarea id="lesson-description" rows="3" required
-                        class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none"></textarea>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Descripción *</label>
+                    <textarea id="lesson-description" rows="3" required class="w-full resize-none"></textarea>
+                </div>
+
+                <!-- Instructor -->
+                <div>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Instructor</label>
+                    <select id="lesson-instructor" class="w-full">
+                        <option value="">Sin instructor asignado</option>
+                        @foreach($instructors as $instructor)
+                            <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Tags -->
+                <div>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Tags</label>
+                    <div class="grid grid-cols-2 gap-2">
+                        @foreach($tags as $tag)
+                            <label class="flex items-center p-3 bg-white border border-gray-light rounded-lg hover:border-purple-primary/50 cursor-pointer transition-colors">
+                                <input type="checkbox" name="tags[]" value="{{ $tag->id }}" class="w-4 h-4 text-purple-primary bg-white border-gray-light rounded focus:ring-purple-primary focus:ring-2">
+                                <span class="ml-2 text-gray-dark text-sm">{{ $tag->name }}</span>
+                            </label>
+                        @endforeach
+                    </div>
                 </div>
 
                 <!-- Video Type -->
                 <div>
-                    <label class="block text-cream/80 text-sm font-medium mb-2">Tipo de Video</label>
-                    <select id="lesson-video-type" onchange="LessonManager.updateVideoFields()"
-                        class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none">
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Tipo de Video</label>
+                    <select id="lesson-video-type" onchange="LessonManager.updateVideoFields()" class="w-full">
                         <option value="youtube">YouTube</option>
                         <option value="bunny">Bunny.net (CDN)</option>
                         <option value="local">Local</option>
@@ -106,40 +127,39 @@
 
                 <!-- YouTube ID -->
                 <div id="youtube-field" class="hidden">
-                    <label class="block text-cream/80 text-sm font-medium mb-2">YouTube Video ID</label>
-                    <input type="text" id="lesson-youtube-id"
-                        class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none">
-                    <p class="text-cream/50 text-xs mt-1">ID del video (ej: dQw4w9WgXcQ de youtube.com/watch?v=dQw4w9WgXcQ)</p>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">YouTube Video ID</label>
+                    <input type="text" id="lesson-youtube-id" class="w-full">
+                    <p class="text-gray-medium text-xs mt-2">ID del video (ej: dQw4w9WgXcQ de youtube.com/watch?v=dQw4w9WgXcQ)</p>
                 </div>
 
                 <!-- Bunny Upload -->
                 <div id="bunny-field" class="hidden">
-                    <label class="block text-cream/80 text-sm font-medium mb-2">Video de Bunny.net</label>
-                    <div class="border-2 border-dashed border-pink-vibrant/30 rounded-lg p-6 text-center hover:border-pink-vibrant/50 transition-colors">
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Video de Bunny.net</label>
+                    <div class="border-2 border-dashed border-purple-primary/30 rounded-lg p-6 text-center hover:border-purple-primary/50 transition-colors bg-white">
                         <input type="file" id="bunny-file-input" accept="video/*" onchange="LessonManager.handleBunnyUpload(event)" class="hidden">
-                        <button type="button" onclick="document.getElementById('bunny-file-input').click()" class="btn-primary" id="bunny-select-button">
+                        <button type="button" onclick="document.getElementById('bunny-file-input').click()" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm transition-all" id="bunny-select-button">
                             Seleccionar archivo de video
                         </button>
-                        <p class="text-cream/50 text-xs mt-2">Soporta: MP4, MOV, AVI, WMV</p>
+                        <p class="text-gray-medium text-xs mt-2">Soporta: MP4, MOV, AVI, WMV</p>
 
                         <!-- Upload Progress -->
                         <div id="upload-progress-container" class="hidden mt-4">
-                            <div class="w-full bg-dark/50 rounded-full h-2 mb-2">
-                                <div id="upload-progress-bar" class="bg-gradient-pink h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            <div class="w-full bg-gray-light rounded-full h-2 mb-2">
+                                <div id="upload-progress-bar" class="bg-gradient-to-r from-purple-primary to-purple-light h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                             </div>
-                            <p class="text-cream/70 text-sm">
+                            <p class="text-gray-dark text-sm">
                                 <span id="upload-percentage">0%</span> -
                                 <span id="upload-speed">0 MB/s</span> -
                                 <span id="upload-eta">Calculando...</span>
                             </p>
-                            <button type="button" onclick="LessonManager.cancelUpload()" class="text-red-400 hover:text-red-300 text-sm mt-2">
+                            <button type="button" onclick="LessonManager.cancelUpload()" class="text-red-600 hover:text-red-700 text-sm mt-2 font-medium">
                                 Cancelar subida
                             </button>
                         </div>
 
                         <!-- Upload Success -->
-                        <div id="upload-success" class="hidden mt-4 p-3 bg-green-500/10 border border-green-500/30 rounded-lg">
-                            <p class="text-green-400 text-sm flex items-center justify-center">
+                        <div id="upload-success" class="hidden mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
+                            <p class="text-green-700 text-sm flex items-center justify-center font-medium">
                                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                                 </svg>
@@ -153,40 +173,40 @@
 
                 <!-- Local File (disabled for now) -->
                 <div id="local-field" class="hidden">
-                    <label class="block text-cream/80 text-sm font-medium mb-2">Archivo Local</label>
-                    <p class="text-yellow-400 text-sm">Funcionalidad en desarrollo. Usa Bunny.net para mejor rendimiento.</p>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Archivo Local</label>
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                        <p class="text-yellow-700 text-sm">Funcionalidad en desarrollo. Usa Bunny.net para mejor rendimiento.</p>
+                    </div>
                 </div>
 
                 <!-- Duration & Order -->
                 <div class="grid grid-cols-2 gap-4">
                     <div>
-                        <label class="block text-cream/80 text-sm font-medium mb-2">Duración (minutos)</label>
-                        <input type="number" id="lesson-duration" min="0" value="0"
-                            class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none">
+                        <label class="block text-gray-dark text-sm font-bold mb-2">Duración (minutos)</label>
+                        <input type="number" id="lesson-duration" min="0" value="0" class="w-full">
                     </div>
                     <div>
-                        <label class="block text-cream/80 text-sm font-medium mb-2">Orden</label>
-                        <input type="number" id="lesson-order" min="1" required
-                            class="w-full px-4 py-2 bg-dark/50 border border-pink-vibrant/30 rounded-lg text-cream focus:border-pink-vibrant focus:outline-none">
+                        <label class="block text-gray-dark text-sm font-bold mb-2">Orden</label>
+                        <input type="number" id="lesson-order" min="1" required class="w-full">
                     </div>
                 </div>
 
                 <!-- Is Trial -->
-                <div class="flex items-center">
-                    <input type="checkbox" id="lesson-is-trial" class="w-4 h-4 text-pink-vibrant bg-dark border-pink-vibrant/30 rounded focus:ring-pink-vibrant">
-                    <label for="lesson-is-trial" class="ml-2 text-cream/80 text-sm">Lección gratuita (Trial)</label>
-                </div>
-
-                <!-- Form Actions -->
-                <div class="flex justify-end space-x-3 pt-4">
-                    <button type="button" onclick="LessonManager.closeModal()" class="px-6 py-2 bg-dark/50 text-cream rounded-lg hover:bg-dark/70 transition-colors">
-                        Cancelar
-                    </button>
-                    <button type="submit" id="submit-button" class="btn-primary">
-                        Guardar Lección
-                    </button>
+                <div class="flex items-center bg-white p-4 rounded-lg border border-gray-light">
+                    <input type="checkbox" id="lesson-is-trial" class="w-5 h-5 text-purple-primary bg-white border-gray-light rounded focus:ring-purple-primary focus:ring-2">
+                    <label for="lesson-is-trial" class="ml-3 text-gray-dark text-sm font-medium cursor-pointer">Lección gratuita (Trial)</label>
                 </div>
             </form>
+
+            <!-- Form Actions -->
+            <div class="px-8 py-6 border-t border-gray-light bg-white flex justify-end space-x-3">
+                <button type="button" onclick="LessonManager.closeModal()" class="px-6 py-3 bg-gray-ultralight text-gray-dark font-medium rounded-lg hover:bg-gray-light transition-colors">
+                    Cancelar
+                </button>
+                <button type="submit" form="lesson-form" id="submit-button" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm hover:shadow transition-all">
+                    Guardar Lección
+                </button>
+            </div>
         </div>
     </div>
 </div>
@@ -440,12 +460,28 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('modal-title').textContent = 'Editar Lección';
         document.getElementById('lesson-title').value = lesson.title;
         document.getElementById('lesson-description').value = lesson.description;
+        document.getElementById('lesson-instructor').value = lesson.instructor_id || '';
         document.getElementById('lesson-video-type').value = lesson.video_type;
         document.getElementById('lesson-youtube-id').value = lesson.youtube_id || '';
         document.getElementById('lesson-bunny-video-id').value = lesson.bunny_video_id || '';
         document.getElementById('lesson-duration').value = lesson.duration || 0;
         document.getElementById('lesson-order').value = lesson.order;
         document.getElementById('lesson-is-trial').checked = lesson.is_trial;
+
+        // Limpiar todos los checkboxes primero
+        document.querySelectorAll('input[name="tags[]"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
+        // Marcar los tags seleccionados
+        if (lesson.tags && lesson.tags.length > 0) {
+            lesson.tags.forEach(tag => {
+                const checkbox = document.querySelector(`input[name="tags[]"][value="${tag.id}"]`);
+                if (checkbox) {
+                    checkbox.checked = true;
+                }
+            });
+        }
 
         this.updateVideoFields();
         this.showModal();
@@ -464,6 +500,12 @@ window.LessonManager = window.LessonManager || {
     closeModal() {
         document.getElementById('lesson-modal').style.display = 'none';
         document.getElementById('lesson-form').reset();
+
+        // Limpiar tags checkboxes
+        document.querySelectorAll('input[name="tags[]"]').forEach(checkbox => {
+            checkbox.checked = false;
+        });
+
         this.resetUploadUI();
     },
 
@@ -491,9 +533,19 @@ window.LessonManager = window.LessonManager || {
     async saveLesson(event) {
         event.preventDefault();
 
+        // Obtener tags seleccionados
+        const selectedTags = [];
+        document.querySelectorAll('input[name="tags[]"]:checked').forEach(checkbox => {
+            selectedTags.push(parseInt(checkbox.value));
+        });
+
+        const instructorId = document.getElementById('lesson-instructor').value;
+
         const formData = {
             title: document.getElementById('lesson-title').value,
             description: document.getElementById('lesson-description').value,
+            instructor_id: instructorId ? parseInt(instructorId) : null,
+            tags: selectedTags,
             video_type: document.getElementById('lesson-video-type').value,
             youtube_id: document.getElementById('lesson-youtube-id').value || null,
             bunny_video_id: document.getElementById('lesson-bunny-video-id').value || null,

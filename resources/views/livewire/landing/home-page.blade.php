@@ -711,7 +711,7 @@
                 <!-- Plan Semestral (Destacado) -->
                 <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
                     <!-- Badge de descuento -->
-                    <div class="absolute -top-4 right-8 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
+                    <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
                         ¡Ahorra 40%!
                     </div>
 

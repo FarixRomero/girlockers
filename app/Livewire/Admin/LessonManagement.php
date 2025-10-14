@@ -4,6 +4,9 @@ namespace App\Livewire\Admin;
 
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Services\BunnyService;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Layout;
@@ -22,13 +25,16 @@ class LessonManagement extends Component
     public $lessonId = null;
     public $title = '';
     public $description = '';
-    public $video_type = 'youtube'; // youtube or local
+    public $video_type = 'youtube'; // youtube, local or bunny
     public $youtube_id = '';
     public $video_file;
     public $video_path = '';
+    public $bunny_video_id = '';
+    public $video_duration = 0;
     public $duration = 0;
     public $order = 1;
     public $is_trial = false;
+    public $uploadProgress = 0;
 
     // Modal state
     public $showModal = false;
@@ -39,7 +45,7 @@ class LessonManagement extends Component
         $rules = [
             'title' => 'required|min:3|max:255',
             'description' => 'required|min:10',
-            'video_type' => 'required|in:youtube,local',
+            'video_type' => 'required|in:youtube,local,bunny',
             'duration' => 'nullable|integer|min:0',
             'order' => 'required|integer|min:1',
             'is_trial' => 'boolean',
@@ -47,8 +53,14 @@ class LessonManagement extends Component
 
         if ($this->video_type === 'youtube') {
             $rules['youtube_id'] = 'required|string|max:20';
-        } elseif (!$this->isEditing || $this->video_file) {
-            $rules['video_file'] = 'required|file|mimes:mp4,mov,avi,wmv|max:512000'; // 500MB max
+        } elseif ($this->video_type === 'local') {
+            if (!$this->isEditing || $this->video_file) {
+                $rules['video_file'] = 'required|file|mimes:mp4,mov,avi,wmv|max:512000'; // 500MB max
+            }
+        } elseif ($this->video_type === 'bunny') {
+            // Para Bunny, el video se crea y sube directamente desde el navegador
+            // El bunny_video_id se obtiene automáticamente después del upload
+            // No validamos aquí porque el botón de submit está deshabilitado hasta que termine el upload
         }
 
         return $rules;
@@ -60,6 +72,70 @@ class LessonManagement extends Component
         $this->module = Module::with(['course', 'lessons' => function ($query) {
             $query->orderBy('order');
         }])->findOrFail($moduleId);
+    }
+
+    /**
+     * Inicializa la subida directa a Bunny.net (Paso 1)
+     */
+    public function initDirectUpload($title)
+    {
+        try {
+            $bunnyService = new BunnyService();
+
+            // Eliminar video anterior si existe
+            if ($this->bunny_video_id) {
+                $bunnyService->deleteVideo($this->bunny_video_id);
+            }
+
+            // Crear video en Bunny.net
+            $videoData = $bunnyService->createVideo($title);
+
+            if (!$videoData || !isset($videoData['guid'])) {
+                return [
+                    'success' => false,
+                    'message' => 'Error al crear video en Bunny.net'
+                ];
+            }
+
+            $videoId = $videoData['guid'];
+
+            return [
+                'success' => true,
+                'video_id' => $videoId,
+                'library_id' => config('bunny.library_id'),
+                'upload_url' => config('bunny.stream_url') . "/library/" . config('bunny.library_id') . "/videos/" . $videoId,
+                'api_key' => config('bunny.api_key')
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error en initDirectUpload: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al inicializar subida: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Confirma la subida directa (Paso 3)
+     */
+    public function confirmDirectUpload($videoId)
+    {
+        try {
+            // Guardar el video_id en la propiedad para usarlo al guardar
+            $this->bunny_video_id = $videoId;
+
+            return [
+                'success' => true,
+                'message' => 'Video vinculado correctamente',
+                'video_id' => $videoId
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error en confirmDirectUpload: ' . $e->getMessage());
+            return [
+                'success' => false,
+                'message' => 'Error al confirmar subida: ' . $e->getMessage()
+            ];
+        }
     }
 
     public function openCreateModal()
@@ -80,6 +156,8 @@ class LessonManagement extends Component
         $this->video_type = $lesson->video_type;
         $this->youtube_id = $lesson->youtube_id ?? '';
         $this->video_path = $lesson->video_path ?? '';
+        $this->bunny_video_id = $lesson->bunny_video_id ?? '';
+        $this->video_duration = $lesson->video_duration ?? 0;
         $this->duration = $lesson->duration;
         $this->order = $lesson->order;
         $this->is_trial = $lesson->is_trial;
@@ -104,9 +182,12 @@ class LessonManagement extends Component
             'youtube_id',
             'video_file',
             'video_path',
+            'bunny_video_id',
+            'video_duration',
             'duration',
             'order',
             'is_trial',
+            'uploadProgress',
         ]);
         $this->resetValidation();
     }
@@ -128,9 +209,23 @@ class LessonManagement extends Component
         if ($this->video_type === 'youtube') {
             $data['youtube_id'] = $this->youtube_id;
             $data['video_path'] = null;
-        } elseif ($this->video_file) {
+            $data['bunny_video_id'] = null;
+        } elseif ($this->video_type === 'local' && $this->video_file) {
             $data['video_path'] = $this->video_file->store('lessons', 'public');
             $data['youtube_id'] = null;
+            $data['bunny_video_id'] = null;
+        } elseif ($this->video_type === 'bunny' && $this->bunny_video_id) {
+            // El video ya fue subido directamente desde el navegador
+            $data['bunny_video_id'] = $this->bunny_video_id;
+            $data['youtube_id'] = null;
+            $data['video_path'] = null;
+
+            // Obtener información del video para obtener la duración
+            $bunnyService = new BunnyService();
+            $videoInfo = $bunnyService->getVideoInfo($this->bunny_video_id);
+            if ($videoInfo && isset($videoInfo['length'])) {
+                $data['video_duration'] = $videoInfo['length'];
+            }
         }
 
         if ($this->isEditing) {
@@ -153,7 +248,13 @@ class LessonManagement extends Component
 
         // Delete video file if it's a local video
         if ($lesson->video_type === 'local' && $lesson->video_path) {
-            \Storage::disk('public')->delete($lesson->video_path);
+            Storage::disk('public')->delete($lesson->video_path);
+        }
+
+        // Delete video from Bunny.net if it's a bunny video
+        if ($lesson->video_type === 'bunny' && $lesson->bunny_video_id) {
+            $bunnyService = new BunnyService();
+            $bunnyService->deleteVideo($lesson->bunny_video_id);
         }
 
         $lesson->delete();

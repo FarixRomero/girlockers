@@ -102,8 +102,8 @@
                         <tr class="border-b border-pink-vibrant/10 hover:bg-purple-deep/50 transition" wire:key="course-{{ $course->id }}">
                             <td class="py-4 px-4">
                                 <div class="flex items-center">
-                                    @if($course->image_path)
-                                        <img src="{{ asset('storage/' . $course->image_path) }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg mr-3">
+                                    @if($course->image)
+                                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-16 h-16 object-cover rounded-lg mr-3">
                                     @else
                                         <div class="w-16 h-16 bg-gradient-pink rounded-lg flex items-center justify-center mr-3">
                                             <svg class="w-8 h-8 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -147,11 +147,13 @@
                                     <a
                                         href="{{ route('admin.courses.modules', $course->id) }}"
                                         wire:navigate
-                                        class="p-2 text-cream/70 hover:text-cream hover:bg-purple-deep rounded-lg transition"
+                                        class="px-4 py-2 bg-gradient-to-r from-pink-vibrant to-pink-light text-cream rounded-lg transition-all duration-300 font-medium flex items-center"
+                                        style="box-shadow: 0 15px 35px rgba(255, 123, 169, 0.6);"
                                         title="Gestionar módulos">
-                                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                                        <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
+                                            <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
                                         </svg>
+                                        Módulos
                                     </a>
 
                                     <button
@@ -285,10 +287,10 @@
                                         <p class="text-cream/70 text-sm mb-2">Vista previa:</p>
                                         <img src="{{ $image->temporaryUrl() }}" class="w-32 h-32 object-cover rounded-lg">
                                     </div>
-                                @elseif ($image_path)
+                                @elseif ($existingImage)
                                     <div class="mt-2">
                                         <p class="text-cream/70 text-sm mb-2">Imagen actual:</p>
-                                        <img src="{{ asset('storage/' . $image_path) }}" class="w-32 h-32 object-cover rounded-lg">
+                                        <img src="{{ asset('storage/' . $existingImage) }}" class="w-32 h-32 object-cover rounded-lg">
                                     </div>
                                 @endif
                             </div>

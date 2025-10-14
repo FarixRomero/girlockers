@@ -19,7 +19,7 @@
     },
     "dependencies": {
         "alpinejs": "^3.15.0",
-        "motion": "^12.23.22",
+        "motion": "^12.23.24",
         "terser": "^5.44.0"
     }
 }

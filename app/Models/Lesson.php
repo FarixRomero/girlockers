@@ -19,6 +19,8 @@ class Lesson extends Model
         'video_type',
         'youtube_id',
         'video_path',
+        'bunny_video_id',
+        'video_duration',
         'duration',
         'thumbnail',
         'is_trial',

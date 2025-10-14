@@ -193,20 +193,13 @@
 
 @push('scripts')
 <script>
-/**
- * Lesson Manager - Gestión de lecciones con JavaScript puro
- * Soporta navegación Livewire y carga directa de página
- */
-
-// ============================================================================
-// CONFIGURACIÓN
-// ============================================================================
-window.LessonManagerConfig = window.LessonManagerConfig || {
+// Configuration
+const CONFIG = {
     moduleId: {{ $moduleId }},
     csrfToken: '{{ csrf_token() }}',
     routes: {
         lessons: {
-            index: '/admin/api/modules/:moduleId/lessons',
+            index: '{{ route('admin.api.lessons.index', ['moduleId' => ':moduleId']) }}',
             store: '{{ route('admin.api.lessons.store') }}',
             show: '{{ route('admin.api.lessons.show', ['id' => ':id']) }}',
             update: '{{ route('admin.api.lessons.update', ['id' => ':id']) }}',
@@ -222,13 +215,8 @@ window.LessonManagerConfig = window.LessonManagerConfig || {
     }
 };
 
-const CONFIG = window.LessonManagerConfig;
-
-// ============================================================================
-// LESSON MANAGER
-// ============================================================================
-window.LessonManager = window.LessonManager || {
-    // Estado
+// Lesson Manager
+const LessonManager = {
     currentModule: null,
     lessons: [],
     editingLessonId: null,
@@ -236,20 +224,11 @@ window.LessonManager = window.LessonManager || {
     uploadStartTime: 0,
     uploadStartLoaded: 0,
 
-    // ========================================================================
-    // INICIALIZACIÓN Y CARGA DE DATOS
-    // ========================================================================
-
-    /**
-     * Inicializa el gestor de lecciones
-     */
     async init() {
+        console.log('Initializing Lesson Manager for module:', CONFIG.moduleId);
         await this.loadLessons();
     },
 
-    /**
-     * Carga las lecciones del módulo desde la API
-     */
     async loadLessons() {
         try {
             const url = CONFIG.routes.lessons.index.replace(':moduleId', CONFIG.moduleId);
@@ -261,6 +240,7 @@ window.LessonManager = window.LessonManager || {
             });
 
             const data = await response.json();
+            console.log('Loaded lessons:', data);
 
             if (data.success) {
                 this.currentModule = data.module;
@@ -276,38 +256,25 @@ window.LessonManager = window.LessonManager || {
         }
     },
 
-    // ========================================================================
-    // RENDERIZADO DE INTERFAZ
-    // ========================================================================
-
-    /**
-     * Renderiza la información del módulo en el encabezado
-     */
     renderModule() {
         const module = this.currentModule;
-        const totalDuration = module.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
-        const courseId = module.course_id;
-        const backUrl = '{{ route('admin.courses.modules', ['courseId' => ':courseId']) }}'.replace(':courseId', courseId);
-
-        // Actualizar títulos y descripciones
         document.getElementById('module-title').textContent = `Lecciones de ${module.title}`;
         document.getElementById('course-title').textContent = module.course.title;
         document.getElementById('module-description').textContent = module.description;
-
-        // Actualizar contadores
         document.getElementById('lessons-count').textContent = module.lessons.length;
         document.getElementById('lessons-count-detail').textContent = module.lessons.length;
         document.getElementById('module-order').textContent = module.order;
+
+        const totalDuration = module.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
         document.getElementById('total-duration').textContent = totalDuration;
 
-        // Actualizar enlaces de navegación
+        // Update back links
+        const courseId = module.course_id;
+        const backUrl = '{{ route('admin.courses.modules', ['courseId' => ':courseId']) }}'.replace(':courseId', courseId);
         document.getElementById('back-link').href = backUrl;
         document.getElementById('back-button').href = backUrl;
     },
 
-    /**
-     * Renderiza la lista de lecciones
-     */
     renderLessons() {
         const container = document.getElementById('lessons-container');
 
@@ -328,9 +295,6 @@ window.LessonManager = window.LessonManager || {
         container.innerHTML = this.lessons.map(lesson => this.renderLessonCard(lesson)).join('');
     },
 
-    /**
-     * Renderiza una tarjeta de lección individual
-     */
     renderLessonCard(lesson) {
         const videoTypeLabel = {
             youtube: 'YouTube',
@@ -408,13 +372,6 @@ window.LessonManager = window.LessonManager || {
         `;
     },
 
-    // ========================================================================
-    // GESTIÓN DE MODALES
-    // ========================================================================
-
-    /**
-     * Abre el modal para crear una nueva lección
-     */
     openCreateModal() {
         this.editingLessonId = null;
         document.getElementById('modal-title').textContent = 'Nueva Lección';
@@ -425,9 +382,6 @@ window.LessonManager = window.LessonManager || {
         this.showModal();
     },
 
-    /**
-     * Abre el modal para editar una lección existente
-     */
     async openEditModal(lessonId) {
         this.editingLessonId = lessonId;
         const lesson = this.lessons.find(l => l.id === lessonId);
@@ -451,25 +405,16 @@ window.LessonManager = window.LessonManager || {
         this.showModal();
     },
 
-    /**
-     * Muestra el modal
-     */
     showModal() {
         document.getElementById('lesson-modal').style.display = 'flex';
     },
 
-    /**
-     * Cierra el modal y resetea el formulario
-     */
     closeModal() {
         document.getElementById('lesson-modal').style.display = 'none';
         document.getElementById('lesson-form').reset();
         this.resetUploadUI();
     },
 
-    /**
-     * Actualiza los campos visibles según el tipo de video seleccionado
-     */
     updateVideoFields() {
         const videoType = document.getElementById('lesson-video-type').value;
 
@@ -477,17 +422,10 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('bunny-field').classList.toggle('hidden', videoType !== 'bunny');
         document.getElementById('local-field').classList.toggle('hidden', videoType !== 'local');
 
-        // Actualizar campos requeridos
+        // Update required fields
         document.getElementById('lesson-youtube-id').required = videoType === 'youtube';
     },
 
-    // ========================================================================
-    // OPERACIONES CRUD
-    // ========================================================================
-
-    /**
-     * Guarda una lección (crear o actualizar)
-     */
     async saveLesson(event) {
         event.preventDefault();
 
@@ -502,6 +440,8 @@ window.LessonManager = window.LessonManager || {
             is_trial: document.getElementById('lesson-is-trial').checked,
             module_id: CONFIG.moduleId
         };
+
+        console.log('Saving lesson:', formData);
 
         try {
             let url, method;
@@ -525,6 +465,7 @@ window.LessonManager = window.LessonManager || {
             });
 
             const data = await response.json();
+            console.log('Save response:', data);
 
             if (data.success) {
                 this.showAlert('success', data.message);
@@ -539,9 +480,6 @@ window.LessonManager = window.LessonManager || {
         }
     },
 
-    /**
-     * Elimina una lección
-     */
     async deleteLesson(lessonId, lessonTitle) {
         if (!confirm(`¿Estás seguro de eliminar la lección "${lessonTitle}"?`)) {
             return;
@@ -571,30 +509,18 @@ window.LessonManager = window.LessonManager || {
         }
     },
 
-    /**
-     * Mueve una lección hacia arriba en el orden
-     */
     async moveUp(lessonId) {
         await this.callAction('moveUp', lessonId);
     },
 
-    /**
-     * Mueve una lección hacia abajo en el orden
-     */
     async moveDown(lessonId) {
         await this.callAction('moveDown', lessonId);
     },
 
-    /**
-     * Alterna el estado trial/premium de una lección
-     */
     async toggleTrial(lessonId) {
         await this.callAction('toggleTrial', lessonId);
     },
 
-    /**
-     * Ejecuta una acción en el API
-     */
     async callAction(action, lessonId) {
         try {
             const url = CONFIG.routes.lessons[action].replace(':id', lessonId);
@@ -620,21 +546,18 @@ window.LessonManager = window.LessonManager || {
         }
     },
 
-    // ========================================================================
-    // FUNCIONES DE SUBIDA A BUNNY.NET
-    // ========================================================================
-
-    /**
-     * Maneja la subida de un video a Bunny.net CDN
-     */
+    // Bunny Upload Functions
     async handleBunnyUpload(event) {
         const file = event.target.files[0];
         if (!file) return;
 
+        console.log('Starting Bunny upload for file:', file.name);
+
+        // Get title
         const title = document.getElementById('lesson-title').value || 'Video de lección';
 
         try {
-            // Paso 1: Inicializar la subida
+            // Step 1: Initialize upload
             const initResponse = await fetch(CONFIG.routes.bunny.init, {
                 method: 'POST',
                 headers: {
@@ -645,14 +568,16 @@ window.LessonManager = window.LessonManager || {
             });
 
             const initData = await initResponse.json();
+            console.log('Init response:', initData);
 
             if (!initData.success) {
                 throw new Error(initData.message || 'Error al inicializar subida');
             }
 
+            // Show upload UI
             this.showUploadProgress();
 
-            // Paso 2: Subir el archivo a Bunny.net
+            // Step 2: Upload to Bunny
             this.uploadStartTime = Date.now();
             this.uploadStartLoaded = 0;
             this.uploadXhr = new XMLHttpRequest();
@@ -665,8 +590,10 @@ window.LessonManager = window.LessonManager || {
             });
 
             this.uploadXhr.addEventListener('load', async () => {
+                console.log('Upload complete - Status:', this.uploadXhr.status);
+
                 if (this.uploadXhr.status === 200 || this.uploadXhr.status === 201) {
-                    // Paso 3: Confirmar la subida
+                    // Step 3: Confirm upload
                     try {
                         const confirmResponse = await fetch(CONFIG.routes.bunny.confirm, {
                             method: 'POST',
@@ -700,6 +627,7 @@ window.LessonManager = window.LessonManager || {
                 this.resetUploadUI();
             });
 
+            console.log('Uploading to:', initData.upload_url);
             this.uploadXhr.open('PUT', initData.upload_url);
             this.uploadXhr.setRequestHeader('AccessKey', initData.api_key);
             this.uploadXhr.send(file);
@@ -711,18 +639,12 @@ window.LessonManager = window.LessonManager || {
         }
     },
 
-    /**
-     * Muestra la UI de progreso de subida
-     */
     showUploadProgress() {
         document.getElementById('bunny-select-button').disabled = true;
         document.getElementById('upload-progress-container').classList.remove('hidden');
         document.getElementById('upload-success').classList.add('hidden');
     },
 
-    /**
-     * Actualiza la barra de progreso de subida
-     */
     updateProgress(percentage, loaded, total) {
         document.getElementById('upload-progress-bar').style.width = percentage + '%';
         document.getElementById('upload-percentage').textContent = percentage + '%';
@@ -737,18 +659,12 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('upload-eta').textContent = eta > 0 ? Math.ceil(eta) + 's restantes' : 'Finalizando...';
     },
 
-    /**
-     * Muestra el mensaje de subida exitosa
-     */
     showUploadSuccess() {
         document.getElementById('upload-progress-container').classList.add('hidden');
         document.getElementById('upload-success').classList.remove('hidden');
         document.getElementById('submit-button').disabled = false;
     },
 
-    /**
-     * Resetea la UI de subida a su estado inicial
-     */
     resetUploadUI() {
         document.getElementById('bunny-select-button').disabled = false;
         document.getElementById('upload-progress-container').classList.add('hidden');
@@ -758,9 +674,6 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('bunny-file-input').value = '';
     },
 
-    /**
-     * Cancela la subida en progreso
-     */
     cancelUpload() {
         if (this.uploadXhr) {
             this.uploadXhr.abort();
@@ -770,13 +683,6 @@ window.LessonManager = window.LessonManager || {
         this.showAlert('info', 'Subida cancelada');
     },
 
-    // ========================================================================
-    // UTILIDADES
-    // ========================================================================
-
-    /**
-     * Muestra una alerta temporal al usuario
-     */
     showAlert(type, message) {
         const container = document.getElementById('alert-container');
         const colors = {
@@ -804,9 +710,6 @@ window.LessonManager = window.LessonManager || {
         }, 5000);
     },
 
-    /**
-     * Escapa HTML para prevenir XSS
-     */
     escapeHtml(text) {
         const div = document.createElement('div');
         div.textContent = text;
@@ -814,34 +717,9 @@ window.LessonManager = window.LessonManager || {
     }
 };
 
-// ============================================================================
-// INICIALIZACIÓN
-// ============================================================================
-
-/**
- * Inicializa el Lesson Manager
- * Soporta tanto carga directa de página como navegación SPA con Livewire
- */
-function initializeLessonManager() {
-    if (document.readyState === 'loading') {
-        // DOM aún cargando, esperar al evento
-        document.addEventListener('DOMContentLoaded', () => {
-            window.LessonManager.init();
-        });
-    } else {
-        // DOM ya está listo, inicializar inmediatamente
-        window.LessonManager.init();
-    }
-}
-
-// Inicializar ahora
-initializeLessonManager();
-
-// Escuchar navegación Livewire para reinicializar
-// IMPORTANTE: Esto resuelve el problema cuando se navega desde una página Livewire
-// hacia esta página no-Livewire usando wire:navigate
-document.addEventListener('livewire:navigated', () => {
-    window.LessonManager.init();
+// Initialize on page load
+document.addEventListener('DOMContentLoaded', () => {
+    LessonManager.init();
 });
 </script>
 @endpush

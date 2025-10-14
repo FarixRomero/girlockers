@@ -12,7 +12,6 @@ use App\Livewire\Admin\AccessRequests;
 use App\Livewire\Admin\CommentModeration;
 use App\Livewire\Admin\CourseManagement;
 use App\Livewire\Admin\ModuleManagement;
-use App\Livewire\Admin\LessonManagement;
 use App\Http\Controllers\VideoStreamController;
 use Illuminate\Support\Facades\Route;
 
@@ -47,7 +46,28 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('comments', CommentModeration::class)->name('comments.index');
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');
-    Route::get('modules/{moduleId}/lessons', LessonManagement::class)->name('modules.lessons');
+    Route::get('modules/{moduleId}/lessons', function ($moduleId) {
+        return view('livewire.admin.lesson-management', ['moduleId' => $moduleId]);
+    })->name('modules.lessons');
+    Route::get('modules/{moduleId}/lessons-pure', function ($moduleId) {
+        return view('admin.lesson-management-pure', ['moduleId' => $moduleId]);
+    })->name('modules.lessons-pure');
+
+    // Bunny.net video upload endpoints
+    Route::post('lessons/bunny/init-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'initUpload'])->name('lessons.bunny.init');
+    Route::post('lessons/bunny/confirm-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'confirmUpload'])->name('lessons.bunny.confirm');
+
+    // API Routes for Lesson Management
+    Route::prefix('api')->name('api.')->group(function () {
+        Route::get('modules/{moduleId}/lessons', [App\Http\Controllers\Api\LessonController::class, 'index'])->name('lessons.index');
+        Route::post('lessons', [App\Http\Controllers\Api\LessonController::class, 'store'])->name('lessons.store');
+        Route::get('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'show'])->name('lessons.show');
+        Route::put('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'update'])->name('lessons.update');
+        Route::delete('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'destroy'])->name('lessons.destroy');
+        Route::post('lessons/{id}/move-up', [App\Http\Controllers\Api\LessonController::class, 'moveUp'])->name('lessons.move-up');
+        Route::post('lessons/{id}/move-down', [App\Http\Controllers\Api\LessonController::class, 'moveDown'])->name('lessons.move-down');
+        Route::post('lessons/{id}/toggle-trial', [App\Http\Controllers\Api\LessonController::class, 'toggleTrial'])->name('lessons.toggle-trial');
+    });
 });
 
 require __DIR__.'/auth.php';

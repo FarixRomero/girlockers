@@ -26,7 +26,7 @@ class CourseManagement extends Component
     public $slug = '';
     public $description = '';
     public $level = 'principiante';
-    public $image_path = '';
+    public $existingImage = '';
     public $image;
     public $is_published = false;
 
@@ -64,7 +64,7 @@ class CourseManagement extends Component
         $this->slug = $course->slug;
         $this->description = $course->description;
         $this->level = $course->level;
-        $this->image_path = $course->image_path;
+        $this->existingImage = $course->image;
         $this->is_published = $course->is_published;
 
         $this->showModal = true;
@@ -85,7 +85,7 @@ class CourseManagement extends Component
             'slug',
             'description',
             'level',
-            'image_path',
+            'existingImage',
             'image',
             'is_published',
         ]);
@@ -118,7 +118,7 @@ class CourseManagement extends Component
         ];
 
         if ($this->image) {
-            $data['image_path'] = $this->image->store('courses', 'public');
+            $data['image'] = $this->image->store('courses', 'public');
         }
 
         if ($this->isEditing) {

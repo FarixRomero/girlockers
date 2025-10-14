@@ -8,7 +8,7 @@
         <title>Admin - {{ config('app.name', 'Laravel') }}</title>
 
         <!-- Favicon -->
-        <link rel="icon" type="image/jpeg" href="{{ asset('images/girllockers.jpg') }}">
+        <link rel="icon" type="image/jpeg" href="{{ asset('images/girlslockers.jpg') }}">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -86,7 +86,7 @@
 
                 <!-- Page Content -->
                 <main class="flex-1 overflow-y-auto p-4 lg:p-8">
-                    {{ $slot }}
+                    @yield('content', $slot ?? '')
                 </main>
             </div>
 
@@ -116,5 +116,7 @@
                 </div>
             </div>
         </div>
+
+        @stack('scripts')
     </body>
 </html>

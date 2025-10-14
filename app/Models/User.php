@@ -113,7 +113,8 @@ class User extends Authenticatable
      */
     public function likes()
     {
-        return $this->belongsToMany(Lesson::class, 'lesson_likes')->withTimestamps();
+        return $this->belongsToMany(Lesson::class, 'lesson_likes')
+            ->withPivot('created_at');
     }
 
     /**

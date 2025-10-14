@@ -6,6 +6,10 @@ use App\Livewire\Student\CourseDetail;
 use App\Livewire\Student\LessonView;
 use App\Livewire\Student\RequestAccess;
 use App\Livewire\Student\Dashboard;
+use App\Livewire\Student\LessonCatalog;
+use App\Livewire\Student\InstructorCatalog;
+use App\Livewire\Student\SavedContent;
+use App\Livewire\Student\WatchHistory;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\StudentManagement;
 use App\Livewire\Admin\AccessRequests;
@@ -28,7 +32,15 @@ Route::middleware(['auth'])->group(function () {
     // Courses & Lessons
     Route::get('courses', CourseCatalog::class)->name('courses.index');
     Route::get('courses/{course}', CourseDetail::class)->name('courses.show');
+    Route::get('lessons', LessonCatalog::class)->name('lessons.index');
     Route::get('lessons/{lesson}', LessonView::class)->name('lessons.show');
+
+    // Instructors
+    Route::get('instructors', InstructorCatalog::class)->name('instructors.index');
+
+    // Saved & History
+    Route::get('saved', SavedContent::class)->name('saved.index');
+    Route::get('history', WatchHistory::class)->name('history.index');
 
     // Video Streaming
     Route::get('lessons/{lesson}/stream', [VideoStreamController::class, 'stream'])->name('lessons.stream');

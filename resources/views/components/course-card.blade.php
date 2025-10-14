@@ -1,69 +1,68 @@
 @props(['course'])
 
 @php
-    $levelConfig = [
-        'beginner' => ['name' => 'Principiante', 'icon' => '🌱', 'color' => 'bg-green-500/20 text-green-400'],
-        'intermediate' => ['name' => 'Intermedio', 'icon' => '🔥', 'color' => 'bg-orange-500/20 text-orange-400'],
-        'advanced' => ['name' => 'Avanzado', 'icon' => '💎', 'color' => 'bg-purple-500/20 text-purple-400'],
+    $levelColors = [
+        'principiante' => 'bg-orange-500',
+        'intermedio' => 'bg-blue-500',
+        'avanzado' => 'bg-red-600'
     ];
-
-    $config = $levelConfig[$course->level] ?? $levelConfig['beginner'];
+    $levelColor = $levelColors[$course->level] ?? 'bg-gray-500';
     $totalLessons = $course->modules->sum(fn($module) => $module->lessons_count);
 @endphp
 
-<a href="{{ route('courses.show', $course) }}" wire:navigate class="block card-premium hover-lift group">
-    <!-- Course Image -->
-    @if($course->image)
-        <div class="aspect-video bg-purple-darkest rounded-t-3xl overflow-hidden mb-4">
-            <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
-        </div>
-    @else
-        <div class="aspect-video bg-gradient-card rounded-t-3xl overflow-hidden mb-4 flex items-center justify-center">
-            <span class="text-6xl">💃</span>
-        </div>
-    @endif
+<div class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition relative">
+    <!-- Thumbnail -->
+    <a href="{{ route('courses.show', $course) }}" wire:navigate class="block relative">
+        @if($course->image)
+            <div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 relative">
+                <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="absolute inset-0 w-full h-full object-cover">
 
-    <!-- Course Info -->
-    <div class="px-2">
-        <!-- Level Badge -->
-        <div class="flex items-center justify-between mb-3">
-            <span class="px-3 py-1 rounded-full text-xs font-bold {{ $config['color'] }}">
-                {{ $config['icon'] }} {{ $config['name'] }}
-            </span>
-            @if($course->is_published)
-                <span class="text-xs text-green-400">● Publicado</span>
-            @endif
-        </div>
-
-        <!-- Title & Description -->
-        <h3 class="font-display text-xl text-cream mb-2 group-hover:text-pink-vibrant transition">
-            {{ $course->title }}
-        </h3>
-
-        <p class="text-cream/70 text-sm mb-4 line-clamp-2">
-            {{ $course->description }}
-        </p>
-
-        <!-- Stats -->
-        <div class="flex items-center justify-between text-sm text-cream/60 pt-4 border-t border-pink-vibrant/10">
-            <div class="flex items-center space-x-4">
-                <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                    </svg>
-                    {{ $course->modules_count }} {{ $course->modules_count === 1 ? 'módulo' : 'módulos' }}
-                </span>
-                <span class="flex items-center">
-                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    {{ $totalLessons }} {{ $totalLessons === 1 ? 'lección' : 'lecciones' }}
-                </span>
+                <!-- Title Overlay (bottom) -->
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    <h3 class="text-white font-bold text-lg line-clamp-2">{{ $course->title }}</h3>
+                </div>
             </div>
-            <svg class="w-5 h-5 text-pink-vibrant group-hover:translate-x-1 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-            </svg>
+        @else
+            <div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 relative">
+                <div class="absolute inset-0 flex items-center justify-center">
+                    <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                    </svg>
+                </div>
+
+                <!-- Title Overlay (bottom) -->
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
+                    <h3 class="text-white font-bold text-lg line-clamp-2">{{ $course->title }}</h3>
+                </div>
+            </div>
+        @endif
+    </a>
+
+    <!-- Content -->
+    <div class="p-4">
+        <!-- Tags Row -->
+        <div class="flex flex-wrap gap-2 mb-3">
+            <!-- Course Level Badge -->
+            <span class="px-2 py-1 {{ $levelColor }} text-white text-xs font-bold uppercase rounded">
+                {{ $course->level }}
+            </span>
+
+            <!-- Modules Count -->
+            <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">
+                {{ $course->modules_count }} {{ $course->modules_count === 1 ? 'MÓDULO' : 'MÓDULOS' }}
+            </span>
+
+            <!-- Lessons Count -->
+            <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">
+                {{ $totalLessons }} {{ $totalLessons === 1 ? 'CLASE' : 'CLASES' }}
+            </span>
         </div>
+
+        <!-- Description -->
+        @if($course->description)
+            <p class="text-sm text-gray-600 line-clamp-2">
+                {{ $course->description }}
+            </p>
+        @endif
     </div>
-</a>
+</div>

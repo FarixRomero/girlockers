@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.student')]
 class LessonView extends Component
 {
     use AuthorizesRequests;

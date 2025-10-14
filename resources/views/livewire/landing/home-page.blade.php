@@ -635,6 +635,167 @@
         </div>
     </section>
 
+    <!-- Pricing Section con Candado 3D -->
+    <section class="py-32 bg-white relative overflow-hidden" id="pricing">
+        <!-- Blobs de fondo -->
+        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-primary/5 rounded-full filter blur-3xl animate-blob-slower"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-light/5 rounded-full filter blur-3xl animate-blob" style="animation-delay: 2s;"></div>
+
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="pricing-title font-display font-black text-5xl md:text-7xl text-black mb-6 leading-tight">
+                    Elige Tu <span class="text-purple-primary">Plan</span>
+                </h2>
+                <p class="pricing-subtitle text-gray-dark text-xl md:text-2xl max-w-3xl mx-auto font-bold">
+                    Desbloquea todo tu potencial locker
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto items-center">
+                <!-- Plan Mensual -->
+                <div class="pricing-card-1 bg-white rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-light relative overflow-hidden group">
+                    <!-- Efecto de brillo -->
+                    <div class="absolute inset-0 bg-gradient-to-br from-purple-primary/0 via-purple-primary/5 to-purple-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                    <div class="relative z-10">
+                        <div class="text-center mb-6">
+                            <div class="inline-block bg-purple-ultralight text-purple-primary text-sm font-bold px-4 py-2 rounded-full uppercase mb-4">
+                                Plan Mensual
+                            </div>
+                            <div class="flex items-end justify-center gap-2 mb-2">
+                                <span class="text-6xl font-black text-black">S/30</span>
+                                <span class="text-gray-dark text-xl font-medium mb-3">/mes</span>
+                            </div>
+                            <p class="text-gray-dark text-sm">Perfecto para empezar</p>
+                        </div>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start text-gray-dark">
+                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Acceso a todas las clases</span>
+                            </li>
+                            <li class="flex items-start text-gray-dark">
+                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">La Bóveda completa</span>
+                            </li>
+                            <li class="flex items-start text-gray-dark">
+                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Comunidad privada</span>
+                            </li>
+                            <li class="flex items-start text-gray-dark">
+                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Contenido nuevo semanal</span>
+                            </li>
+                        </ul>
+
+                        <a href="{{ route('register') }}" wire:navigate
+                           class="block w-full px-8 py-4 bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white font-bold text-lg rounded-xl text-center transition-all duration-300 transform group-hover:scale-105 shadow-lg">
+                            COMENZAR AHORA
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Candado 3D en el centro -->
+                <div class="hidden lg:block">
+                    <div id="lock-3d-container" class="w-full h-[500px] rounded-3xl"></div>
+                </div>
+
+                <!-- Plan Semestral (Destacado) -->
+                <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
+                    <!-- Badge de descuento -->
+                    <div class="absolute -top-4 right-8 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
+                        ¡Ahorra 40%!
+                    </div>
+
+                    <!-- Efecto de brillo -->
+                    <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+                    <!-- Estrellas decorativas -->
+                    <div class="absolute top-4 right-4 text-4xl animate-pulse">✨</div>
+                    <div class="absolute bottom-8 left-6 text-3xl animate-pulse" style="animation-delay: 0.5s;">💫</div>
+
+                    <div class="relative z-10">
+                        <div class="text-center mb-6">
+                            <div class="inline-block bg-white text-purple-primary text-sm font-bold px-4 py-2 rounded-full uppercase mb-4">
+                                Plan Semestral
+                            </div>
+                            <div class="flex items-end justify-center gap-2 mb-2">
+                                <span class="text-gray-light line-through text-2xl font-bold">S/180</span>
+                            </div>
+                            <div class="flex items-end justify-center gap-2 mb-2">
+                                <span class="text-6xl font-black text-white">S/100</span>
+                                <span class="text-purple-ultralight text-xl font-medium mb-3">/6 meses</span>
+                            </div>
+                            <p class="text-purple-ultralight text-sm font-medium">¡Mejor valor!</p>
+                        </div>
+
+                        <ul class="space-y-4 mb-8">
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Acceso a todas las clases</span>
+                            </li>
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">La Bóveda completa</span>
+                            </li>
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Comunidad privada</span>
+                            </li>
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-medium">Contenido nuevo semanal</span>
+                            </li>
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-yellow-300 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-bold">Sesiones exclusivas en vivo</span>
+                            </li>
+                            <li class="flex items-start text-white">
+                                <svg class="w-6 h-6 text-yellow-300 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                </svg>
+                                <span class="font-bold">Feedback personalizado</span>
+                            </li>
+                        </ul>
+
+                        <a href="{{ route('register') }}" wire:navigate
+                           class="block w-full px-8 py-4 bg-white hover:bg-gray-ultralight text-purple-primary font-bold text-lg rounded-xl text-center transition-all duration-300 transform group-hover:scale-105 shadow-2xl">
+                            OBTENER DESCUENTO
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Garantía -->
+            <div class="mt-16 text-center">
+                <div class="inline-flex items-center gap-3 bg-purple-ultralight px-8 py-4 rounded-full">
+                    <svg class="w-8 h-8 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+                    </svg>
+                    <span class="text-purple-primary font-bold text-lg">Garantía de satisfacción de 7 días</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <!-- CTA Final -->
     <section class="py-24 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary relative overflow-hidden">
         <!-- Pattern overlay -->

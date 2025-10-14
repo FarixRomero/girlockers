@@ -1,6 +1,12 @@
 {
+  "node_modules/three/build/three.module.js": {
+    "file": "assets/three.module-kJECfnIC.js",
+    "name": "three.module",
+    "src": "node_modules/three/build/three.module.js",
+    "isDynamicEntry": true
+  },
   "resources/css/app.css": {
-    "file": "assets/app-_3QnmVxw.css",
+    "file": "assets/app-B5NKfYoc.css",
     "src": "resources/css/app.css",
     "isEntry": true,
     "names": [
@@ -14,9 +20,12 @@
     "isEntry": true
   },
   "resources/js/landing-animations.js": {
-    "file": "assets/landing-animations-DPd6vu-z.js",
+    "file": "assets/landing-animations-_GqrHyf0.js",
     "name": "landing-animations",
     "src": "resources/js/landing-animations.js",
-    "isEntry": true
+    "isEntry": true,
+    "dynamicImports": [
+      "node_modules/three/build/three.module.js"
+    ]
   }
 }

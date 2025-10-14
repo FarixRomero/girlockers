@@ -20,6 +20,7 @@
     "dependencies": {
         "alpinejs": "^3.15.0",
         "motion": "^12.23.24",
-        "terser": "^5.44.0"
+        "terser": "^5.44.0",
+        "three": "^0.180.0"
     }
 }

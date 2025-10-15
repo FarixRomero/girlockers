@@ -65,7 +65,7 @@
                                         </div>
                                     @endif
                                     @if($lesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">STEEZY</span>
+                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
                                     @endif
                                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
                                         <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
@@ -132,7 +132,7 @@
                                             </div>
                                         @endif
                                         @if($lesson->is_trial)
-                                            <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">STEEZY</span>
+                                            <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
                                         @endif
                                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
                                             <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
@@ -196,7 +196,7 @@
                                         </div>
                                     @endif
                                     @if($lesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">STEEZY</span>
+                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
                                     @endif
                                     <div class="absolute top-3 left-3">
                                         <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">

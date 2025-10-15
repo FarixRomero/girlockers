@@ -150,7 +150,7 @@
                                     </div>
 
                                     @if($upcomingLesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">STEEZY</span>
+                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
                                     @endif
 
                                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -229,7 +229,7 @@
                                     </div>
 
                                     @if($similarLesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">STEEZY</span>
+                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
                                     @endif
 
                                     <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">

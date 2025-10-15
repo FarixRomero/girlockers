@@ -33,13 +33,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        \DB::table('courses')->update(['level' => \DB::raw("
-            CASE
-                WHEN level = 'principiante' THEN 'beginner'
-                WHEN level = 'intermedio' THEN 'intermediate'
-                WHEN level = 'avanzado' THEN 'advanced'
-                ELSE level
-            END
-        ")]);
+        // El enum ya está en español, así que no necesitamos convertir nada
+        // Esta migración no debe hacer nada en el down porque los valores
+        // ya están en el formato correcto (español) según el enum definido
     }
 };

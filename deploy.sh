@@ -21,7 +21,7 @@ sshpass -p "Trilce@123" ssh -p 65002 -o StrictHostKeyChecking=no u912353527@89.1
 
   echo "📦 Ejecutando git pull..."
   git pull origin master
-  php artisan migrate:refresh --seed
+  php artisan migrate:fresh --seed
 
   echo "✅ Deployment completado!"
 EOF

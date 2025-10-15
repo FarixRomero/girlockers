@@ -14,7 +14,7 @@ git commit -m "Agrega archivos de build al repositorio" || true
 git push origin master
 
 # Conectarse al servidor y ejecutar comandos remotos
-wsl sshpass -p "Trilce@123" ssh -p 65002 -o StrictHostKeyChecking=no u912353527@89.116.115.104 << 'EOF'
+sshpass -p "Trilce@123" ssh -p 65002 -o StrictHostKeyChecking=no u912353527@89.116.115.104 << 'EOF'
   echo "📁 Navegando al directorio del proyecto..."
   cd domains/consultoria-im.com/public/girlockers
 

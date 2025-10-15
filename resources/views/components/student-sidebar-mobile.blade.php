@@ -7,7 +7,7 @@
             <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
             <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
         </div>
-        <span class="text-xl font-bold text-white tracking-wider">GIRLSLOCKERS</span>
+        <span class="text-xl font-script bg-gradient-to-r from-purple-primary to-purple-light bg-clip-text text-transparent italic font-bold tracking-wider">Girls Lockers</span>
     </a>
     <button @click="$dispatch('toggle-mobile-sidebar')" class="p-1 hover:bg-gray-800 rounded transition">
         <svg class="w-6 h-6 text-gray-400 hover:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

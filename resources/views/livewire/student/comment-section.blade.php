@@ -30,38 +30,44 @@
 
             <!-- Comment Input -->
             <div class="flex-1">
-                <form wire:submit="postComment" class="space-y-3">
+                <form wire:submit="postComment" class="space-y-3" x-data="{ commentText: '{{ $content }}' }">
                     <textarea
                         wire:model="content"
                         id="comment-content"
                         rows="1"
-                        class="w-full border-0 border-b border-gray-300 focus:border-b-2 focus:border-gray-900 px-0 py-2 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-0 resize-none transition"
+                        class="w-full border border-gray-300 rounded-lg px-4 py-3 text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none transition"
                         placeholder="Añade un comentario..."
                         onfocus="this.rows=4"
-                        onblur="if(this.value === '') this.rows=1"></textarea>
+                        onblur="if(this.value === '') this.rows=1"
+                        x-model="commentText"
+                        @input="$wire.set('content', commentText)"></textarea>
 
                     @error('content')
                         <p class="text-red-600 text-sm">{{ $message }}</p>
                     @enderror
 
-                    <!-- Action Buttons (hidden until focused) -->
-                    <div class="flex items-center justify-between" x-data="{show: false}" x-show="show || '{{ $content }}' !== ''" x-cloak>
-                        <span class="text-gray-500 text-xs">
-                            {{ strlen($content) }}/1000
-                        </span>
+                    <!-- Action Buttons - YouTube Style -->
+                    <div class="flex items-center justify-between mt-3">
                         <div class="flex items-center gap-2">
+                            <!-- Character counter -->
+                            <span x-text="commentText.length + '/1000'" class="text-gray-500 text-xs" :class="commentText.length > 1000 ? 'text-red-500' : ''"></span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <!-- Cancel button (shown when there's content) -->
                             <button
+                                x-show="commentText !== ''"
                                 type="button"
-                                wire:click="$set('content', '')"
+                                @click="commentText = ''; $wire.set('content', '')"
                                 class="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition">
                                 Cancelar
                             </button>
+                            <!-- Comment button - YouTube style -->
                             <button
                                 type="submit"
                                 wire:loading.attr="disabled"
                                 wire:loading.class="opacity-50 cursor-not-allowed"
-                                class="px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-full transition disabled:bg-blue-300"
-                                :disabled="'{{ $content }}' === ''">
+                                class="px-6 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-full transition disabled:bg-gray-400 disabled:cursor-not-allowed flex items-center gap-2"
+                                :disabled="commentText === '' || commentText.length > 1000">
                                 <span wire:loading.remove wire:target="postComment">Comentar</span>
                                 <span wire:loading wire:target="postComment" class="flex items-center">
                                     <svg class="animate-spin h-4 w-4 mr-1" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">

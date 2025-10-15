@@ -8,7 +8,7 @@
                 <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
                 <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
             </div>
-            <span x-show="!collapsed" x-transition class="text-xl font-bold text-white tracking-wider whitespace-nowrap">GIRLSLOCKERS</span>
+            <span x-show="!collapsed" x-transition class="font-script text-xl font-bold text-white tracking-wider whitespace-nowrap">Girls Lockers</span>
         </a>
         <button @click="collapsed = !collapsed" class="p-1 hover:bg-gray-800 rounded transition flex-shrink-0" :title="collapsed ? 'Expandir' : 'Colapsar'">
             <svg class="w-5 h-5 text-gray-400 hover:text-white transition-transform duration-300" :class="collapsed ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">

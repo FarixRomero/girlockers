@@ -132,4 +132,22 @@ class Lesson extends Model
     {
         $this->decrement('likes_count');
     }
+
+    /**
+     * Get the lesson thumbnail URL
+     */
+    public function getThumbnailUrlAttribute(): ?string
+    {
+        if (!$this->thumbnail) {
+            return null;
+        }
+
+        // If it's already a full URL, return it
+        if (str_starts_with($this->thumbnail, 'http://') || str_starts_with($this->thumbnail, 'https://')) {
+            return $this->thumbnail;
+        }
+
+        // Otherwise, generate URL from storage
+        return asset('storage/' . $this->thumbnail);
+    }
 }

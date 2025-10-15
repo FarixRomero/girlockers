@@ -3,11 +3,11 @@ use App\Livewire\Actions\Logout;
 @endphp
 
 <!-- Top Navigation Bar -->
-<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6" x-data="{ openProfile: false, openNotifications: false }">
+<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6" x-data="{ openProfile: false, openNotifications: false, openMobileSearch: false }">
     <!-- Left Section - Menu Toggle (Mobile) + Search -->
     <div class="flex items-center flex-1 space-x-4">
         <!-- Mobile Menu Toggle -->
-        <button @click="$root.mobileSidebarOpen = true" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+        <button @click="$dispatch('toggle-mobile-sidebar')" class="lg:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
             </svg>
@@ -15,21 +15,14 @@ use App\Livewire\Actions\Logout;
 
         <!-- Search Bar -->
         <div class="hidden md:flex items-center flex-1 max-w-2xl">
-            <div class="relative w-full">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                <input type="search" class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent" placeholder="Buscar clases, cursos, instructores...">
-            </div>
+            @livewire('student.global-search')
         </div>
     </div>
 
     <!-- Right Section - Notifications, Profile, Subscribe Button -->
     <div class="flex items-center space-x-4">
         <!-- Search Icon (Mobile) -->
-        <button class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+        <button @click="openMobileSearch = true" class="md:hidden p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
             </svg>
@@ -145,5 +138,22 @@ use App\Livewire\Actions\Logout;
         <a href="{{ route('request-access') }}" wire:navigate class="hidden lg:inline-flex items-center px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg transition shadow-sm">
             SUBSCRIBE
         </a>
+    </div>
+
+    <!-- Mobile Search Modal -->
+    <div x-show="openMobileSearch" @click="openMobileSearch = false" x-transition:enter="transition-opacity ease-linear duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100" x-transition:leave="transition-opacity ease-linear duration-300" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0" class="fixed inset-0 bg-gray-900 bg-opacity-75 z-50 md:hidden" style="display: none;">
+        <div @click.stop class="bg-white h-full">
+            <div class="flex items-center justify-between p-4 border-b border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-900">Buscar</h3>
+                <button @click="openMobileSearch = false" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="p-4">
+                @livewire('student.global-search')
+            </div>
+        </div>
     </div>
 </header>

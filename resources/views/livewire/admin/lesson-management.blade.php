@@ -115,6 +115,28 @@
                     </div>
                 </div>
 
+                <!-- Thumbnail/Image -->
+                <div>
+                    <label class="block text-gray-dark text-sm font-bold mb-2">Imagen/Thumbnail</label>
+                    <div class="border-2 border-dashed border-purple-primary/30 rounded-lg p-4 text-center hover:border-purple-primary/50 transition-colors bg-white">
+                        <input type="file" id="lesson-thumbnail-input" accept="image/*" onchange="LessonManager.handleThumbnailUpload(event)" class="hidden">
+                        <button type="button" onclick="document.getElementById('lesson-thumbnail-input').click()" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm transition-all">
+                            Seleccionar imagen
+                        </button>
+                        <p class="text-gray-medium text-xs mt-2">Formatos: JPG, PNG, WebP (Recomendado: 1280x720px)</p>
+
+                        <!-- Preview -->
+                        <div id="thumbnail-preview" class="hidden mt-4">
+                            <img id="thumbnail-preview-img" src="" alt="Preview" class="max-w-full h-40 mx-auto rounded-lg object-cover">
+                            <button type="button" onclick="LessonManager.removeThumbnail()" class="text-red-600 hover:text-red-700 text-sm mt-2 font-medium">
+                                Eliminar imagen
+                            </button>
+                        </div>
+
+                        <input type="hidden" id="lesson-thumbnail">
+                    </div>
+                </div>
+
                 <!-- Video Type -->
                 <div>
                     <label class="block text-gray-dark text-sm font-bold mb-2">Tipo de Video</label>
@@ -358,35 +380,47 @@ window.LessonManager = window.LessonManager || {
             local: 'Local'
         }[lesson.video_type] || lesson.video_type;
 
+        const thumbnailUrl = lesson.thumbnail
+            ? `/storage/${lesson.thumbnail}`
+            : 'https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen';
+
         return `
             <div class="card-premium">
                 <div class="flex items-start justify-between">
                     <div class="flex items-start flex-1">
-                        <div class="w-12 h-12 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-lg mr-4">
-                            ${lesson.order}
+                        <!-- Thumbnail Image -->
+                        <div class="w-40 h-24 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
+                            <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
+                                class="w-full h-full object-cover"
+                                onerror="this.src='https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen'">
                         </div>
-                        <div class="flex-1">
-                            <div class="flex items-center space-x-2 mb-1">
-                                <h3 class="font-display text-lg text-cream">${this.escapeHtml(lesson.title)}</h3>
-                                ${lesson.is_trial
-                                    ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">✓ Trial</span>'
-                                    : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
-                                }
+                        <div class="flex items-start flex-1">
+                            <div class="w-12 h-12 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-lg mr-4">
+                                ${lesson.order}
                             </div>
-                            <p class="text-cream/60 text-sm mb-2">${this.escapeHtml(lesson.description)}</p>
-                            <div class="flex items-center space-x-3 text-xs text-cream/50">
-                                <span class="flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    </svg>
-                                    ${videoTypeLabel}
-                                </span>
-                                <span class="flex items-center">
-                                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    ${lesson.duration} min
-                                </span>
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <h3 class="font-display text-lg text-cream">${this.escapeHtml(lesson.title)}</h3>
+                                    ${lesson.is_trial
+                                        ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">✓ Trial</span>'
+                                        : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
+                                    }
+                                </div>
+                                <p class="text-cream/60 text-sm mb-2">${this.escapeHtml(lesson.description)}</p>
+                                <div class="flex items-center space-x-3 text-xs text-cream/50">
+                                    <span class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                        </svg>
+                                        ${videoTypeLabel}
+                                    </span>
+                                    <span class="flex items-center">
+                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        ${lesson.duration} min
+                                    </span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -437,10 +471,12 @@ window.LessonManager = window.LessonManager || {
      */
     openCreateModal() {
         this.editingLessonId = null;
+        this.thumbnailFile = null;
         document.getElementById('modal-title').textContent = 'Nueva Lección';
         document.getElementById('lesson-form').reset();
         document.getElementById('lesson-order').value = this.lessons.length + 1;
         document.getElementById('lesson-video-type').value = 'youtube';
+        this.removeThumbnail();
         this.updateVideoFields();
         this.showModal();
     },
@@ -450,6 +486,7 @@ window.LessonManager = window.LessonManager || {
      */
     async openEditModal(lessonId) {
         this.editingLessonId = lessonId;
+        this.thumbnailFile = null;
         const lesson = this.lessons.find(l => l.id === lessonId);
 
         if (!lesson) {
@@ -483,6 +520,15 @@ window.LessonManager = window.LessonManager || {
             });
         }
 
+        // Cargar thumbnail si existe
+        if (lesson.thumbnail) {
+            document.getElementById('lesson-thumbnail').value = lesson.thumbnail;
+            document.getElementById('thumbnail-preview-img').src = '/storage/' + lesson.thumbnail;
+            document.getElementById('thumbnail-preview').classList.remove('hidden');
+        } else {
+            this.removeThumbnail();
+        }
+
         this.updateVideoFields();
         this.showModal();
     },
@@ -507,6 +553,7 @@ window.LessonManager = window.LessonManager || {
         });
 
         this.resetUploadUI();
+        this.removeThumbnail();
     },
 
     /**
@@ -533,29 +580,49 @@ window.LessonManager = window.LessonManager || {
     async saveLesson(event) {
         event.preventDefault();
 
-        // Obtener tags seleccionados
-        const selectedTags = [];
-        document.querySelectorAll('input[name="tags[]"]:checked').forEach(checkbox => {
-            selectedTags.push(parseInt(checkbox.value));
-        });
-
-        const instructorId = document.getElementById('lesson-instructor').value;
-
-        const formData = {
-            title: document.getElementById('lesson-title').value,
-            description: document.getElementById('lesson-description').value,
-            instructor_id: instructorId ? parseInt(instructorId) : null,
-            tags: selectedTags,
-            video_type: document.getElementById('lesson-video-type').value,
-            youtube_id: document.getElementById('lesson-youtube-id').value || null,
-            bunny_video_id: document.getElementById('lesson-bunny-video-id').value || null,
-            duration: parseInt(document.getElementById('lesson-duration').value) || 0,
-            order: parseInt(document.getElementById('lesson-order').value),
-            is_trial: document.getElementById('lesson-is-trial').checked,
-            module_id: CONFIG.moduleId
-        };
+        const submitButton = document.getElementById('submit-button');
+        submitButton.disabled = true;
+        submitButton.textContent = 'Guardando...';
 
         try {
+            // Subir thumbnail si hay un archivo nuevo
+            let thumbnailPath = document.getElementById('lesson-thumbnail').value || null;
+
+            if (this.thumbnailFile) {
+                try {
+                    thumbnailPath = await this.uploadThumbnailToServer();
+                    this.showAlert('success', 'Imagen subida correctamente');
+                } catch (error) {
+                    this.showAlert('error', 'Error al subir la imagen: ' + error.message);
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Guardar Lección';
+                    return;
+                }
+            }
+
+            // Obtener tags seleccionados
+            const selectedTags = [];
+            document.querySelectorAll('input[name="tags[]"]:checked').forEach(checkbox => {
+                selectedTags.push(parseInt(checkbox.value));
+            });
+
+            const instructorId = document.getElementById('lesson-instructor').value;
+
+            const formData = {
+                title: document.getElementById('lesson-title').value,
+                description: document.getElementById('lesson-description').value,
+                instructor_id: instructorId ? parseInt(instructorId) : null,
+                tags: selectedTags,
+                video_type: document.getElementById('lesson-video-type').value,
+                youtube_id: document.getElementById('lesson-youtube-id').value || null,
+                bunny_video_id: document.getElementById('lesson-bunny-video-id').value || null,
+                thumbnail: thumbnailPath,
+                duration: parseInt(document.getElementById('lesson-duration').value) || 0,
+                order: parseInt(document.getElementById('lesson-order').value),
+                is_trial: document.getElementById('lesson-is-trial').checked,
+                module_id: CONFIG.moduleId
+            };
+
             let url, method;
 
             if (this.editingLessonId) {
@@ -588,6 +655,9 @@ window.LessonManager = window.LessonManager || {
         } catch (error) {
             console.error('Error saving lesson:', error);
             this.showAlert('error', 'Error de conexión al guardar la lección');
+        } finally {
+            submitButton.disabled = false;
+            submitButton.textContent = 'Guardar Lección';
         }
     },
 
@@ -820,6 +890,89 @@ window.LessonManager = window.LessonManager || {
         }
         this.resetUploadUI();
         this.showAlert('info', 'Subida cancelada');
+    },
+
+    // ========================================================================
+    // FUNCIONES DE THUMBNAIL
+    // ========================================================================
+
+    thumbnailFile: null,
+
+    /**
+     * Maneja la selección de thumbnail
+     */
+    async handleThumbnailUpload(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        // Validar tipo de archivo
+        if (!file.type.startsWith('image/')) {
+            this.showAlert('error', 'Por favor selecciona un archivo de imagen válido');
+            event.target.value = '';
+            return;
+        }
+
+        // Validar tamaño (max 5MB)
+        if (file.size > 5 * 1024 * 1024) {
+            this.showAlert('error', 'La imagen no debe superar los 5MB');
+            event.target.value = '';
+            return;
+        }
+
+        // Guardar archivo para subir después
+        this.thumbnailFile = file;
+
+        // Mostrar preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            document.getElementById('thumbnail-preview-img').src = e.target.result;
+            document.getElementById('thumbnail-preview').classList.remove('hidden');
+        };
+        reader.readAsDataURL(file);
+    },
+
+    /**
+     * Sube el thumbnail al servidor
+     */
+    async uploadThumbnailToServer() {
+        if (!this.thumbnailFile) {
+            return null;
+        }
+
+        try {
+            const formData = new FormData();
+            formData.append('thumbnail', this.thumbnailFile);
+
+            const response = await fetch('/admin/api/upload-thumbnail', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': CONFIG.csrfToken
+                },
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                return data.path;
+            } else {
+                throw new Error(data.message || 'Error al subir imagen');
+            }
+        } catch (error) {
+            console.error('Error uploading thumbnail:', error);
+            throw error;
+        }
+    },
+
+    /**
+     * Elimina el thumbnail seleccionado
+     */
+    removeThumbnail() {
+        this.thumbnailFile = null;
+        document.getElementById('lesson-thumbnail-input').value = '';
+        document.getElementById('lesson-thumbnail').value = '';
+        document.getElementById('thumbnail-preview').classList.add('hidden');
+        document.getElementById('thumbnail-preview-img').src = '';
     },
 
     // ========================================================================

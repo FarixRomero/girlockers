@@ -59,4 +59,22 @@ class Course extends Model
     {
         return $query->where('level', $level);
     }
+
+    /**
+     * Get the course image URL
+     */
+    public function getImageUrlAttribute(): ?string
+    {
+        if (!$this->image) {
+            return null;
+        }
+
+        // If it's already a full URL, return it
+        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+            return $this->image;
+        }
+
+        // Otherwise, generate URL from storage
+        return asset('storage/' . $this->image);
+    }
 }

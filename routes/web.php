@@ -71,9 +71,6 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     })->name('modules.lessons');
     Route::get('instructors', InstructorManagement::class)->name('instructors.index');
     Route::get('tags', TagManagement::class)->name('tags.index');
-    Route::get('modules/{moduleId}/lessons-pure', function ($moduleId) {
-        return view('admin.lesson-management-pure', ['moduleId' => $moduleId]);
-    })->name('modules.lessons-pure');
 
     // Bunny.net video upload endpoints
     Route::post('lessons/bunny/init-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'initUpload'])->name('lessons.bunny.init');

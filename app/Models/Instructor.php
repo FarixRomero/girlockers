@@ -64,4 +64,22 @@ class Instructor extends Model
     {
         $this->decrement('likes_count');
     }
+
+    /**
+     * Get the instructor photo/avatar URL
+     */
+    public function getPhotoUrlAttribute(): ?string
+    {
+        if (!$this->avatar) {
+            return null;
+        }
+
+        // If it's already a full URL, return it
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        // Otherwise, generate URL from storage
+        return asset('storage/' . $this->avatar);
+    }
 }

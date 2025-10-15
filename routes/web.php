@@ -79,6 +79,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::post('lessons/bunny/init-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'initUpload'])->name('lessons.bunny.init');
     Route::post('lessons/bunny/confirm-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'confirmUpload'])->name('lessons.bunny.confirm');
 
+    // Thumbnail upload
+    Route::post('api/upload-thumbnail', [App\Http\Controllers\Api\LessonController::class, 'uploadThumbnail'])->name('api.upload-thumbnail');
+
     // API Routes for Lesson Management
     Route::prefix('api')->name('api.')->group(function () {
         Route::get('modules/{moduleId}/lessons', [App\Http\Controllers\Api\LessonController::class, 'index'])->name('lessons.index');

@@ -43,6 +43,7 @@ class LessonController extends Controller
             'youtube_id' => 'required_if:video_type,youtube|string|max:20|nullable',
             'video_path' => 'nullable|string',
             'bunny_video_id' => 'required_if:video_type,bunny|string|nullable',
+            'thumbnail' => 'nullable|string',
             'video_duration' => 'nullable|integer|min:0',
             'duration' => 'nullable|integer|min:0',
             'order' => 'required|integer|min:1',
@@ -106,6 +107,7 @@ class LessonController extends Controller
             'youtube_id' => 'required_if:video_type,youtube|string|max:20|nullable',
             'video_path' => 'nullable|string',
             'bunny_video_id' => 'required_if:video_type,bunny|string|nullable',
+            'thumbnail' => 'nullable|string',
             'video_duration' => 'nullable|integer|min:0',
             'duration' => 'nullable|integer|min:0',
             'order' => 'required|integer|min:1',
@@ -253,5 +255,30 @@ class LessonController extends Controller
             'message' => "Lección marcada como {$status}",
             'lesson' => $lesson
         ]);
+    }
+
+    /**
+     * Upload thumbnail image
+     */
+    public function uploadThumbnail(Request $request)
+    {
+        $request->validate([
+            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,webp|max:5120'
+        ]);
+
+        try {
+            $path = $request->file('thumbnail')->store('lessons/thumbnails', 'public');
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Imagen subida correctamente',
+                'path' => $path
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al subir la imagen: ' . $e->getMessage()
+            ], 500);
+        }
     }
 }

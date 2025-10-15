@@ -68,25 +68,3 @@
     </a>
 </nav>
 
-<!-- Bottom Section - Followed Categories -->
-<div class="px-4 py-4 border-t border-gray-800">
-    <h3 class="text-xs font-semibold text-gray-400 uppercase tracking-wider mb-3">Categorías Seguidas</h3>
-    <div class="space-y-2">
-        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition">
-            <span class="mr-2">🎵</span>
-            Hip Hop
-        </a>
-        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition">
-            <span class="mr-2">💃</span>
-            Popping
-        </a>
-        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition">
-            <span class="mr-2">🔒</span>
-            Locking
-        </a>
-        <a href="#" class="flex items-center px-3 py-2 text-sm text-gray-300 hover:text-white hover:bg-gray-800 rounded-lg transition">
-            <span class="mr-2">💥</span>
-            Breaking
-        </a>
-    </div>
-</div>

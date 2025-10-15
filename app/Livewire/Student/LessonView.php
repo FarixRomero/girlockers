@@ -15,6 +15,9 @@ class LessonView extends Component
     public Lesson $lesson;
     public $nextLesson = null;
     public $previousLesson = null;
+    public $upcomingLessons = [];
+    public $similarLessons = [];
+    public $isLiked = false;
 
     public function mount(Lesson $lesson)
     {
@@ -24,10 +27,19 @@ class LessonView extends Component
         $this->lesson = $lesson;
 
         // Load relationships
-        $this->lesson->load(['module.course', 'module.lessons' => fn($query) => $query->orderBy('order')]);
+        $this->lesson->load(['module.course', 'module.lessons' => fn($query) => $query->orderBy('order'), 'tags', 'instructor']);
 
         // Find next and previous lessons
         $this->findAdjacentLessons();
+
+        // Load upcoming lessons from course
+        $this->loadUpcomingLessons();
+
+        // Load similar lessons based on tags
+        $this->loadSimilarLessons();
+
+        // Check if lesson is liked
+        $this->isLiked = $this->lesson->isLikedBy(auth()->user());
     }
 
     protected function findAdjacentLessons()
@@ -52,6 +64,71 @@ class LessonView extends Component
                 }
             }
         }
+    }
+
+    protected function loadUpcomingLessons()
+    {
+        $allLessons = $this->lesson->module->lessons;
+        $currentIndex = $allLessons->search(fn($l) => $l->id === $this->lesson->id);
+
+        if ($currentIndex !== false) {
+            // Get next 8 lessons after current one
+            $this->upcomingLessons = $allLessons
+                ->skip($currentIndex + 1)
+                ->take(8)
+                ->filter(fn($lesson) => $lesson->isAccessibleBy(auth()->user()))
+                ->values();
+        }
+    }
+
+    protected function loadSimilarLessons()
+    {
+        $tagIds = $this->lesson->tags->pluck('id');
+
+        if ($tagIds->isEmpty()) {
+            // If no tags, get lessons from same instructor
+            $this->similarLessons = Lesson::where('instructor_id', $this->lesson->instructor_id)
+                ->where('id', '!=', $this->lesson->id)
+                ->accessibleBy(auth()->user())
+                ->with(['module.course', 'instructor', 'tags'])
+                ->inRandomOrder()
+                ->limit(8)
+                ->get();
+        } else {
+            // Get lessons with similar tags
+            $this->similarLessons = Lesson::whereHas('tags', function($query) use ($tagIds) {
+                    $query->whereIn('tags.id', $tagIds);
+                })
+                ->where('id', '!=', $this->lesson->id)
+                ->accessibleBy(auth()->user())
+                ->with(['module.course', 'instructor', 'tags'])
+                ->withCount(['tags' => function($query) use ($tagIds) {
+                    $query->whereIn('tags.id', $tagIds);
+                }])
+                ->orderByDesc('tags_count')
+                ->limit(8)
+                ->get();
+        }
+    }
+
+    public function toggleLike()
+    {
+        $user = auth()->user();
+
+        if ($this->lesson->isLikedBy($user)) {
+            // Unlike
+            $this->lesson->likes()->detach($user->id);
+            $this->lesson->decrementLikes();
+            $this->isLiked = false;
+        } else {
+            // Like
+            $this->lesson->likes()->attach($user->id);
+            $this->lesson->incrementLikes();
+            $this->isLiked = true;
+        }
+
+        // Refresh the lesson to get updated likes count
+        $this->lesson->refresh();
     }
 
     public function render()

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Course;
 use App\Models\Instructor;
+use App\Services\NotificationService;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -132,7 +133,12 @@ class CourseManagement extends Component
             $course->update($data);
             session()->flash('success', "Curso '{$this->title}' actualizado exitosamente.");
         } else {
-            Course::create($data);
+            $course = Course::create($data);
+
+            // Send notifications to users about new course
+            $notificationService = new NotificationService();
+            $notificationService->notifyNewCourse($course);
+
             session()->flash('success', "Curso '{$this->title}' creado exitosamente.");
         }
 

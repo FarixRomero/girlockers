@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Lesson;
 use App\Models\Module;
 use App\Services\BunnyService;
+use App\Services\NotificationService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -69,6 +70,10 @@ class LessonController extends Controller
         }
 
         $lesson->load(['instructor', 'tags']);
+
+        // Send notifications to users
+        $notificationService = new NotificationService();
+        $notificationService->notifyNewLesson($lesson);
 
         return response()->json([
             'success' => true,

@@ -132,4 +132,20 @@ class User extends Authenticatable
     {
         return $this->hasMany(AccessRequest::class);
     }
+
+    /**
+     * Get user's notifications
+     */
+    public function notifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->latest();
+    }
+
+    /**
+     * Get user's unread notifications
+     */
+    public function unreadNotifications(): HasMany
+    {
+        return $this->hasMany(Notification::class)->unread()->latest();
+    }
 }

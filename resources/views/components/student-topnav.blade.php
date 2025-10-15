@@ -3,7 +3,7 @@ use App\Livewire\Actions\Logout;
 @endphp
 
 <!-- Top Navigation Bar -->
-<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6" x-data="{ openProfile: false, openNotifications: false, openMobileSearch: false }">
+<header class="bg-white border-b border-gray-200 h-16 flex items-center justify-between px-6" x-data="{ openProfile: false, openMobileSearch: false }">
     <!-- Left Section - Menu Toggle (Mobile) + Search -->
     <div class="flex items-center flex-1 space-x-4">
         <!-- Mobile Menu Toggle -->
@@ -29,61 +29,7 @@ use App\Livewire\Actions\Logout;
         </button>
 
         <!-- Notifications -->
-        <div class="relative">
-            <button @click="openNotifications = !openNotifications" class="p-2 text-gray-600 hover:bg-gray-100 rounded-lg relative">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path>
-                </svg>
-                <!-- Notification Badge -->
-                <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-            </button>
-
-            <!-- Notifications Dropdown -->
-            <div x-show="openNotifications" @click.away="openNotifications = false" x-transition class="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50" style="display: none;">
-                <div class="px-4 py-2 border-b border-gray-200">
-                    <h3 class="text-sm font-semibold text-gray-900">Notificaciones</h3>
-                </div>
-                <div class="max-h-96 overflow-y-auto">
-                    <!-- Notification Item -->
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition">
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0">
-                                <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm text-gray-900">Nueva clase disponible</p>
-                                <p class="text-xs text-gray-500 mt-1">Se agregó "Hip Hop Basics" al curso de Fundamentos</p>
-                                <p class="text-xs text-gray-400 mt-1">Hace 2 horas</p>
-                            </div>
-                        </div>
-                    </a>
-                    <!-- More notification items -->
-                    <a href="#" class="block px-4 py-3 hover:bg-gray-50 transition">
-                        <div class="flex items-start space-x-3">
-                            <div class="flex-shrink-0">
-                                <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                                    <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                                    </svg>
-                                </div>
-                            </div>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm text-gray-900">Comentario respondido</p>
-                                <p class="text-xs text-gray-500 mt-1">El instructor respondió tu pregunta en "Locking Fundamentals"</p>
-                                <p class="text-xs text-gray-400 mt-1">Hace 1 día</p>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="px-4 py-2 border-t border-gray-200">
-                    <a href="#" class="text-sm text-purple-600 hover:text-purple-700 font-medium">Ver todas las notificaciones</a>
-                </div>
-            </div>
-        </div>
+        @livewire('student.notifications')
 
         <!-- Profile Dropdown -->
         <div class="relative">

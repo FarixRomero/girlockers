@@ -296,8 +296,9 @@
     </div>
     @endif
 
-    <div class="mt-8 flex justify-center">
-        <div class="container card-premium max-w-3xl mx-auto">
+    <!-- Comments Section -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm p-6">
             <livewire:student.comment-section :lesson="$lesson" :key="'comments-' . $lesson->id" />
         </div>
     </div>

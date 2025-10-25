@@ -43,8 +43,20 @@
     @endif
 
     <!-- Course Info Card -->
-    <div class="bg-white rounded-2xl p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300 mb-6">
-        <div class="flex items-start justify-between">
+    <div class="bg-white rounded-2xl p-4 md:p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300 mb-6">
+        <!-- Mobile Layout -->
+        <div class="md:hidden">
+            <p class="text-gray-dark mb-3 text-sm leading-relaxed">{{ $course->description }}</p>
+            <button wire:click="openCreateModal" class="w-full flex items-center justify-center px-4 py-2.5 bg-gradient-to-r from-purple-primary to-purple-light text-white rounded-xl hover:shadow-lg hover:shadow-purple-primary/30 transition-all duration-300 font-medium">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+                Nuevo Módulo
+            </button>
+        </div>
+
+        <!-- Desktop Layout -->
+        <div class="hidden md:flex items-start justify-between">
             <div class="flex-1">
                 <p class="text-gray-dark mb-4 text-base leading-relaxed">{{ $course->description }}</p>
                 <div class="flex items-center flex-wrap gap-3 text-sm">
@@ -92,16 +104,17 @@
     <!-- Modules List -->
     <div class="space-y-4">
         @forelse($course->modules as $module)
-            <div class="bg-white rounded-2xl p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300 group" wire:key="module-{{ $module->id }}">
+            <div class="bg-white rounded-2xl p-4 md:p-6 border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300 group" wire:key="module-{{ $module->id }}">
                 <div class="flex items-start justify-between">
                     <div class="flex items-start flex-1">
                         <!-- Order Badge with Icon -->
-                        <div class="relative mr-4">
-                            <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-primary via-purple-light to-purple-dark flex items-center justify-center text-white font-bold text-xl shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
+                        <div class="relative mr-3 md:mr-4">
+                            <!-- Mobile: Smaller badge -->
+                            <div class="w-10 h-10 md:w-16 md:h-16 rounded-xl md:rounded-2xl bg-gradient-to-br from-purple-primary via-purple-light to-purple-dark flex items-center justify-center text-white font-bold text-base md:text-xl shadow-sm group-hover:shadow-md group-hover:scale-105 transition-all duration-300">
                                 {{ $module->order }}
                             </div>
-                            <!-- Decorative icon -->
-                            <div class="absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full flex items-center justify-center border-2 border-purple-ultralight shadow-sm">
+                            <!-- Decorative icon (hidden on mobile) -->
+                            <div class="hidden md:flex absolute -bottom-1 -right-1 w-6 h-6 bg-white rounded-full items-center justify-center border-2 border-purple-ultralight shadow-sm">
                                 <svg class="w-3 h-3 text-purple-primary" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z"/>
                                 </svg>
@@ -111,30 +124,30 @@
                         <!-- Module Info -->
                         <div class="flex-1">
                             <div class="flex items-start justify-between mb-2">
-                                <h3 class="font-display text-xl text-black group-hover:text-purple-primary transition-colors duration-300">
+                                <h3 class="font-display text-lg md:text-xl text-black group-hover:text-purple-primary transition-colors duration-300">
                                     {{ $module->title }}
                                 </h3>
                             </div>
-                            <p class="text-gray-dark text-sm mb-4 leading-relaxed">{{ $module->description }}</p>
+                            <p class="text-gray-dark text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">{{ $module->description }}</p>
 
-                            <div class="flex items-center space-x-4 text-sm">
-                                <span class="flex items-center px-3 py-1.5 bg-purple-ultralight rounded-lg text-purple-dark border border-purple-primary/20">
-                                    <svg class="w-4 h-4 mr-1.5 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <div class="flex items-center flex-wrap gap-2 md:gap-4 text-sm">
+                                <span class="flex items-center px-2 md:px-3 py-1 md:py-1.5 bg-purple-ultralight rounded-lg text-purple-dark border border-purple-primary/20">
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-1.5 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <span class="font-medium text-black">{{ $module->lessons_count }}</span>
-                                    <span class="ml-1">{{ $module->lessons_count === 1 ? 'lección' : 'lecciones' }}</span>
+                                    <span class="font-bold text-black text-xs md:text-sm">{{ $module->lessons_count }}</span>
                                 </span>
                                 <a href="{{ route('admin.modules.lessons', $module->id) }}"
                                    wire:navigate
-                                   class="flex items-center px-4 py-1.5 bg-gradient-to-r from-purple-primary to-purple-light text-white rounded-lg hover:shadow-lg hover:shadow-purple-primary/30 transition-all duration-300 font-medium">
-                                    <svg class="w-4 h-4 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                   class="flex items-center px-2 md:px-3 py-1 md:py-1.5 text-xs md:text-sm bg-gradient-to-r from-purple-primary to-purple-light text-white rounded-lg hover:shadow-lg hover:shadow-purple-primary/30 transition-all duration-300 font-medium">
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    Gestionar lecciones
-                                    <svg class="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <span class="hidden md:inline">Lecciones</span>
+                                    <span class="md:hidden">Ver</span>
+                                    <svg class="w-3 h-3 md:w-4 md:h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 </a>
@@ -143,14 +156,14 @@
                     </div>
 
                     <!-- Actions -->
-                    <div class="flex items-center space-x-1 ml-4">
+                    <div class="flex items-center space-x-0.5 md:space-x-1 ml-1 md:ml-4">
                         <!-- Move Up -->
                         @if(!$loop->first)
                             <button
                                 wire:click="moveUp({{ $module->id }})"
-                                class="p-2.5 text-gray-dark hover:text-black hover:bg-gray-ultralight rounded-xl transition-all duration-200 hover:scale-110"
+                                class="p-1 md:p-2.5 text-gray-dark hover:text-black hover:bg-gray-ultralight rounded-md md:rounded-xl transition-all duration-200 hover:scale-110"
                                 title="Mover arriba">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 15l7-7 7 7"></path>
                                 </svg>
                             </button>
@@ -160,9 +173,9 @@
                         @if(!$loop->last)
                             <button
                                 wire:click="moveDown({{ $module->id }})"
-                                class="p-2.5 text-gray-dark hover:text-black hover:bg-gray-ultralight rounded-xl transition-all duration-200 hover:scale-110"
+                                class="p-1 md:p-2.5 text-gray-dark hover:text-black hover:bg-gray-ultralight rounded-md md:rounded-xl transition-all duration-200 hover:scale-110"
                                 title="Mover abajo">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>
@@ -171,9 +184,9 @@
                         <!-- Edit -->
                         <button
                             wire:click="openEditModal({{ $module->id }})"
-                            class="p-2.5 text-purple-primary hover:bg-purple-ultralight rounded-xl transition-all duration-200 hover:scale-110"
+                            class="p-1 md:p-2.5 text-purple-primary hover:bg-purple-ultralight rounded-md md:rounded-xl transition-all duration-200 hover:scale-110"
                             title="Editar">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                             </svg>
                         </button>
@@ -182,9 +195,9 @@
                         <button
                             wire:click="deleteModule({{ $module->id }})"
                             wire:confirm="¿Estás seguro de eliminar el módulo '{{ $module->title }}'?"
-                            class="p-2.5 text-red-500 hover:bg-red-50 rounded-xl transition-all duration-200 hover:scale-110"
+                            class="p-1 md:p-2.5 text-red-500 hover:bg-red-50 rounded-md md:rounded-xl transition-all duration-200 hover:scale-110"
                             title="Eliminar">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <svg class="w-3.5 h-3.5 md:w-5 md:h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
                         </button>

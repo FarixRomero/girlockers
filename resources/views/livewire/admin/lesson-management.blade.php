@@ -29,7 +29,7 @@
     <div id="alert-container" class="hidden mb-6"></div>
 
     <!-- Module Info Card -->
-    <div class="card-premium mb-6" id="module-info">
+    <div class="card-premium mb-6 hidden md:block" id="module-info">
         <div class="flex items-start justify-between">
             <div class="flex-1">
                 <p class="text-cream/70 mb-2" id="module-description">Cargando...</p>
@@ -56,6 +56,16 @@
                 + Nueva Lección
             </button>
         </div>
+    </div>
+
+    <!-- Mobile Nueva Lección Button -->
+    <div class="md:hidden mb-4">
+        <button onclick="LessonManager.openCreateModal()" class="w-full bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center justify-center">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+            </svg>
+            Nueva Lección
+        </button>
     </div>
 
     <!-- Lessons List -->
@@ -404,7 +414,78 @@ window.LessonManager = window.LessonManager || {
 
         return `
             <div class="card-premium">
-                <div class="flex items-start justify-between">
+                <!-- Mobile Layout -->
+                <div class="block md:hidden">
+                    <div class="flex items-start gap-3 mb-3">
+                        <!-- Order Badge -->
+                        <div class="w-10 h-10 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold flex-shrink-0">
+                            ${lesson.order}
+                        </div>
+                        <!-- Title & Badge -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-display text-base text-cream font-bold mb-1">${this.escapeHtml(lesson.title)}</h3>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                ${lesson.is_trial
+                                    ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
+                                    : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
+                                }
+                                <span class="text-xs text-cream/50">${videoTypeLabel} • ${lesson.duration} min</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thumbnail -->
+                    <div class="w-full aspect-video rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer" onclick="LessonManager.openEditModal(${lesson.id})">
+                        <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
+                            class="w-full h-full object-cover"
+                            onerror="this.src='https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen'">
+                    </div>
+
+                    <!-- Description -->
+                    <p class="text-cream/60 text-sm mb-3">${this.escapeHtml(lesson.description)}</p>
+
+                    <!-- Actions -->
+                    <div class="flex items-center justify-between gap-2 pt-3 border-t border-cream/10">
+                        <div class="flex items-center gap-1">
+                            ${lesson.order > 1
+                                ? `<button onclick="LessonManager.moveUp(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover arriba">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                    </svg>
+                                </button>`
+                                : '<div class="w-9"></div>'
+                            }
+                            ${lesson.order < this.lessons.length
+                                ? `<button onclick="LessonManager.moveDown(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover abajo">
+                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                    </svg>
+                                </button>`
+                                : '<div class="w-9"></div>'
+                            }
+                        </div>
+                        <div class="flex items-center gap-1">
+                            <button onclick="LessonManager.toggleTrial(${lesson.id})" class="p-2 text-cream/60 hover:text-green-400 transition-colors rounded-lg hover:bg-cream/10" title="Toggle trial">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="LessonManager.openEditModal(${lesson.id})" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-cream/60 hover:text-red-400 transition-colors rounded-lg hover:bg-cream/10" title="Eliminar">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Desktop Layout -->
+                <div class="hidden md:flex items-start justify-between">
                     <div class="flex items-start flex-1">
                         <!-- Thumbnail Image -->
                         <div class="w-40 h-24 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
@@ -420,7 +501,7 @@ window.LessonManager = window.LessonManager || {
                                 <div class="flex items-center space-x-2 mb-1">
                                     <h3 class="font-display text-lg text-cream">${this.escapeHtml(lesson.title)}</h3>
                                     ${lesson.is_trial
-                                        ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">✓ Trial</span>'
+                                        ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
                                         : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
                                     }
                                 </div>
@@ -945,15 +1026,14 @@ window.LessonManager = window.LessonManager || {
      * Muestra el preview del video de Bunny.net
      */
     showBunnyVideoPreview(videoId) {
-        const cdnHostname = CONFIG.bunnyCdnHostname;
         const libraryId = CONFIG.bunnyLibraryId;
 
-        if (!cdnHostname || !libraryId) {
-            console.error('Bunny CDN hostname o library ID no configurado');
+        if (!libraryId) {
+            console.error('Bunny library ID no configurado');
             return;
         }
 
-        const iframeUrl = `https://${cdnHostname}/embed/${libraryId}/${videoId}`;
+        const iframeUrl = `https://iframe.mediadelivery.net/embed/${libraryId}/${videoId}`;
 
         document.getElementById('bunny-video-iframe').src = iframeUrl;
         document.getElementById('bunny-video-id-display').textContent = videoId;

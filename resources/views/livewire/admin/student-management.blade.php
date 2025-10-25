@@ -15,43 +15,45 @@
         </div>
     @endif
 
-    <!-- Stats -->
-    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Total Estudiantes</div>
-            <div class="text-2xl font-bold text-cream">{{ $stats['total'] }}</div>
-        </div>
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Acceso Completo</div>
-            <div class="text-2xl font-bold text-green-400">{{ $stats['premium'] }}</div>
-        </div>
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Solo Prueba</div>
-            <div class="text-2xl font-bold text-orange-400">{{ $stats['trial'] }}</div>
-        </div>
-        <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Solicitudes Pendientes</div>
-            <div class="text-2xl font-bold text-pink-vibrant">{{ $stats['pending'] }}</div>
+    <!-- Stats - Mobile: Compact horizontal scroll, Desktop: Grid -->
+    <div class="mb-6 overflow-x-auto scrollbar-hide">
+        <div class="flex md:grid md:grid-cols-4 gap-2 md:gap-4 pb-2">
+            <div class="card-premium min-w-[110px] md:min-w-0 flex-shrink-0 py-3 px-4">
+                <div class="text-xs md:text-sm mb-0.5 md:mb-1 text-gray-500">Total</div>
+                <div class="text-lg md:text-2xl font-bold text-gray-900">{{ $stats['total'] }}</div>
+            </div>
+            <div class="card-premium min-w-[110px] md:min-w-0 flex-shrink-0 py-3 px-4">
+                <div class="text-xs md:text-sm mb-0.5 md:mb-1 text-gray-500">Completo</div>
+                <div class="text-lg md:text-2xl font-bold text-green-600">{{ $stats['premium'] }}</div>
+            </div>
+            <div class="card-premium min-w-[110px] md:min-w-0 flex-shrink-0 py-3 px-4">
+                <div class="text-xs md:text-sm mb-0.5 md:mb-1 text-gray-500">Prueba</div>
+                <div class="text-lg md:text-2xl font-bold text-orange-500">{{ $stats['trial'] }}</div>
+            </div>
+            <div class="card-premium min-w-[110px] md:min-w-0 flex-shrink-0 py-3 px-4">
+                <div class="text-xs md:text-sm mb-0.5 md:mb-1 text-gray-500">Pendientes</div>
+                <div class="text-lg md:text-2xl font-bold text-purple-600">{{ $stats['pending'] }}</div>
+            </div>
         </div>
     </div>
 
     <!-- Filters -->
-    <div class="card-premium mb-6">
-        <div class="flex flex-col md:flex-row gap-4">
+    <div class="card-premium mb-4 md:mb-6 p-3 md:p-8">
+        <div class="flex flex-col md:flex-row gap-2 md:gap-4">
             <!-- Search -->
             <div class="flex-1">
                 <input
                     type="text"
                     wire:model.live.debounce.300ms="search"
-                    placeholder="Buscar por nombre o email..."
-                    class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream placeholder-cream/40 focus:outline-none focus:border-pink-vibrant transition">
+                    placeholder="Buscar nombre o email..."
+                    class="w-full text-sm md:text-base px-3 py-2 md:px-4 md:py-2">
             </div>
 
             <!-- Access Filter -->
-            <div>
+            <div class="md:min-w-[200px]">
                 <select
                     wire:model.live="filterAccess"
-                    class="bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition">
+                    class="w-full text-sm md:text-base px-3 py-2 md:px-4 md:py-2">
                     <option value="all">Todos</option>
                     <option value="premium">Acceso Completo</option>
                     <option value="trial">Solo Prueba</option>
@@ -61,89 +63,149 @@
         </div>
     </div>
 
-    <!-- Students Table -->
-    <div class="card-premium overflow-hidden">
-        <div class="overflow-x-auto">
-            <table class="w-full">
-                <thead>
-                    <tr class="border-b border-pink-vibrant/20">
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Estudiante</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Estado</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Actividad</th>
-                        <th class="text-left py-4 px-4 text-cream/70 font-medium text-sm">Registro</th>
-                        <th class="text-right py-4 px-4 text-cream/70 font-medium text-sm">Acciones</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @forelse($students as $student)
-                        <tr class="border-b border-pink-vibrant/10 hover:bg-purple-deep/50 transition" wire:key="student-{{ $student->id }}">
-                            <td class="py-4 px-4">
-                                <div class="flex items-center">
-                                    <div class="w-10 h-10 rounded-full bg-gradient-pink flex items-center justify-center text-cream font-bold mr-3">
-                                        {{ strtoupper(substr($student->name, 0, 1)) }}
-                                    </div>
-                                    <div>
-                                        <p class="text-cream font-medium">{{ $student->name }}</p>
-                                        <p class="text-cream/60 text-sm">{{ $student->email }}</p>
-                                    </div>
-                                </div>
-                            </td>
-                            <td class="py-4 px-4">
+    <!-- Students List -->
+    <div class="space-y-3 md:space-y-0">
+        <!-- Mobile View -->
+        <div class="block md:hidden space-y-3">
+            @forelse($students as $student)
+                <div class="card-premium p-3" wire:key="student-mobile-{{ $student->id }}">
+                    <div class="flex items-start justify-between gap-3">
+                        <!-- Left: Student Info -->
+                        <div class="flex-1 min-w-0">
+                            <p class="font-medium text-gray-900 truncate">{{ $student->name }}</p>
+                            <p class="text-xs text-gray-500 truncate">{{ $student->email }}</p>
+                            <div class="flex items-center gap-2 mt-1">
                                 @if($student->has_full_access)
-                                    <span class="px-3 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">
-                                        ✓ Acceso Completo
+                                    <span class="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-medium">
+                                        ✓ Completo
                                     </span>
                                 @else
-                                    <span class="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">
+                                    <span class="px-2 py-0.5 bg-orange-100 text-orange-600 text-xs rounded-full font-medium">
                                         Prueba
                                     </span>
                                 @endif
                                 @if($student->access_requests_count > 0)
-                                    <span class="ml-2 px-2 py-1 bg-pink-vibrant/20 text-pink-vibrant text-xs rounded-full">
-                                        Solicitud pendiente
+                                    <span class="px-2 py-0.5 bg-purple-100 text-purple-600 text-xs rounded-full">
+                                        Pendiente
                                     </span>
                                 @endif
-                            </td>
-                            <td class="py-4 px-4">
-                                <div class="flex items-center space-x-3 text-xs text-cream/60">
-                                    <span title="Comentarios">💬 {{ $student->comments_count }}</span>
-                                    <span title="Likes">❤️ {{ $student->likes_count }}</span>
-                                </div>
-                            </td>
-                            <td class="py-4 px-4">
-                                <span class="text-cream/70 text-sm">{{ $student->created_at->format('d/m/Y') }}</span>
-                                <p class="text-cream/50 text-xs">{{ $student->created_at->diffForHumans() }}</p>
-                            </td>
-                            <td class="py-4 px-4 text-right">
-                                @if($student->has_full_access)
-                                    <button
-                                        wire:click="revokeAccess({{ $student->id }})"
-                                        wire:confirm="¿Estás seguro de revocar el acceso completo a {{ $student->name }}?"
-                                        class="px-3 py-1 bg-red-500/20 text-red-400 rounded-lg text-sm hover:bg-red-500/30 transition">
-                                        Revocar Acceso
-                                    </button>
-                                @else
-                                    <button
-                                        wire:click="approveAccess({{ $student->id }})"
-                                        wire:confirm="¿Otorgar acceso completo a {{ $student->name }}?"
-                                        class="px-3 py-1 bg-green-500/20 text-green-400 rounded-lg text-sm hover:bg-green-500/30 transition">
-                                        Otorgar Acceso
-                                    </button>
-                                @endif
-                            </td>
+                            </div>
+                        </div>
+
+                        <!-- Right: Action Button -->
+                        <div class="flex-shrink-0">
+                            @if($student->has_full_access)
+                                <button
+                                    wire:click="revokeAccess({{ $student->id }})"
+                                    wire:confirm="¿Estás seguro de revocar el acceso completo a {{ $student->name }}?"
+                                    class="px-3 py-2 bg-red-100 text-red-600 rounded-lg text-xs font-medium hover:bg-red-200 transition active:scale-95 whitespace-nowrap">
+                                    Revocar
+                                </button>
+                            @else
+                                <button
+                                    wire:click="approveAccess({{ $student->id }})"
+                                    wire:confirm="¿Otorgar acceso completo a {{ $student->name }}?"
+                                    class="px-3 py-2 bg-green-100 text-green-600 rounded-lg text-xs font-medium hover:bg-green-200 transition active:scale-95 whitespace-nowrap">
+                                    Dar Acceso
+                                </button>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="card-premium py-12 text-center">
+                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                    <p class="text-gray-500">No se encontraron estudiantes</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Desktop View (Table) -->
+        <div class="hidden md:block card-premium overflow-hidden">
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="border-b border-gray-200">
+                            <th class="text-left py-4 px-4 text-gray-500 font-medium text-sm">Estudiante</th>
+                            <th class="text-left py-4 px-4 text-gray-500 font-medium text-sm">Estado</th>
+                            <th class="text-left py-4 px-4 text-gray-500 font-medium text-sm">Actividad</th>
+                            <th class="text-left py-4 px-4 text-gray-500 font-medium text-sm">Registro</th>
+                            <th class="text-right py-4 px-4 text-gray-500 font-medium text-sm">Acciones</th>
                         </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="py-12 text-center">
-                                <svg class="w-16 h-16 text-cream/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
-                                </svg>
-                                <p class="text-cream/70">No se encontraron estudiantes</p>
-                            </td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @forelse($students as $student)
+                            <tr class="border-b border-gray-100 hover:bg-purple-50 transition" wire:key="student-desktop-{{ $student->id }}">
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center">
+                                        <div class="w-10 h-10 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold mr-3">
+                                            {{ strtoupper(substr($student->name, 0, 1)) }}
+                                        </div>
+                                        <div>
+                                            <p class="text-gray-900 font-medium">{{ $student->name }}</p>
+                                            <p class="text-gray-500 text-sm">{{ $student->email }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    @if($student->has_full_access)
+                                        <span class="px-3 py-1 bg-green-100 text-green-700 text-xs rounded-full font-bold">
+                                            ✓ Acceso Completo
+                                        </span>
+                                    @else
+                                        <span class="px-3 py-1 bg-orange-100 text-orange-600 text-xs rounded-full font-bold">
+                                            Prueba
+                                        </span>
+                                    @endif
+                                    @if($student->access_requests_count > 0)
+                                        <span class="ml-2 px-2 py-1 bg-purple-100 text-purple-600 text-xs rounded-full">
+                                            Solicitud pendiente
+                                        </span>
+                                    @endif
+                                </td>
+                                <td class="py-4 px-4">
+                                    <div class="flex items-center space-x-3 text-xs text-gray-500">
+                                        <span title="Comentarios">💬 {{ $student->comments_count }}</span>
+                                        <span title="Likes">❤️ {{ $student->likes_count }}</span>
+                                    </div>
+                                </td>
+                                <td class="py-4 px-4">
+                                    <span class="text-gray-700 text-sm">{{ $student->created_at->format('d/m/Y') }}</span>
+                                    <p class="text-gray-400 text-xs">{{ $student->created_at->diffForHumans() }}</p>
+                                </td>
+                                <td class="py-4 px-4 text-right">
+                                    @if($student->has_full_access)
+                                        <button
+                                            wire:click="revokeAccess({{ $student->id }})"
+                                            wire:confirm="¿Estás seguro de revocar el acceso completo a {{ $student->name }}?"
+                                            class="px-3 py-1 bg-red-100 text-red-600 rounded-lg text-sm hover:bg-red-200 transition">
+                                            Revocar Acceso
+                                        </button>
+                                    @else
+                                        <button
+                                            wire:click="approveAccess({{ $student->id }})"
+                                            wire:confirm="¿Otorgar acceso completo a {{ $student->name }}?"
+                                            class="px-3 py-1 bg-green-100 text-green-600 rounded-lg text-sm hover:bg-green-200 transition">
+                                            Otorgar Acceso
+                                        </button>
+                                    @endif
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="py-12 text-center">
+                                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                                    </svg>
+                                    <p class="text-gray-500">No se encontraron estudiantes</p>
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 

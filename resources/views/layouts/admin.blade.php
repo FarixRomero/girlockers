@@ -66,10 +66,22 @@
                     </a>
                 </nav>
 
-                <div class="p-4 border-t border-pink-vibrant/20">
+                <div class="p-4 border-t border-pink-vibrant/20 space-y-2">
+                    <!-- User Info -->
+                    <div class="flex items-center px-4 py-3 bg-purple-deep/50 rounded-lg">
+                        <div class="w-10 h-10 bg-gradient-pink rounded-full flex items-center justify-center text-cream font-bold mr-3 flex-shrink-0">
+                            {{ substr(auth()->user()->name, 0, 1) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-cream font-medium text-sm truncate">{{ auth()->user()->name }}</p>
+                            <p class="text-cream/50 text-xs truncate">{{ auth()->user()->email }}</p>
+                        </div>
+                    </div>
+
+                    <!-- Logout Button -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <button type="submit" class="flex items-center w-full px-4 py-3 text-cream/70 hover:text-pink-vibrant rounded-lg">
+                        <button type="submit" class="flex items-center w-full px-4 py-3 text-cream/70 hover:text-pink-vibrant rounded-lg hover:bg-purple-deep transition-colors">
                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                             </svg>
@@ -81,23 +93,6 @@
 
             <!-- Main Content -->
             <div class="flex-1 flex flex-col min-w-0">
-                <!-- Top Bar -->
-                <header class="bg-purple-darker border-b border-pink-vibrant/20 lg:px-8 px-4 py-4">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            @if (isset($header))
-                                <h2 class="font-display text-2xl text-cream">{{ $header }}</h2>
-                            @endif
-                        </div>
-                        <div class="flex items-center space-x-4">
-                            <span class="text-cream/70 text-sm hidden sm:block">{{ auth()->user()->name }}</span>
-                            <div class="w-10 h-10 bg-gradient-pink rounded-full flex items-center justify-center text-cream font-bold">
-                                {{ substr(auth()->user()->name, 0, 1) }}
-                            </div>
-                        </div>
-                    </div>
-                </header>
-
                 <!-- Page Content -->
                 <main class="flex-1 overflow-y-auto p-4 lg:p-8">
                     @yield('content', $slot ?? '')
@@ -127,6 +122,14 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
                         </svg>
                     </a>
+                    <form method="POST" action="{{ route('logout') }}" class="nav-item">
+                        @csrf
+                        <button type="submit" class="flex items-center justify-center w-full h-full">
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>

@@ -12,13 +12,10 @@ class WatchHistory extends Component
 {
     public function render()
     {
-        // Get user's commented lessons (as a proxy for watch history)
-        $watchedLessons = auth()->user()->comments()
-            ->with(['lesson.module.course', 'lesson.instructor'])
-            ->latest()
-            ->get()
-            ->pluck('lesson')
-            ->unique('id');
+        // Get user's viewed lessons from lesson_views table
+        $watchedLessons = auth()->user()->viewedLessons()
+            ->with(['module.course', 'instructor', 'tags'])
+            ->get();
 
         return view('livewire.student.watch-history', [
             'watchedLessons' => $watchedLessons,

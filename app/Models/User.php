@@ -148,4 +148,22 @@ class User extends Authenticatable
     {
         return $this->hasMany(Notification::class)->unread()->latest();
     }
+
+    /**
+     * Get user's lesson views
+     */
+    public function lessonViews(): HasMany
+    {
+        return $this->hasMany(LessonView::class);
+    }
+
+    /**
+     * Get user's viewed lessons
+     */
+    public function viewedLessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_views')
+            ->withPivot('viewed_at')
+            ->orderByPivot('viewed_at', 'desc');
+    }
 }

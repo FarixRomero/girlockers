@@ -3,6 +3,7 @@
 namespace App\Livewire\Student;
 
 use App\Models\Lesson;
+use App\Models\LessonView as LessonViewModel;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
@@ -40,6 +41,9 @@ class LessonView extends Component
 
         // Check if lesson is liked
         $this->isLiked = $this->lesson->isLikedBy(auth()->user());
+
+        // Record lesson view
+        LessonViewModel::recordView(auth()->id(), $lesson->id);
     }
 
     protected function findAdjacentLessons()

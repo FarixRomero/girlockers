@@ -78,6 +78,9 @@
                 </button>
             </div>
 
+            <!-- Alert Messages dentro del Modal -->
+            <div id="modal-alert-container" class="hidden mx-8 mt-6"></div>
+
             <form id="lesson-form" onsubmit="LessonManager.saveLesson(event)" class="px-8 py-6 space-y-5 bg-gray-ultralight/30 overflow-y-auto" style="max-height: calc(90vh - 200px);">
                 <!-- Title -->
                 <div>
@@ -141,8 +144,8 @@
                 <div>
                     <label class="block text-gray-dark text-sm font-bold mb-2">Tipo de Video</label>
                     <select id="lesson-video-type" onchange="LessonManager.updateVideoFields()" class="w-full">
-                        <option value="youtube">YouTube</option>
                         <option value="bunny">Bunny.net (CDN)</option>
+                        <option value="youtube">YouTube</option>
                         <option value="local">Local</option>
                     </select>
                 </div>
@@ -157,10 +160,23 @@
                 <!-- Bunny Upload -->
                 <div id="bunny-field" class="hidden">
                     <label class="block text-gray-dark text-sm font-bold mb-2">Video de Bunny.net</label>
+
+                    <!-- Video Preview (when editing) -->
+                    <div id="bunny-video-preview" class="hidden mb-4">
+                        <div class="bg-black rounded-lg overflow-hidden" style="position: relative; padding-top: 56.25%;">
+                            <iframe id="bunny-video-iframe"
+                                    style="border: none; position: absolute; top: 0; height: 100%; width: 100%;"
+                                    allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                                    allowfullscreen="true">
+                            </iframe>
+                        </div>
+                        <p class="text-gray-medium text-sm mt-2">Video actual - ID: <span id="bunny-video-id-display"></span></p>
+                    </div>
+
                     <div class="border-2 border-dashed border-purple-primary/30 rounded-lg p-6 text-center hover:border-purple-primary/50 transition-colors bg-white">
                         <input type="file" id="bunny-file-input" accept="video/*" onchange="LessonManager.handleBunnyUpload(event)" class="hidden">
                         <button type="button" onclick="document.getElementById('bunny-file-input').click()" class="px-6 py-3 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-lg shadow-sm transition-all" id="bunny-select-button">
-                            Seleccionar archivo de video
+                            <span id="bunny-button-text">Seleccionar archivo de video</span>
                         </button>
                         <p class="text-gray-medium text-xs mt-2">Soporta: MP4, MOV, AVI, WMV</p>
 
@@ -246,6 +262,8 @@
 window.LessonManagerConfig = window.LessonManagerConfig || {
     moduleId: {{ $moduleId }},
     csrfToken: '{{ csrf_token() }}',
+    bunnyCdnHostname: '{{ config('bunny.cdn_hostname') }}',
+    bunnyLibraryId: '{{ config('bunny.library_id') }}',
     routes: {
         lessons: {
             index: '/admin/api/modules/:moduleId/lessons',
@@ -475,8 +493,9 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('modal-title').textContent = 'Nueva Lección';
         document.getElementById('lesson-form').reset();
         document.getElementById('lesson-order').value = this.lessons.length + 1;
-        document.getElementById('lesson-video-type').value = 'youtube';
+        document.getElementById('lesson-video-type').value = 'bunny';
         this.removeThumbnail();
+        this.hideBunnyVideoPreview();
         this.updateVideoFields();
         this.showModal();
     },
@@ -530,6 +549,14 @@ window.LessonManager = window.LessonManager || {
         }
 
         this.updateVideoFields();
+
+        // Mostrar preview del video de Bunny si existe
+        if (lesson.video_type === 'bunny' && lesson.bunny_video_id) {
+            this.showBunnyVideoPreview(lesson.bunny_video_id);
+        } else {
+            this.hideBunnyVideoPreview();
+        }
+
         this.showModal();
     },
 
@@ -537,6 +564,12 @@ window.LessonManager = window.LessonManager || {
      * Muestra el modal
      */
     showModal() {
+        // Limpiar alertas del modal
+        const modalAlertContainer = document.getElementById('modal-alert-container');
+        if (modalAlertContainer) {
+            modalAlertContainer.classList.add('hidden');
+            modalAlertContainer.innerHTML = '';
+        }
         document.getElementById('lesson-modal').style.display = 'flex';
     },
 
@@ -591,9 +624,9 @@ window.LessonManager = window.LessonManager || {
             if (this.thumbnailFile) {
                 try {
                     thumbnailPath = await this.uploadThumbnailToServer();
-                    this.showAlert('success', 'Imagen subida correctamente');
+                    this.showAlert('success', 'Imagen subida correctamente', true);
                 } catch (error) {
-                    this.showAlert('error', 'Error al subir la imagen: ' + error.message);
+                    this.showAlert('error', 'Error al subir la imagen: ' + error.message, true);
                     submitButton.disabled = false;
                     submitButton.textContent = 'Guardar Lección';
                     return;
@@ -650,11 +683,27 @@ window.LessonManager = window.LessonManager || {
                 this.closeModal();
                 await this.loadLessons();
             } else {
-                this.showAlert('error', data.message || 'Error al guardar la lección');
+                // Manejar errores de validación
+                let errorMessage = data.message || 'Error al guardar la lección';
+
+                // Si hay errores de validación específicos, mostrarlos
+                if (data.errors) {
+                    const errorMessages = [];
+                    for (const field in data.errors) {
+                        if (data.errors.hasOwnProperty(field)) {
+                            errorMessages.push(...data.errors[field]);
+                        }
+                    }
+                    if (errorMessages.length > 0) {
+                        errorMessage = errorMessages.join('<br>');
+                    }
+                }
+
+                this.showAlert('error', errorMessage, true);
             }
         } catch (error) {
             console.error('Error saving lesson:', error);
-            this.showAlert('error', 'Error de conexión al guardar la lección');
+            this.showAlert('error', 'Error de conexión al guardar la lección', true);
         } finally {
             submitButton.disabled = false;
             submitButton.textContent = 'Guardar Lección';
@@ -892,6 +941,35 @@ window.LessonManager = window.LessonManager || {
         this.showAlert('info', 'Subida cancelada');
     },
 
+    /**
+     * Muestra el preview del video de Bunny.net
+     */
+    showBunnyVideoPreview(videoId) {
+        const cdnHostname = CONFIG.bunnyCdnHostname;
+        const libraryId = CONFIG.bunnyLibraryId;
+
+        if (!cdnHostname || !libraryId) {
+            console.error('Bunny CDN hostname o library ID no configurado');
+            return;
+        }
+
+        const iframeUrl = `https://${cdnHostname}/embed/${libraryId}/${videoId}`;
+
+        document.getElementById('bunny-video-iframe').src = iframeUrl;
+        document.getElementById('bunny-video-id-display').textContent = videoId;
+        document.getElementById('bunny-video-preview').classList.remove('hidden');
+        document.getElementById('bunny-button-text').textContent = 'Cambiar video';
+    },
+
+    /**
+     * Oculta el preview del video de Bunny.net
+     */
+    hideBunnyVideoPreview() {
+        document.getElementById('bunny-video-preview').classList.add('hidden');
+        document.getElementById('bunny-video-iframe').src = '';
+        document.getElementById('bunny-button-text').textContent = 'Seleccionar archivo de video';
+    },
+
     // ========================================================================
     // FUNCIONES DE THUMBNAIL
     // ========================================================================
@@ -982,8 +1060,12 @@ window.LessonManager = window.LessonManager || {
     /**
      * Muestra una alerta temporal al usuario
      */
-    showAlert(type, message) {
-        const container = document.getElementById('alert-container');
+    showAlert(type, message, inModal = false) {
+        const containerId = inModal ? 'modal-alert-container' : 'alert-container';
+        const container = document.getElementById(containerId);
+
+        if (!container) return;
+
         const colors = {
             success: { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-400' },
             error: { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-400' },

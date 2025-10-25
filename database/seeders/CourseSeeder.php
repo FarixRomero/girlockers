@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use App\Models\Course;
 use App\Models\Module;
 use App\Models\Lesson;
+use App\Models\Instructor;
 use Illuminate\Database\Seeder;
 
 class CourseSeeder extends Seeder
@@ -14,6 +15,8 @@ class CourseSeeder extends Seeder
      */
     public function run(): void
     {
+        // Obtener la instructora Tatiana Cerna
+        $tatiana = Instructor::where('name', 'Tatiana Cerna')->first();
         // Locking Básico Course
         $lockingBasico = Course::create([
             'title' => 'Locking Básico',
@@ -90,6 +93,7 @@ class CourseSeeder extends Seeder
                     'video_path' => null,
                     'duration' => 0,
                     'is_trial' => $lessonData['is_trial'] ?? false,
+                    'instructor_id' => $tatiana?->id,
                     'order' => $lessonOrder++,
                 ]);
             }
@@ -175,6 +179,7 @@ class CourseSeeder extends Seeder
                     'video_path' => null,
                     'duration' => 0,
                     'is_trial' => $lessonData['is_trial'] ?? false,
+                    'instructor_id' => $tatiana?->id,
                     'order' => $lessonOrder++,
                 ]);
             }

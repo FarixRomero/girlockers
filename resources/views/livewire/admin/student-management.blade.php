@@ -26,7 +26,7 @@
             <div class="text-2xl font-bold text-green-400">{{ $stats['premium'] }}</div>
         </div>
         <div class="card-premium">
-            <div class="text-cream/70 text-sm mb-1">Solo Trial</div>
+            <div class="text-cream/70 text-sm mb-1">Solo Prueba</div>
             <div class="text-2xl font-bold text-orange-400">{{ $stats['trial'] }}</div>
         </div>
         <div class="card-premium">
@@ -54,7 +54,7 @@
                     class="bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-4 py-2 text-cream focus:outline-none focus:border-pink-vibrant transition">
                     <option value="all">Todos</option>
                     <option value="premium">Acceso Completo</option>
-                    <option value="trial">Solo Trial</option>
+                    <option value="trial">Solo Prueba</option>
                     <option value="pending">Con Solicitud Pendiente</option>
                 </select>
             </div>
@@ -95,7 +95,7 @@
                                     </span>
                                 @else
                                     <span class="px-3 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">
-                                        Trial
+                                        Prueba
                                     </span>
                                 @endif
                                 @if($student->access_requests_count > 0)

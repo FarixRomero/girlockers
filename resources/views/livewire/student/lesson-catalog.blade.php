@@ -113,10 +113,6 @@
                             </div>
                         @endif
 
-                        <!-- Free Badge (top-right corner) -->
-                        @if($lesson->is_trial)
-                            <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
-                        @endif
 
                         <!-- Title Overlay (bottom) -->
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
@@ -173,7 +169,7 @@
                                 <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                 </svg>
-                                Free Class
+                                Clase gratis
                             </span>
                         </div>
                     @endif

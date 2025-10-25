@@ -1,24 +1,7 @@
 <div>
     <!-- Video Player Section - calc(100vh - navbar height) -->
     <div class="z-10" style="height: calc(100vh - 3.5rem);">
-        @if(!$lesson->isAccessibleBy(auth()->user()))
-            <!-- Access Denied - Premium Lesson -->
-            <div class="h-full flex items-center justify-center bg-gradient-to-br from-purple-900 via-pink-900 to-black">
-                <div class="text-center max-w-2xl px-4">
-                    <svg class="w-24 h-24 text-pink-400 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                    </svg>
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Esta clase es Premium</h2>
-                    <p class="text-white/80 text-lg mb-8">Para acceder a esta clase necesitas tener acceso completo a la plataforma.</p>
-                    <a href="{{ route('request-access') }}" class="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-pink-500 to-purple-500 text-white font-bold text-lg rounded-lg hover:shadow-lg transition">
-                        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z"></path>
-                        </svg>
-                        Solicitar Acceso Completo
-                    </a>
-                </div>
-            </div>
-        @elseif ($lesson->video_type === 'youtube' && $lesson->youtube_id)
+        @if ($lesson->video_type === 'youtube' && $lesson->youtube_id)
             <!-- YouTube Player -->
             <div class="w-full h-full">
                 <iframe src="https://www.youtube.com/embed/{{ $lesson->youtube_id }}?rel=0&modestbranding=1"

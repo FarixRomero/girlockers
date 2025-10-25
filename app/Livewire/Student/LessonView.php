@@ -20,6 +20,12 @@ class LessonView extends Component
 
     public function mount(Lesson $lesson)
     {
+        // Check if user has access to this lesson
+        // If not, redirect to request access page
+        if (!$lesson->isAccessibleBy(auth()->user())) {
+            return redirect()->route('request-access');
+        }
+
         $this->lesson = $lesson;
 
         // Load relationships
@@ -37,10 +43,8 @@ class LessonView extends Component
         // Check if lesson is liked
         $this->isLiked = $this->lesson->isLikedBy(auth()->user());
 
-        // Record lesson view only if user has access
-        if ($lesson->isAccessibleBy(auth()->user())) {
-            LessonViewModel::recordView(auth()->id(), $lesson->id);
-        }
+        // Record lesson view
+        LessonViewModel::recordView(auth()->id(), $lesson->id);
     }
 
     protected function findAdjacentLessons()

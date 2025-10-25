@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('request-access', RequestAccess::class)->name('request-access');
 
     // Profile
-    Route::view('profile', 'profile')->name('profile');
+    Route::get('profile', \App\Livewire\Student\Profile::class)->name('profile');
 });
 
 // Admin Routes

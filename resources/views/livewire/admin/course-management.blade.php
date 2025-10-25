@@ -1,4 +1,4 @@
-<div>
+<div class="pb-20 lg:pb-0">
     <x-slot name="header">
         Gestión de Cursos
     </x-slot>

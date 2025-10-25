@@ -17,6 +17,8 @@ class StudentManagement extends Component
 
     public $search = '';
     public $filterAccess = 'all'; // all, trial, premium, pending
+    public $activeTab = 'users'; // users, requests
+    public $statusFilter = 'pending'; // pending, approved, rejected, all
 
     public function approveAccess($userId)
     {
@@ -40,6 +42,28 @@ class StudentManagement extends Component
         ]);
 
         session()->flash('success', "Acceso revocado para {$user->name}");
+    }
+
+    public function approveRequest($requestId)
+    {
+        $request = AccessRequest::with('user')->findOrFail($requestId);
+        $request->approve();
+
+        session()->flash('success', "Acceso aprobado para {$request->user->name}");
+    }
+
+    public function rejectRequest($requestId)
+    {
+        $request = AccessRequest::with('user')->findOrFail($requestId);
+        $request->update(['status' => 'rejected']);
+
+        session()->flash('success', "Solicitud rechazada para {$request->user->name}");
+    }
+
+    public function setTab($tab)
+    {
+        $this->activeTab = $tab;
+        $this->resetPage();
     }
 
     public function render()
@@ -67,7 +91,14 @@ class StudentManagement extends Component
 
         $students = $query->withCount(['comments', 'likes', 'accessRequests'])
             ->latest()
-            ->paginate(20);
+            ->paginate(20, ['*'], 'studentsPage');
+
+        // Access requests query
+        $requestsQuery = AccessRequest::with('user');
+        if ($this->statusFilter !== 'all') {
+            $requestsQuery->where('status', $this->statusFilter);
+        }
+        $requests = $requestsQuery->latest()->paginate(20, ['*'], 'requestsPage');
 
         $stats = [
             'total' => User::where('role', 'student')->count(),
@@ -76,9 +107,17 @@ class StudentManagement extends Component
             'pending' => AccessRequest::where('status', 'pending')->count(),
         ];
 
+        $requestStats = [
+            'pending' => AccessRequest::where('status', 'pending')->count(),
+            'approved' => AccessRequest::where('status', 'approved')->count(),
+            'rejected' => AccessRequest::where('status', 'rejected')->count(),
+        ];
+
         return view('livewire.admin.student-management', [
             'students' => $students,
             'stats' => $stats,
+            'requests' => $requests,
+            'requestStats' => $requestStats,
         ]);
     }
 }

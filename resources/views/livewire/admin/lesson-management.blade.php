@@ -3,7 +3,7 @@
 @section('title', 'Gestión de Lecciones - Admin')
 
 @section('content')
-<div id="app">
+<div id="app" class="pb-20 lg:pb-0">
     <!-- Header -->
     <div class="mb-6">
         <div class="flex items-center justify-between">
@@ -52,20 +52,20 @@
                     </span>
                 </div>
             </div>
-            <button onclick="LessonManager.openCreateModal()" class="btn-primary ml-4">
+            <a href="{{ route('admin.lessons.create', $moduleId) }}" class="btn-primary ml-4">
                 + Nueva Lección
-            </button>
+            </a>
         </div>
     </div>
 
     <!-- Mobile Nueva Lección Button -->
     <div class="md:hidden mb-4">
-        <button onclick="LessonManager.openCreateModal()" class="w-full bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center justify-center">
+        <a href="{{ route('admin.lessons.create', $moduleId) }}" class="w-full bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center justify-center">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
             Nueva Lección
-        </button>
+        </a>
     </div>
 
     <!-- Lessons List -->
@@ -277,6 +277,7 @@ window.LessonManagerConfig = window.LessonManagerConfig || {
     routes: {
         lessons: {
             index: '/admin/api/modules/:moduleId/lessons',
+            create: '{{ route('admin.lessons.create', ['moduleId' => ':moduleId']) }}',
             store: '{{ route('admin.api.lessons.store') }}',
             show: '{{ route('admin.api.lessons.show', ['id' => ':id']) }}',
             update: '{{ route('admin.api.lessons.update', ['id' => ':id']) }}',
@@ -389,7 +390,7 @@ window.LessonManager = window.LessonManager || {
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                     </svg>
                     <p class="text-cream/60">No hay lecciones aún</p>
-                    <button onclick="LessonManager.openCreateModal()" class="btn-primary mt-4">+ Crear primera lección</button>
+                    <a href="${CONFIG.routes.lessons.create.replace(':moduleId', CONFIG.moduleId)}" class="btn-primary mt-4 inline-block">+ Crear primera lección</a>
                 </div>
             `;
             return;
@@ -410,7 +411,7 @@ window.LessonManager = window.LessonManager || {
 
         const thumbnailUrl = lesson.thumbnail
             ? `/storage/${lesson.thumbnail}`
-            : 'https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen';
+            : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="90" viewBox="0 0 160 90"%3E%3Crect fill="%231a1625" width="160" height="90"/%3E%3Ctext fill="%23f472b6" font-family="Arial" font-size="12" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3ESin Imagen%3C/text%3E%3C/svg%3E';
 
         return `
             <div class="card-premium">
@@ -435,11 +436,11 @@ window.LessonManager = window.LessonManager || {
                     </div>
 
                     <!-- Thumbnail -->
-                    <div class="w-full aspect-video rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer" onclick="LessonManager.openEditModal(${lesson.id})">
+                    <a href="/admin/lessons/${lesson.id}/edit" class="block w-full aspect-video rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer">
                         <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
                             class="w-full h-full object-cover"
-                            onerror="this.src='https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen'">
-                    </div>
+                            onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
+                    </a>
 
                     <!-- Description -->
                     <p class="text-cream/60 text-sm mb-3">${this.escapeHtml(lesson.description)}</p>
@@ -470,11 +471,11 @@ window.LessonManager = window.LessonManager || {
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                             </button>
-                            <button onclick="LessonManager.openEditModal(${lesson.id})" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
+                            <a href="/admin/lessons/${lesson.id}/edit" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
-                            </button>
+                            </a>
                             <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-cream/60 hover:text-red-400 transition-colors rounded-lg hover:bg-cream/10" title="Eliminar">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
@@ -491,7 +492,7 @@ window.LessonManager = window.LessonManager || {
                         <div class="w-40 h-24 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
                             <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
                                 class="w-full h-full object-cover"
-                                onerror="this.src='https://via.placeholder.com/160x90/1a1625/f472b6?text=Sin+Imagen'">
+                                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
                         </div>
                         <div class="flex items-start flex-1">
                             <div class="w-12 h-12 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-lg mr-4">
@@ -545,11 +546,11 @@ window.LessonManager = window.LessonManager || {
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
                         </button>
-                        <button onclick="LessonManager.openEditModal(${lesson.id})" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors">
+                        <a href="/admin/lessons/${lesson.id}/edit" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                             </svg>
-                        </button>
+                        </a>
                         <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-cream/60 hover:text-red-400 transition-colors">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>

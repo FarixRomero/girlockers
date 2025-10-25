@@ -1,4 +1,4 @@
-<div>
+<div class="pb-20 lg:pb-0">
     <x-slot name="header">
         Gestión de Estudiantes
     </x-slot>
@@ -15,6 +15,30 @@
         </div>
     @endif
 
+    <!-- Tab Navigation -->
+    <div class="mb-6">
+        <div class="flex border-b border-gray-200">
+            <button
+                wire:click="setTab('users')"
+                class="px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base font-medium transition-all relative {{ $activeTab === 'users' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-500 hover:text-gray-700' }}">
+                Usuarios
+                <span class="ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 text-xs rounded-full {{ $activeTab === 'users' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600' }}">
+                    {{ $stats['total'] }}
+                </span>
+            </button>
+            <button
+                wire:click="setTab('requests')"
+                class="px-4 md:px-6 py-2.5 md:py-3 text-sm md:text-base font-medium transition-all relative {{ $activeTab === 'requests' ? 'text-purple-600 border-b-2 border-purple-600' : 'text-gray-500 hover:text-gray-700' }}">
+                Solicitudes
+                <span class="ml-1 md:ml-2 px-1.5 md:px-2 py-0.5 text-xs rounded-full {{ $activeTab === 'requests' ? 'bg-purple-100 text-purple-600' : 'bg-gray-100 text-gray-600' }}">
+                    {{ $requestStats['pending'] }}
+                </span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Users Tab -->
+    <div x-show="$wire.activeTab === 'users'">
     <!-- Stats - Mobile: Compact horizontal scroll, Desktop: Grid -->
     <div class="mb-6 overflow-x-auto scrollbar-hide">
         <div class="flex md:grid md:grid-cols-4 gap-2 md:gap-4 pb-2">
@@ -215,4 +239,158 @@
             {{ $students->links() }}
         </div>
     @endif
+    </div>
+
+    <!-- Access Requests Tab -->
+    <div x-show="$wire.activeTab === 'requests'">
+        <!-- Request Stats -->
+        <div class="hidden md:grid grid-cols-3 gap-4 mb-6">
+            <div class="card-premium">
+                <div class="text-cream/70 text-sm mb-1">Pendientes</div>
+                <div class="text-2xl font-bold text-orange-400">{{ $requestStats['pending'] }}</div>
+            </div>
+            <div class="card-premium">
+                <div class="text-cream/70 text-sm mb-1">Aprobadas</div>
+                <div class="text-2xl font-bold text-green-400">{{ $requestStats['approved'] }}</div>
+            </div>
+            <div class="card-premium">
+                <div class="text-cream/70 text-sm mb-1">Rechazadas</div>
+                <div class="text-2xl font-bold text-red-400">{{ $requestStats['rejected'] }}</div>
+            </div>
+        </div>
+
+        <!-- Status Filter Buttons -->
+        <div class="card-premium mb-6 p-4">
+            <div class="grid grid-cols-2 md:flex md:items-center gap-2">
+                <button
+                    wire:click="$set('statusFilter', 'pending')"
+                    class="px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition {{ $statusFilter === 'pending' ? 'bg-orange-500 text-white' : 'bg-purple-deeper text-cream hover:bg-purple-deeper/80' }}">
+                    Pendientes
+                </button>
+                <button
+                    wire:click="$set('statusFilter', 'approved')"
+                    class="px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition {{ $statusFilter === 'approved' ? 'bg-green-500 text-white' : 'bg-purple-deeper text-cream hover:bg-purple-deeper/80' }}">
+                    Aprobadas
+                </button>
+                <button
+                    wire:click="$set('statusFilter', 'rejected')"
+                    class="px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition {{ $statusFilter === 'rejected' ? 'bg-red-500 text-white' : 'bg-purple-deeper text-cream hover:bg-purple-deeper/80' }}">
+                    Rechazadas
+                </button>
+                <button
+                    wire:click="$set('statusFilter', 'all')"
+                    class="px-3 md:px-4 py-2 rounded-lg text-xs md:text-sm font-medium transition {{ $statusFilter === 'all' ? 'bg-pink-vibrant text-white' : 'bg-purple-deeper text-cream hover:bg-purple-deeper/80' }}">
+                    Todas
+                </button>
+            </div>
+        </div>
+
+        <!-- Requests List -->
+        <div class="space-y-4">
+            @forelse($requests as $request)
+                <!-- Mobile View -->
+                <div class="md:hidden card-premium" wire:key="request-mobile-{{ $request->id }}">
+                    <div class="flex items-start gap-3 mb-3">
+                        <div class="w-10 h-10 rounded-full bg-gradient-pink flex items-center justify-center text-cream font-bold flex-shrink-0">
+                            {{ strtoupper(substr($request->user->name, 0, 1)) }}
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-cream font-medium truncate">{{ $request->user->name }}</p>
+                            <p class="text-cream/60 text-xs truncate">{{ $request->user->email }}</p>
+                            <span class="inline-block mt-1 px-2 py-0.5 text-xs rounded-full
+                                {{ $request->status === 'pending' ? 'bg-orange-500/20 text-orange-400' : '' }}
+                                {{ $request->status === 'approved' ? 'bg-green-500/20 text-green-400' : '' }}
+                                {{ $request->status === 'rejected' ? 'bg-red-500/20 text-red-400' : '' }}">
+                                {{ ucfirst($request->status) }}
+                            </span>
+                        </div>
+                    </div>
+                    @if($request->message)
+                        <div class="bg-purple-deeper rounded-lg p-3 mb-3">
+                            <p class="text-cream/90 text-sm">{{ $request->message }}</p>
+                        </div>
+                    @endif
+                    <div class="flex items-center justify-between text-xs text-cream/60 mb-3">
+                        <span>{{ $request->created_at->format('d/m/Y H:i') }}</span>
+                        <span>{{ $request->created_at->diffForHumans() }}</span>
+                    </div>
+                    @if($request->status === 'pending')
+                        <div class="flex gap-2">
+                            <button
+                                wire:click="approveRequest({{ $request->id }})"
+                                class="flex-1 px-3 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg text-sm font-medium transition active:scale-95">
+                                Aprobar
+                            </button>
+                            <button
+                                wire:click="rejectRequest({{ $request->id }})"
+                                wire:confirm="¿Rechazar la solicitud de {{ $request->user->name }}?"
+                                class="flex-1 px-3 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-medium transition active:scale-95">
+                                Rechazar
+                            </button>
+                        </div>
+                    @endif
+                </div>
+
+                <!-- Desktop View -->
+                <div class="hidden md:block card-premium" wire:key="request-desktop-{{ $request->id }}">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-start flex-1">
+                            <div class="w-12 h-12 rounded-full bg-gradient-pink flex items-center justify-center text-cream font-bold mr-4 flex-shrink-0">
+                                {{ strtoupper(substr($request->user->name, 0, 1)) }}
+                            </div>
+                            <div class="flex-1">
+                                <div class="flex items-center gap-3 mb-1">
+                                    <p class="text-cream font-medium">{{ $request->user->name }}</p>
+                                    <span class="px-2 py-1 text-xs rounded-full
+                                        {{ $request->status === 'pending' ? 'bg-orange-500/20 text-orange-400' : '' }}
+                                        {{ $request->status === 'approved' ? 'bg-green-500/20 text-green-400' : '' }}
+                                        {{ $request->status === 'rejected' ? 'bg-red-500/20 text-red-400' : '' }}">
+                                        {{ ucfirst($request->status) }}
+                                    </span>
+                                </div>
+                                <p class="text-cream/60 text-sm mb-2">{{ $request->user->email }}</p>
+                                @if($request->message)
+                                    <div class="bg-purple-deeper rounded-lg p-3 mb-2">
+                                        <p class="text-cream/90">{{ $request->message }}</p>
+                                    </div>
+                                @endif
+                                <p class="text-cream/50 text-xs">
+                                    {{ $request->created_at->format('d/m/Y H:i') }} ({{ $request->created_at->diffForHumans() }})
+                                </p>
+                            </div>
+                        </div>
+                        @if($request->status === 'pending')
+                            <div class="flex items-center space-x-2 ml-4">
+                                <button
+                                    wire:click="approveRequest({{ $request->id }})"
+                                    class="px-4 py-2 bg-green-500 hover:bg-green-600 text-white rounded-lg font-medium transition">
+                                    Aprobar
+                                </button>
+                                <button
+                                    wire:click="rejectRequest({{ $request->id }})"
+                                    wire:confirm="¿Rechazar la solicitud de {{ $request->user->name }}?"
+                                    class="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg font-medium transition">
+                                    Rechazar
+                                </button>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            @empty
+                <div class="card-premium text-center py-12">
+                    <svg class="w-16 h-16 text-cream/30 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    <p class="text-cream/70">No se encontraron solicitudes</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Pagination -->
+        @if($requests->hasPages())
+            <div class="mt-6">
+                {{ $requests->links() }}
+            </div>
+        @endif
+    </div>
 </div>

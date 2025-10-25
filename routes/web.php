@@ -69,6 +69,31 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             'tags' => $tags
         ]);
     })->name('modules.lessons');
+    Route::get('modules/{moduleId}/lessons/create', function ($moduleId) {
+        $module = \App\Models\Module::with('course')->findOrFail($moduleId);
+        $instructors = \App\Models\Instructor::orderBy('name')->get();
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        $nextOrder = $module->lessons()->max('order') + 1;
+        return view('admin.lesson-form', [
+            'module' => $module,
+            'lesson' => null,
+            'instructors' => $instructors,
+            'tags' => $tags,
+            'nextOrder' => $nextOrder
+        ]);
+    })->name('lessons.create');
+    Route::get('lessons/{lessonId}/edit', function ($lessonId) {
+        $lesson = \App\Models\Lesson::with(['module.course', 'tags'])->findOrFail($lessonId);
+        $instructors = \App\Models\Instructor::orderBy('name')->get();
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        return view('admin.lesson-form', [
+            'module' => $lesson->module,
+            'lesson' => $lesson,
+            'instructors' => $instructors,
+            'tags' => $tags,
+            'nextOrder' => null
+        ]);
+    })->name('lessons.edit');
     Route::get('instructors', InstructorManagement::class)->name('instructors.index');
     Route::get('tags', TagManagement::class)->name('tags.index');
 

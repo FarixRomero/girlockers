@@ -58,11 +58,11 @@
                         Usuarios
                     </a>
 
-                    <a href="{{ route('admin.access-requests.index') }}" wire:navigate class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('admin.access-requests.*') ? 'bg-pink-vibrant text-cream' : 'text-cream/70 hover:bg-purple-deep' }}">
+                    <a href="{{ route('admin.comments.index') }}" wire:navigate class="flex items-center px-4 py-3 rounded-lg {{ request()->routeIs('admin.comments.*') ? 'bg-pink-vibrant text-cream' : 'text-cream/70 hover:bg-purple-deep' }}">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
-                        Solicitudes
+                        Comentarios
                     </a>
                 </nav>
 
@@ -117,9 +117,9 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                         </svg>
                     </a>
-                    <a href="{{ route('admin.access-requests.index') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.access-requests.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.comments.index') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.comments.*') ? 'active' : '' }}">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"></path>
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                         </svg>
                     </a>
                     <form method="POST" action="{{ route('logout') }}" class="nav-item">

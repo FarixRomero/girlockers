@@ -12,7 +12,6 @@ use App\Livewire\Student\SavedContent;
 use App\Livewire\Student\WatchHistory;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\StudentManagement;
-use App\Livewire\Admin\AccessRequests;
 use App\Livewire\Admin\CommentModeration;
 use App\Livewire\Admin\CourseManagement;
 use App\Livewire\Admin\ModuleManagement;
@@ -56,7 +55,6 @@ Route::middleware(['auth'])->group(function () {
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('users', StudentManagement::class)->name('users.index');
-    Route::get('access-requests', AccessRequests::class)->name('access-requests.index');
     Route::get('comments', CommentModeration::class)->name('comments.index');
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');

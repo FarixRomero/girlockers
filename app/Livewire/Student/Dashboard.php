@@ -37,17 +37,28 @@ class Dashboard extends Component
             ->take(8)
             ->get();
 
-        // Get 4 tags with most lessons
-        $topTags = Tag::withCount('lessons')
-            ->orderByDesc('lessons_count')
-            ->take(4)
-            ->get();
+        // Get specific tag categories for carousels
+        $coreografiaTag = Tag::where('name', 'Coreografía')->first();
+        $lecturasTag = Tag::where('name', 'Lecturas y Conceptos')->first();
 
-        // Get lessons by each tag
-        $lessonsByTag = [];
-        foreach ($topTags as $tag) {
-            $lessonsByTag[$tag->name] = Lesson::whereHas('tags', function($query) use ($tag) {
-                    $query->where('tags.id', $tag->id);
+        // Get lessons for Coreografía
+        $coreografiaLessons = collect();
+        if ($coreografiaTag) {
+            $coreografiaLessons = Lesson::whereHas('tags', function($query) use ($coreografiaTag) {
+                    $query->where('tags.id', $coreografiaTag->id);
+                })
+                ->accessibleBy($user)
+                ->with(['module.course', 'instructor', 'tags'])
+                ->inRandomOrder()
+                ->take(8)
+                ->get();
+        }
+
+        // Get lessons for Lecturas y Conceptos
+        $lecturasLessons = collect();
+        if ($lecturasTag) {
+            $lecturasLessons = Lesson::whereHas('tags', function($query) use ($lecturasTag) {
+                    $query->where('tags.id', $lecturasTag->id);
                 })
                 ->accessibleBy($user)
                 ->with(['module.course', 'instructor', 'tags'])
@@ -73,8 +84,8 @@ class Dashboard extends Component
         return view('livewire.student.dashboard', [
             'stats' => $stats,
             'recentLessons' => $recentLessons,
-            'topTags' => $topTags,
-            'lessonsByTag' => $lessonsByTag,
+            'coreografiaLessons' => $coreografiaLessons,
+            'lecturasLessons' => $lecturasLessons,
             'savedLessons' => $savedLessons,
             'trendingCourses' => $trendingCourses,
         ]);

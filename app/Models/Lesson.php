@@ -99,14 +99,13 @@ class Lesson extends Model
 
     /**
      * Scope to get lessons accessible by a user
+     * Note: All users can now see all lessons, but cannot play premium ones
      */
-    public function scopeAccessibleBy($query, User $user)
+    public function scopeAccessibleBy($query, User $user = null)
     {
-        if ($user->isAdmin() || $user->hasFullAccess()) {
-            return $query;
-        }
-
-        return $query->where('is_trial', true);
+        // All authenticated users can see all lessons
+        // Access control is now handled at the playback level
+        return $query;
     }
 
     /**

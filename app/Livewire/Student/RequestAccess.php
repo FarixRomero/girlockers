@@ -5,8 +5,10 @@ namespace App\Livewire\Student;
 use App\Models\AccessRequest;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Title;
 
-#[Layout('layouts.app')]
+#[Layout('layouts.student')]
+#[Title('Solicitar Acceso Completo - Girls Lockers')]
 class RequestAccess extends Component
 {
     public $existingRequest = null;

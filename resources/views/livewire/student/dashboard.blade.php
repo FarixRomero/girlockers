@@ -1,7 +1,7 @@
 <div class="max-w-full">
     <!-- Hero Section - Bienvenida con estadísticas -->
     <div class="bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-4 md:py-6 px-4">
-        <h1 class="text-2xl md:text-7xl font-black mb-3 md:mb-4 tracking-tight">
+        <h1 class="text-2xl font-black md:text-7xl md:font-bold mb-3 md:mb-4 tracking-tight">
             Bienvenido,<br>
             <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
                 {{ $stats['name'] }}
@@ -11,30 +11,30 @@
         <div class="grid grid-cols-2 md:grid-cols-3 gap-2 md:gap-4 mt-3 md:mt-4">
             <!-- Minutes Dancing -->
             <div class="bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 border border-white/20 hover:bg-white/20 transition">
-                <div class="text-3xl md:text-7xl font-black mb-1 md:mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
+                <div class="text-3xl font-black md:text-7xl md:font-bold mb-1 md:mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
                     {{ $stats['total_minutes'] }}
                 </div>
-                <div class="text-xs md:text-xl font-bold uppercase tracking-wider text-white/90">
+                <div class="text-xs font-bold md:text-xl md:font-semibold uppercase tracking-wider text-white/90">
                     Minutos Bailando
                 </div>
             </div>
 
             <!-- Completed Lessons -->
             <div class="bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 border border-white/20 hover:bg-white/20 transition">
-                <div class="text-3xl md:text-7xl font-black mb-1 md:mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
+                <div class="text-3xl font-black md:text-7xl md:font-bold mb-1 md:mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
                     {{ $stats['completed_lessons'] }}
                 </div>
-                <div class="text-xs md:text-xl font-bold uppercase tracking-wider text-white/90">
+                <div class="text-xs font-bold md:text-xl md:font-semibold uppercase tracking-wider text-white/90">
                     Clases Completadas
                 </div>
             </div>
 
             <!-- Access Status -->
             <div class="bg-white/10 backdrop-blur-md rounded-xl md:rounded-2xl p-2 md:p-4 border border-white/20 hover:bg-white/20 transition col-span-2 md:col-span-1">
-                <div class="text-2xl md:text-5xl font-black mb-1 md:mb-2 {{ $stats['has_access'] ? 'text-green-400' : 'text-yellow-400' }}">
+                <div class="text-2xl font-black md:text-5xl md:font-bold mb-1 md:mb-2 {{ $stats['has_access'] ? 'text-green-400' : 'text-yellow-400' }}">
                     {{ $stats['has_access'] ? 'PREMIUM' : 'FREE' }}
                 </div>
-                <div class="text-xs md:text-xl font-bold uppercase tracking-wider text-white/90">
+                <div class="text-xs font-bold md:text-xl md:font-semibold uppercase tracking-wider text-white/90">
                     Tu Plan
                 </div>
             </div>
@@ -44,14 +44,14 @@
     <!-- Recent Lessons Carousel -->
     @if($recentLessons->count() > 0)
     <div class="px-4 py-3 md:py-4">
-        <h2 class="text-xl md:text-5xl font-black text-gray-900 mb-3 md:mb-4 tracking-tight">Últimas Clases</h2>
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Últimas Clases</h2>
         <div class="relative overflow-hidden">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="recent-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
                     @foreach($recentLessons as $lesson)
-                        <div class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" style="width: 280px; flex-shrink: 0;">
-                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block relative">
-                                <div class="aspect-video relative">
+                        <div class="group rounded-lg overflow-hidden" style="width: 280px; flex-shrink: 0;">
+                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                                <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($lesson->thumbnail)
                                         <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                     @else
@@ -64,29 +64,47 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if($lesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
+
+                                    <!-- Lock icon for premium lessons -->
+                                    @if(!$lesson->is_trial && !auth()->user()->has_full_access)
+                                        <div class="absolute top-2 left-2 bg-black/80 rounded-lg p-1.5">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
                                     @endif
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                        <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
+
+                                    <!-- Tags en la parte inferior de la imagen -->
+                                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                        @php
+                                            $levelColors = [
+                                                'principiante' => 'bg-green-500',
+                                                'intermedio' => 'bg-blue-500',
+                                                'avanzado' => 'bg-red-500'
+                                            ];
+                                            $courseLevel = $lesson->module?->course?->level;
+                                            $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                        @endphp
+                                        @if($courseLevel)
+                                            <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                        @endif
+                                        @if($lesson->duration)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                        @endif
+                                        @foreach($lesson->tags->take(1) as $tag)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $tag->name }}</span>
+                                        @endforeach
                                     </div>
                                 </div>
-                            </a>
-                            <div class="p-4">
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    @if($lesson->duration)
-                                        <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
-                                    @endif
-                                    @foreach($lesson->tags->take(2) as $tag)
-                                        <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">{{ $tag->name }}</span>
-                                    @endforeach
-                                </div>
-                                <div class="text-sm text-gray-600">
+
+                                <!-- Info abajo sin background -->
+                                <div class="pt-2">
+                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                                     @if($lesson->instructor)
-                                        <span>{{ $lesson->instructor->name }}</span>
+                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                                     @endif
                                 </div>
-                            </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -107,82 +125,17 @@
     </div>
     @endif
 
-    <!-- Carousels by Tags -->
-    @foreach($topTags as $tag)
-        @if(isset($lessonsByTag[$tag->name]) && $lessonsByTag[$tag->name]->count() > 0)
-        <div class="px-4 py-3 md:py-4">
-            <h2 class="text-xl md:text-5xl font-black text-gray-900 mb-3 md:mb-4 tracking-tight">{{ $tag->name }}</h2>
-            <div class="relative overflow-hidden">
-                <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="tag-{{ $tag->id }}-carousel">
-                    <div class="flex gap-3 md:gap-6" style="width: max-content;">
-                        @foreach($lessonsByTag[$tag->name] as $lesson)
-                            <div class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" style="width: 280px; flex-shrink: 0;">
-                                <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block relative">
-                                    <div class="aspect-video relative">
-                                        @if($lesson->thumbnail)
-                                            <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
-                                        @else
-                                            <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
-                                                <div class="absolute inset-0 flex items-center justify-center">
-                                                    <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                                    </svg>
-                                                </div>
-                                            </div>
-                                        @endif
-                                        @if($lesson->is_trial)
-                                            <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
-                                        @endif
-                                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                            <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
-                                        </div>
-                                    </div>
-                                </a>
-                                <div class="p-4">
-                                    <div class="flex flex-wrap gap-2 mb-2">
-                                        @if($lesson->duration)
-                                            <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
-                                        @endif
-                                    </div>
-                                    <div class="text-sm text-gray-600">
-                                        @if($lesson->instructor)
-                                            <span>{{ $lesson->instructor->name }}</span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        @endforeach
-                    </div>
-                </div>
-                <button onclick="document.getElementById('tag-{{ $tag->id }}-carousel').scrollBy({left: -290, behavior: 'smooth'})"
-                        class="hidden md:flex absolute left-0 top-1/3 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
-                    <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
-                    </svg>
-                </button>
-                <button onclick="document.getElementById('tag-{{ $tag->id }}-carousel').scrollBy({left: 290, behavior: 'smooth'})"
-                        class="hidden md:flex absolute right-0 top-1/3 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
-                    <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
-                    </svg>
-                </button>
-            </div>
-        </div>
-        @endif
-    @endforeach
-
-    <!-- Saved Lessons Carousel -->
-    @if($savedLessons->count() > 0)
+    <!-- Coreografía Carousel -->
+    @if($coreografiaLessons->count() > 0)
     <div class="px-4 py-3 md:py-4">
-        <h2 class="text-xl md:text-5xl font-black text-gray-900 mb-3 md:mb-4 tracking-tight">Tus Clases Guardadas</h2>
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Coreografía</h2>
         <div class="relative overflow-hidden">
-            <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="saved-carousel">
+            <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="coreografia-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
-                    @foreach($savedLessons as $lesson)
-                        <div class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition" style="width: 280px; flex-shrink: 0;">
-                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block relative">
-                                <div class="aspect-video relative">
+                    @foreach($coreografiaLessons as $lesson)
+                        <div class="group rounded-lg overflow-hidden" style="width: 280px; flex-shrink: 0;">
+                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                                <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($lesson->thumbnail)
                                         <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                     @else
@@ -195,34 +148,215 @@
                                             </div>
                                         </div>
                                     @endif
-                                    @if($lesson->is_trial)
-                                        <span class="absolute top-3 right-3 px-3 py-1 bg-red-500 text-white text-xs font-bold rounded-full">Gratis</span>
+
+                                    <!-- Lock icon for premium lessons -->
+                                    @if(!$lesson->is_trial && !auth()->user()->has_full_access)
+                                        <div class="absolute top-2 left-2 bg-black/80 rounded-lg p-1.5">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
                                     @endif
-                                    <div class="absolute top-3 left-3">
-                                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
-                                        </svg>
+
+                                    <!-- Tags en la parte inferior de la imagen -->
+                                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                        @php
+                                            $levelColors = [
+                                                'principiante' => 'bg-green-500',
+                                                'intermedio' => 'bg-blue-500',
+                                                'avanzado' => 'bg-red-500'
+                                            ];
+                                            $courseLevel = $lesson->module?->course?->level;
+                                            $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                        @endphp
+                                        @if($courseLevel)
+                                            <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                        @endif
+                                        @if($lesson->duration)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                        @endif
+                                        @foreach($lesson->tags->take(1) as $tag)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $tag->name }}</span>
+                                        @endforeach
                                     </div>
-                                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                                        <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
-                                    </div>
+                                </div>
+
+                                <!-- Info abajo sin background -->
+                                <div class="pt-2">
+                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                    @if($lesson->instructor)
+                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                    @endif
                                 </div>
                             </a>
-                            <div class="p-4">
-                                <div class="flex flex-wrap gap-2 mb-2">
-                                    @if($lesson->duration)
-                                        <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <button onclick="document.getElementById('coreografia-carousel').scrollBy({left: -290, behavior: 'smooth'})"
+                    class="hidden md:flex absolute left-0 top-1/3 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
+                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button onclick="document.getElementById('coreografia-carousel').scrollBy({left: 290, behavior: 'smooth'})"
+                    class="hidden md:flex absolute right-0 top-1/3 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
+                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    @endif
+
+    <!-- Lecturas y Conceptos Carousel -->
+    @if($lecturasLessons->count() > 0)
+    <div class="px-4 py-3 md:py-4">
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Lecturas y Conceptos</h2>
+        <div class="relative overflow-hidden">
+            <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="lecturas-carousel">
+                <div class="flex gap-3 md:gap-6" style="width: max-content;">
+                    @foreach($lecturasLessons as $lesson)
+                        <div class="group rounded-lg overflow-hidden" style="width: 280px; flex-shrink: 0;">
+                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                                <div class="aspect-video relative rounded-lg overflow-hidden">
+                                    @if($lesson->thumbnail)
+                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
                                     @endif
-                                    @foreach($lesson->tags->take(2) as $tag)
-                                        <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">{{ $tag->name }}</span>
-                                    @endforeach
+
+                                    <!-- Lock icon for premium lessons -->
+                                    @if(!$lesson->is_trial && !auth()->user()->has_full_access)
+                                        <div class="absolute top-2 left-2 bg-black/80 rounded-lg p-1.5">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    <!-- Tags en la parte inferior de la imagen -->
+                                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                        @php
+                                            $levelColors = [
+                                                'principiante' => 'bg-green-500',
+                                                'intermedio' => 'bg-blue-500',
+                                                'avanzado' => 'bg-red-500'
+                                            ];
+                                            $courseLevel = $lesson->module?->course?->level;
+                                            $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                        @endphp
+                                        @if($courseLevel)
+                                            <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                        @endif
+                                        @if($lesson->duration)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                        @endif
+                                        @foreach($lesson->tags->take(1) as $tag)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $tag->name }}</span>
+                                        @endforeach
+                                    </div>
                                 </div>
-                                <div class="text-sm text-gray-600">
+
+                                <!-- Info abajo sin background -->
+                                <div class="pt-2">
+                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                                     @if($lesson->instructor)
-                                        <span>{{ $lesson->instructor->name }}</span>
+                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                                     @endif
                                 </div>
-                            </div>
+                            </a>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+            <button onclick="document.getElementById('lecturas-carousel').scrollBy({left: -290, behavior: 'smooth'})"
+                    class="hidden md:flex absolute left-0 top-1/3 -translate-y-1/2 -translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
+                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+                </svg>
+            </button>
+            <button onclick="document.getElementById('lecturas-carousel').scrollBy({left: 290, behavior: 'smooth'})"
+                    class="hidden md:flex absolute right-0 top-1/3 -translate-y-1/2 translate-x-4 bg-white/90 hover:bg-white p-3 rounded-full shadow-lg transition z-10">
+                <svg class="w-6 h-6 text-gray-900" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+    @endif
+
+    <!-- Saved Lessons Carousel -->
+    @if($savedLessons->count() > 0)
+    <div class="px-4 py-3 md:py-4">
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Tus Clases Guardadas</h2>
+        <div class="relative overflow-hidden">
+            <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="saved-carousel">
+                <div class="flex gap-3 md:gap-6" style="width: max-content;">
+                    @foreach($savedLessons as $lesson)
+                        <div class="group rounded-lg overflow-hidden" style="width: 280px; flex-shrink: 0;">
+                            <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                                <div class="aspect-video relative rounded-lg overflow-hidden">
+                                    @if($lesson->thumbnail)
+                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
+                                            <div class="absolute inset-0 flex items-center justify-center">
+                                                <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Lock icon for premium lessons -->
+                                    @if(!$lesson->is_trial && !auth()->user()->has_full_access)
+                                        <div class="absolute top-2 left-2 bg-black/80 rounded-lg p-1.5">
+                                            <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    <!-- Tags en la parte inferior de la imagen -->
+                                    <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                        @php
+                                            $levelColors = [
+                                                'principiante' => 'bg-green-500',
+                                                'intermedio' => 'bg-blue-500',
+                                                'avanzado' => 'bg-red-500'
+                                            ];
+                                            $courseLevel = $lesson->module?->course?->level;
+                                            $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                        @endphp
+                                        @if($courseLevel)
+                                            <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                        @endif
+                                        @if($lesson->duration)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                        @endif
+                                        @foreach($lesson->tags->take(1) as $tag)
+                                            <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $tag->name }}</span>
+                                        @endforeach
+                                    </div>
+                                </div>
+
+                                <!-- Info abajo sin background -->
+                                <div class="pt-2">
+                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                    @if($lesson->instructor)
+                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                    @endif
+                                </div>
+                            </a>
                         </div>
                     @endforeach
                 </div>
@@ -246,7 +380,7 @@
     <!-- Trending Courses -->
     @if($trendingCourses->count() > 0)
     <div class="px-4 py-3 md:py-4 pb-8">
-        <h2 class="text-xl md:text-5xl font-black text-gray-900 mb-3 md:mb-4 tracking-tight">Cursos de Moda</h2>
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Cursos de Moda</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($trendingCourses as $course)
                 <a href="{{ route('courses.show', $course) }}" wire:navigate class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition">

@@ -113,6 +113,14 @@
                             </div>
                         @endif
 
+                        <!-- Lock icon for premium lessons -->
+                        @if(!$lesson->is_trial && !auth()->user()->has_full_access)
+                            <div class="absolute top-3 left-3 bg-black/80 rounded-lg p-2 z-10">
+                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
+                                </svg>
+                            </div>
+                        @endif
 
                         <!-- Title Overlay (bottom) -->
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">

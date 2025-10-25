@@ -18,10 +18,13 @@ class LessonPolicy
 
     /**
      * Determine whether the user can view the model.
+     * All authenticated users can now see all lessons
+     * (but playback is restricted to accessible lessons)
      */
     public function view(User $user, Lesson $lesson): bool
     {
-        return $lesson->isAccessibleBy($user);
+        // All authenticated users can view any lesson
+        return true;
     }
 
     /**

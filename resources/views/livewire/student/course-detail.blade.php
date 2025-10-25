@@ -80,7 +80,7 @@
                                 <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                <span>Solo puedes ver lecciones de prueba. <a href="{{ route('dashboard') }}" wire:navigate class="underline font-bold">Solicita acceso completo</a> para desbloquear todo el contenido.</span>
+                                <span>Puedes ver todo el contenido del curso, pero solo puedes acceder a las lecciones gratuitas. <a href="{{ route('request-access') }}" wire:navigate class="underline font-bold">Solicita acceso completo</a> para desbloquear todas las lecciones.</span>
                             </p>
                         </div>
                     @endif
@@ -123,9 +123,9 @@
                             @endphp
 
                             <a
-                                href="{{ $canAccess ? route('lessons.show', $lesson) : '#' }}"
-                                wire:navigate
-                                class="flex items-center justify-between p-3 rounded-lg {{ $canAccess ? 'hover:bg-purple-deep/50 cursor-pointer' : 'opacity-50 cursor-not-allowed' }} transition group">
+                                href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
+                                {{ $canAccess ? 'wire:navigate' : '' }}
+                                class="flex items-center justify-between p-3 rounded-lg hover:bg-purple-deep/50 cursor-pointer transition group">
                                 <div class="flex items-center flex-1">
                                     <div class="w-10 h-10 rounded-lg bg-gradient-pink flex items-center justify-center mr-3 flex-shrink-0">
                                         @if($canAccess)

@@ -10,7 +10,7 @@ use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Instructores - Girls Lockers')]
 class InstructorCatalog extends Component
 {

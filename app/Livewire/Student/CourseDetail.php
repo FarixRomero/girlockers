@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 class CourseDetail extends Component
 {
     public Course $course;

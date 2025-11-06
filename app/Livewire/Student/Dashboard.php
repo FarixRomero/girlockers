@@ -9,7 +9,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Dashboard - Girls Lockers')]
 class Dashboard extends Component
 {

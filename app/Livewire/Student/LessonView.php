@@ -7,7 +7,7 @@ use App\Models\LessonView as LessonViewModel;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 class LessonView extends Component
 {
 

@@ -6,7 +6,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Historial - Girls Lockers')]
 class WatchHistory extends Component
 {

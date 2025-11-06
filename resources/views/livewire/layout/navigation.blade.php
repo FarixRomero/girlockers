@@ -31,10 +31,13 @@ new class extends Component
                 <!-- Navigation Links -->
                 <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                        Inicio
+                        Home
                     </x-nav-link>
-                    <x-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.*')" wire:navigate>
-                        Cursos
+                    <x-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.*') && !request()->routeIs('lessons.*')" wire:navigate>
+                        Librería
+                    </x-nav-link>
+                    <x-nav-link :href="route('saved.index')" :active="request()->routeIs('saved.*') || request()->routeIs('history.*')" wire:navigate>
+                        Guardados
                     </x-nav-link>
                 </div>
             </div>
@@ -85,10 +88,13 @@ new class extends Component
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')" wire:navigate>
-                Inicio
+                Home
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.*')" wire:navigate>
-                Cursos
+            <x-responsive-nav-link :href="route('courses.index')" :active="request()->routeIs('courses.*') && !request()->routeIs('lessons.*')" wire:navigate>
+                Librería
+            </x-responsive-nav-link>
+            <x-responsive-nav-link :href="route('saved.index')" :active="request()->routeIs('saved.*') || request()->routeIs('history.*')" wire:navigate>
+                Guardados
             </x-responsive-nav-link>
         </div>
 

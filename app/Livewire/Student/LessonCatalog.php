@@ -9,7 +9,7 @@ use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
 use Livewire\WithPagination;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Clases - Girls Lockers')]
 class LessonCatalog extends Component
 {

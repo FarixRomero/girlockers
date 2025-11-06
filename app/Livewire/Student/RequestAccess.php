@@ -7,7 +7,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Solicitar Acceso Completo - Girls Lockers')]
 class RequestAccess extends Component
 {

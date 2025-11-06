@@ -11,7 +11,7 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 
-#[Layout('layouts.student')]
+#[Layout('layouts.app')]
 #[Title('Mi Perfil - Girls Lockers')]
 class Profile extends Component
 {

@@ -62,7 +62,7 @@
                 </div>
 
                 <div class="bg-purple-deeper rounded-lg p-4 mb-3">
-                    <p class="text-cream/90 whitespace-pre-wrap">{{ $comment->body }}</p>
+                    <p class="text-cream/90 whitespace-pre-wrap">{{ $comment->content }}</p>
                 </div>
 
                 <a href="{{ route('lessons.show', $comment->lesson) }}" wire:navigate class="inline-flex items-center text-pink-vibrant hover:text-pink-light text-sm">

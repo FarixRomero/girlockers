@@ -3,6 +3,11 @@
         Gestión de Cursos
     </x-slot>
 
+    <!-- Mobile Title -->
+    <div class="md:hidden px-4 pt-4 pb-2 bg-white">
+        <h1 class="text-xl font-bold text-black">Cursos</h1>
+    </div>
+
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 bg-white">
         <!-- Success/Error Messages -->
         @if(session()->has('success'))

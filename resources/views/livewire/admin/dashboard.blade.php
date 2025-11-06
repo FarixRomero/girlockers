@@ -25,7 +25,7 @@
                     </svg>
                 </div>
                 <div class="text-xl md:text-3xl font-black text-purple-primary">{{ $stats['pending_requests'] }}</div>
-                <a href="{{ route('admin.access-requests.index') }}" wire:navigate class="text-xs text-purple-primary hover:text-purple-dark hover:underline mt-0.5 md:mt-1 inline-block font-medium hidden md:inline-block">Ver todas →</a>
+                <a href="{{ route('admin.users.index') }}" wire:navigate class="text-xs text-purple-primary hover:text-purple-dark hover:underline mt-0.5 md:mt-1 inline-block font-medium hidden md:inline-block">Ver todas →</a>
             </div>
 
             <div class="bg-white rounded-xl md:rounded-2xl p-3 md:p-6 border border-gray-light/50 shadow-sm hover:shadow-md hover:border-purple-primary/30 transition-all duration-300">
@@ -63,7 +63,7 @@
                         <span class="hidden md:inline">Solicitudes Pendientes</span>
                         <span class="md:hidden">Solicitudes</span>
                     </h2>
-                    <a href="{{ route('admin.access-requests.index') }}" wire:navigate class="text-purple-primary hover:text-purple-dark text-xs md:text-sm font-medium">
+                    <a href="{{ route('admin.users.index') }}" wire:navigate class="text-purple-primary hover:text-purple-dark text-xs md:text-sm font-medium">
                         Ver →
                     </a>
                 </div>
@@ -89,7 +89,7 @@
                                         <p class="text-gray-medium text-xs hidden md:block">{{ $request->created_at->diffForHumans() }}</p>
                                     </div>
                                 </div>
-                                <a href="{{ route('admin.access-requests.index') }}" wire:navigate class="px-3 md:px-4 py-1.5 md:py-2 bg-purple-primary hover:bg-purple-dark text-white font-medium text-xs md:text-sm rounded-lg shadow-sm hover:shadow transition-colors ml-2">
+                                <a href="{{ route('admin.users.index') }}" wire:navigate class="px-3 md:px-4 py-1.5 md:py-2 bg-purple-primary hover:bg-purple-dark text-white font-medium text-xs md:text-sm rounded-lg shadow-sm hover:shadow transition-colors ml-2">
                                     Revisar
                                 </a>
                             </div>

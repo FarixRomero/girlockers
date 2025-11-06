@@ -31,7 +31,7 @@ class CommentModeration extends Component
         $query = Comment::with(['user', 'lesson.module.course']);
 
         if ($this->search) {
-            $query->where('body', 'like', '%' . $this->search . '%')
+            $query->where('content', 'like', '%' . $this->search . '%')
                   ->orWhereHas('user', function ($q) {
                       $q->where('name', 'like', '%' . $this->search . '%');
                   });

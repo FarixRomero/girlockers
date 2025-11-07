@@ -126,7 +126,7 @@
                 </span>
             @endif
 
-            @if($lesson->duration_minutes)
+            @if($lesson->duration_minutes && $lesson->video_type !== 'youtube')
                 <span class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold uppercase rounded">
                     {{ $lesson->duration_minutes }} MIN
                 </span>

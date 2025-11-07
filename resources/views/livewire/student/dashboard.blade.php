@@ -152,7 +152,7 @@
                                         @if($courseLevel)
                                             <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
                                         @endif
-                                        @if($lesson->duration_minutes)
+                                        @if($lesson->duration_minutes && $lesson->video_type !== 'youtube')
                                             <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration_minutes }} MIN</span>
                                         @endif
                                         @foreach($lesson->tags->take(1) as $tag)
@@ -236,7 +236,7 @@
                                         @if($courseLevel)
                                             <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
                                         @endif
-                                        @if($lesson->duration_minutes)
+                                        @if($lesson->duration_minutes && $lesson->video_type !== 'youtube')
                                             <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration_minutes }} MIN</span>
                                         @endif
                                         @foreach($lesson->tags->take(1) as $tag)
@@ -320,7 +320,7 @@
                                         @if($courseLevel)
                                             <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
                                         @endif
-                                        @if($lesson->duration_minutes)
+                                        @if($lesson->duration_minutes && $lesson->video_type !== 'youtube')
                                             <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration_minutes }} MIN</span>
                                         @endif
                                         @foreach($lesson->tags->take(1) as $tag)

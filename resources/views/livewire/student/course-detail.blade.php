@@ -299,7 +299,7 @@
                                                     </div>
 
                                                     <!-- Duration -->
-                                                    @if($lesson->duration_minutes)
+                                                    @if($lesson->duration_minutes && $lesson->video_type !== 'youtube')
                                                         <p class="text-gray-400 text-xs">{{ $lesson->duration_minutes }}:00 • {{ $lesson->instructor?->name ?? 'Instructor' }}</p>
                                                     @endif
                                                 </div>

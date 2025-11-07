@@ -439,13 +439,15 @@ window.LessonManager = window.LessonManager || {
                                     ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
                                     : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
                                 }
-                                <span class="text-xs text-cream/50">${videoTypeLabel} • ${Math.ceil((lesson.duration || 0) / 60)} min</span>
+                                <span class="text-xs text-cream/50">
+                                    ${videoTypeLabel}${lesson.video_type !== 'youtube' && lesson.duration > 0 ? ' • ' + Math.ceil((lesson.duration || 0) / 60) + ' min' : ''}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <!-- Thumbnail -->
-                    <a href="/admin/lessons/${lesson.id}/edit" class="block w-full aspect-video rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer">
+                    <a href="/admin/lessons/${lesson.id}/edit" class="block w-32 h-20 rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer flex-shrink-0">
                         <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
                             class="w-full h-full object-cover"
                             onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
@@ -498,7 +500,7 @@ window.LessonManager = window.LessonManager || {
                 <div class="hidden md:flex items-start justify-between">
                     <div class="flex items-start flex-1">
                         <!-- Thumbnail Image -->
-                        <div class="w-40 h-24 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
+                        <div class="w-28 h-20 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
                             <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
                                 class="w-full h-full object-cover"
                                 onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
@@ -523,12 +525,14 @@ window.LessonManager = window.LessonManager || {
                                         </svg>
                                         ${videoTypeLabel}
                                     </span>
+                                    ${lesson.video_type !== 'youtube' && lesson.duration > 0 ? `
                                     <span class="flex items-center">
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
                                         ${Math.ceil((lesson.duration || 0) / 60)} min
                                     </span>
+                                    ` : ''}
                                 </div>
                             </div>
                         </div>

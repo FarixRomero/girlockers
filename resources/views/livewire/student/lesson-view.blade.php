@@ -105,15 +105,6 @@
                         </svg>
                     @endif
                 </button>
-
-                <!-- Menu Button -->
-                <button
-                    class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 transition"
-                    title="Más opciones">
-                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                    </svg>
-                </button>
             </div>
         </div>
 
@@ -327,7 +318,7 @@
 
     <!-- Comments Section -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg md:shadow-sm p-4 md:p-6">
+        <div class="max-w-4xl mx-auto">
             <livewire:student.comment-section :lesson="$lesson" :key="'comments-' . $lesson->id" />
         </div>
     </div>

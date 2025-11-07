@@ -1,4 +1,4 @@
-<div class="bg-white">
+<div>
     <!-- Comments Header -->
     <div class="mb-6">
         <h2 class="text-2xl font-bold text-gray-900">

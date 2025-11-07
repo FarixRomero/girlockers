@@ -32,6 +32,8 @@ class LessonCatalog extends Component
 
     public $showFilterModal = false;
 
+    public $perPage = 12;
+
     public function render()
     {
         $user = auth()->user();
@@ -77,7 +79,7 @@ class LessonCatalog extends Component
         }
 
         $lessons = $query->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->paginate($this->perPage);
 
         // Get all tags and instructors for the filter
         $tags = \App\Models\Tag::orderBy('name')->get();
@@ -143,5 +145,10 @@ class LessonCatalog extends Component
             $user->likes()->attach($lessonId, ['created_at' => now()]);
             $lesson->incrementLikes();
         }
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 }

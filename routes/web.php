@@ -58,10 +58,12 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('comments', CommentModeration::class)->name('comments.index');
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');
+
+    // Lesson list view (uses vanilla JS + API, NOT Livewire)
     Route::get('modules/{moduleId}/lessons', function ($moduleId) {
         $instructors = \App\Models\Instructor::orderBy('name')->get();
         $tags = \App\Models\Tag::orderBy('name')->get();
-        return view('livewire.admin.lesson-management', [
+        return view('admin.lesson-management', [
             'moduleId' => $moduleId,
             'instructors' => $instructors,
             'tags' => $tags

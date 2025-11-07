@@ -59,90 +59,104 @@
     </div>
 
     <!-- Lesson Info Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div class="bg-white rounded-lg shadow-sm p-6">
-            <!-- Title and Actions -->
-            <div class="flex flex-col md:flex-row md:items-start md:justify-between gap-4 mb-6">
-                <div class="flex-1">
-                    <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-2">{{ $lesson->title }}</h1>
-                    <div class="flex flex-wrap items-center gap-3 text-sm text-gray-600">
-                        <span class="font-medium">{{ $lesson->module->course->title }}</span>
-                        @if($lesson->instructor)
-                            <span class="text-gray-400">•</span>
-                            <span>{{ $lesson->instructor->name }}</span>
-                        @endif
-                        @if($lesson->duration)
-                            <span class="text-gray-400">•</span>
-                            <span>{{ $lesson->duration }} min</span>
-                        @endif
+    <div class="px-4 py-6">
+        <div class="flex items-start gap-3 mb-4">
+            <!-- Instructor Avatar -->
+            @if($lesson->instructor)
+                <div class="flex-shrink-0">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-lg">
+                        {{ strtoupper(substr($lesson->instructor->name, 0, 1)) }}
                     </div>
                 </div>
-
-                <!-- Action Buttons -->
-                <div class="flex items-center gap-3">
-                    <!-- Save/Like Button -->
-                    <button
-                        wire:click="toggleLike"
-                        class="flex items-center justify-center gap-2 px-4 py-2 bg-white border-2 border-gray-900 text-gray-900 font-semibold rounded hover:bg-gray-50 transition"
-                        title="{{ $isLiked ? 'Quitar de guardados' : 'Guardar clase' }}"
-                    >
-                        @if($isLiked)
-                            <svg class="w-5 h-5 text-red-500" fill="currentColor" viewBox="0 0 20 20">
-                                <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
-                            </svg>
-                            <span class="hidden sm:inline">Guardado</span>
-                        @else
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
-                            </svg>
-                            <span class="hidden sm:inline">Guardar</span>
-                        @endif
-                    </button>
-
-                    <!-- Share Button -->
-                    <button
-                        onclick="navigator.share ? navigator.share({title: '{{ $lesson->title }}', url: window.location.href}) : navigator.clipboard.writeText(window.location.href).then(() => alert('Link copiado al portapapeles'))"
-                        class="flex items-center justify-center gap-2 px-4 py-2 bg-white border-2 border-gray-900 text-gray-900 font-semibold rounded hover:bg-gray-50 transition"
-                        title="Compartir clase"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
-                        </svg>
-                        <span class="hidden sm:inline">Compartir</span>
-                    </button>
-
-                    <!-- Go to Course Button -->
-                    <a
-                        href="{{ route('courses.show', $lesson->module->course) }}"
-                        wire:navigate
-                        class="flex items-center justify-center gap-2 px-4 py-2 bg-gray-900 text-white font-semibold rounded hover:bg-gray-800 transition"
-                        title="Ver curso completo"
-                    >
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
-                        </svg>
-                        <span class="hidden sm:inline">Ver curso</span>
-                    </a>
-                </div>
-            </div>
-
-            <!-- Tags -->
-            @if($lesson->tags->count() > 0)
-            <div class="flex flex-wrap gap-2">
-                @foreach($lesson->tags as $tag)
-                    <span class="px-3 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">
-                        {{ $tag->name }}
-                    </span>
-                @endforeach
-            </div>
             @endif
+
+            <!-- Title and Instructor -->
+            <div class="flex-1 min-w-0">
+                <h1 class="text-xl md:text-2xl font-bold text-gray-900 mb-1 leading-tight">{{ $lesson->title }}</h1>
+                @if($lesson->instructor)
+                    <p class="text-sm text-gray-600">{{ $lesson->instructor->name }}</p>
+                @endif
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center gap-2">
+                <!-- Share Button -->
+                <button
+                    onclick="navigator.share ? navigator.share({title: '{{ $lesson->title }}', url: window.location.href}) : navigator.clipboard.writeText(window.location.href).then(() => alert('Link copiado al portapapeles'))"
+                    class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 transition"
+                    title="Compartir">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path>
+                    </svg>
+                </button>
+
+                <!-- Like Button -->
+                <button
+                    wire:click="toggleLike"
+                    class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 transition"
+                    title="{{ $isLiked ? 'Quitar de guardados' : 'Guardar clase' }}">
+                    @if($isLiked)
+                        <svg class="w-6 h-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                            <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
+                        </svg>
+                    @else
+                        <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    @endif
+                </button>
+
+                <!-- Menu Button -->
+                <button
+                    class="w-12 h-12 rounded-full border-2 border-gray-300 flex items-center justify-center hover:bg-gray-50 transition"
+                    title="Más opciones">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- Tags/Badges -->
+        <div class="flex flex-wrap gap-1.5">
+            @php
+                $levelColors = [
+                    'principiante' => 'bg-cyan-500',
+                    'intermedio' => 'bg-blue-500',
+                    'avanzado' => 'bg-red-500'
+                ];
+                $courseLevel = $lesson->module?->course?->level;
+                $levelColor = isset($courseLevel) ? ($levelColors[strtolower($courseLevel)] ?? 'bg-gray-900') : 'bg-gray-900';
+            @endphp
+
+            @if($courseLevel)
+                <span class="px-3 py-1.5 {{ $levelColor }} text-white text-xs font-bold uppercase rounded">
+                    {{ $courseLevel }}
+                </span>
+            @endif
+
+            @if($lesson->duration)
+                <span class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold uppercase rounded">
+                    {{ $lesson->duration }} MIN
+                </span>
+            @endif
+
+            @foreach($lesson->tags as $tag)
+                <span class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold uppercase rounded">
+                    {{ $tag->name }}
+                </span>
+            @endforeach
+
+            <span class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold uppercase rounded">
+                {{ strtoupper(str_replace('-', ' ', $lesson->module->course->title)) }}
+            </span>
         </div>
     </div>
 
     <!-- Upcoming Lessons Carousel -->
     @if($upcomingLessons && $upcomingLessons->count() > 0)
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">Próximas clases del curso</h2>
+        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">Próximas clases del curso</h2>
         <div class="relative">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="upcoming-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
@@ -227,8 +241,8 @@
 
     <!-- Similar Lessons Carousel -->
     @if($similarLessons && $similarLessons->count() > 0)
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <h2 class="text-3xl font-bold text-gray-900 mb-6">Clases similares</h2>
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-6">
+        <h2 class="text-xl md:text-3xl font-bold text-gray-900 mb-4 md:mb-6">Clases similares</h2>
         <div class="relative">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="similar-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
@@ -312,8 +326,8 @@
     @endif
 
     <!-- Comments Section -->
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-sm p-6">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+        <div class="max-w-4xl mx-auto bg-white rounded-lg md:shadow-sm p-4 md:p-6">
             <livewire:student.comment-section :lesson="$lesson" :key="'comments-' . $lesson->id" />
         </div>
     </div>

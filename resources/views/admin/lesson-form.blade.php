@@ -27,9 +27,8 @@
     <!-- Alert Messages -->
     <div id="alert-container" class="hidden mb-4 md:mb-6"></div>
 
-    <!-- Form Card -->
-    <div class="card-premium p-4 md:p-6">
-        <form id="lesson-form" onsubmit="LessonFormManager.saveLesson(event)" class="space-y-4 md:space-y-6">
+    <!-- Form -->
+    <form id="lesson-form" onsubmit="LessonFormManager.saveLesson(event)" class="space-y-4 md:space-y-6">
             <!-- Title -->
             <div>
                 <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Título *</label>
@@ -61,13 +60,19 @@
             <!-- Tags -->
             <div>
                 <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Tags</label>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
+                <div class="flex flex-wrap gap-2">
                     @foreach($tags as $tag)
-                        <label class="flex items-center p-2.5 md:p-3 bg-purple-deep border border-pink-vibrant/20 rounded-lg hover:border-pink-vibrant/50 cursor-pointer transition-colors">
+                        <label class="inline-flex items-center cursor-pointer group">
                             <input type="checkbox" name="tags[]" value="{{ $tag->id }}"
                                 {{ $lesson && $lesson->tags->contains($tag->id) ? 'checked' : '' }}
-                                class="w-4 h-4 text-purple-primary bg-purple-deeper border-pink-vibrant/20 rounded focus:ring-purple-primary focus:ring-2">
-                            <span class="ml-2 text-cream text-xs md:text-sm">{{ $tag->name }}</span>
+                                class="hidden peer">
+                            <span class="px-4 py-2 rounded-full text-sm font-medium transition-all duration-200
+                                peer-checked:bg-gradient-to-r peer-checked:from-purple-primary peer-checked:to-purple-light peer-checked:text-white peer-checked:shadow-lg
+                                bg-purple-deep/50 text-cream/70 border border-pink-vibrant/20
+                                hover:border-pink-vibrant/50 hover:text-cream
+                                peer-checked:border-transparent">
+                                {{ $tag->name }}
+                            </span>
                         </label>
                     @endforeach
                 </div>
@@ -228,8 +233,7 @@
                     {{ $lesson ? 'Actualizar Lección' : 'Crear Lección' }}
                 </button>
             </div>
-        </form>
-    </div>
+    </form>
 </div>
 
 @push('scripts')

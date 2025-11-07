@@ -227,16 +227,24 @@
                     </div>
                 </div>
 
-                <!-- Duration & Order -->
-                <div class="grid grid-cols-2 gap-4">
-                    <div>
-                        <label class="block text-gray-dark text-sm font-bold mb-2">Duración (minutos)</label>
-                        <input type="number" id="lesson-duration" min="0" value="0" class="w-full">
-                    </div>
+                <!-- Duration (hidden, auto-detected) & Order -->
+                <div class="grid grid-cols-1 gap-4">
+                    <!-- Duration is hidden and auto-detected from Bunny.net -->
+                    <input type="hidden" id="lesson-duration" value="0">
+
                     <div>
                         <label class="block text-gray-dark text-sm font-bold mb-2">Orden</label>
                         <input type="number" id="lesson-order" min="1" required class="w-full">
                     </div>
+
+                    <!-- Duration info message (shown when auto-detected) -->
+                    <p id="duration-info" class="text-xs text-gray-600 hidden">
+                        <svg class="w-4 h-4 inline text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                        <span class="text-green-600 font-medium">Duración detectada automáticamente:</span>
+                        <span id="duration-display" class="font-bold">0</span> minutos
+                    </p>
                 </div>
 
                 <!-- Is Trial -->
@@ -1211,6 +1219,51 @@ initializeLessonManager();
 document.addEventListener('livewire:navigated', () => {
     window.LessonManager.init();
 });
+
+/**
+ * Función global para obtener duración desde Bunny.net
+ * (Se llama automáticamente después de subir el video)
+ */
+async function fetchDurationFromBunny() {
+    const bunnyVideoId = document.getElementById('lesson-bunny-video-id').value;
+    const videoType = document.getElementById('lesson-video-type').value;
+
+    if (videoType !== 'bunny' || !bunnyVideoId) {
+        return;
+    }
+
+    const durationInput = document.getElementById('lesson-duration');
+    const durationInfo = document.getElementById('duration-info');
+    const durationDisplay = document.getElementById('duration-display');
+
+    try {
+        // Llamar a la API para obtener la duración
+        const response = await fetch('{{ route('admin.api.lessons.bunny.duration') }}', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            },
+            body: JSON.stringify({
+                video_id: bunnyVideoId
+            })
+        });
+
+        const data = await response.json();
+
+        if (data.success && data.duration > 0) {
+            durationInput.value = data.duration;
+            durationDisplay.textContent = data.duration;
+
+            // Mostrar mensaje de éxito
+            durationInfo.classList.remove('hidden');
+        }
+
+    } catch (error) {
+        console.error('Error al obtener duración:', error);
+    }
+}
 </script>
 @endpush
 @endsection

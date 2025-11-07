@@ -13,6 +13,10 @@ class AccessRequest extends Model
     protected $fillable = [
         'user_id',
         'status',
+        'request_type',
+        'membership_type',
+        'country_code',
+        'phone_number',
     ];
 
     /**
@@ -29,7 +33,14 @@ class AccessRequest extends Model
     public function approve(): void
     {
         $this->update(['status' => 'approved']);
-        $this->user->grantFullAccess();
+
+        $membershipType = $this->membership_type ?? 'monthly';
+
+        if ($this->request_type === 'renewal') {
+            $this->user->extendMembership($membershipType);
+        } else {
+            $this->user->grantFullAccess($membershipType);
+        }
     }
 
     /**
@@ -65,10 +76,34 @@ class AccessRequest extends Model
     }
 
     /**
+     * Check if request is for renewal
+     */
+    public function isRenewal(): bool
+    {
+        return $this->request_type === 'renewal';
+    }
+
+    /**
+     * Check if request is for new access
+     */
+    public function isNew(): bool
+    {
+        return $this->request_type === 'new';
+    }
+
+    /**
      * Scope to get pending requests
      */
     public function scopePending($query)
     {
         return $query->where('status', 'pending');
+    }
+
+    /**
+     * Scope to get renewal requests
+     */
+    public function scopeRenewal($query)
+    {
+        return $query->where('request_type', 'renewal');
     }
 }

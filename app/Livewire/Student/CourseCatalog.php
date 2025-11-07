@@ -7,11 +7,14 @@ use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
 use Livewire\Attributes\Url;
+use Livewire\WithPagination;
 
 #[Layout('layouts.app')]
 #[Title('Cursos - Girls Lockers')]
 class CourseCatalog extends Component
 {
+    use WithPagination;
+
     #[Url(as: 'nivel')]
     public $selectedLevel = 'all';
 
@@ -22,6 +25,8 @@ class CourseCatalog extends Component
     public $search = '';
 
     public $showFilterModal = false;
+
+    public $perPage = 12;
 
     public function mount()
     {
@@ -55,7 +60,7 @@ class CourseCatalog extends Component
 
         $courses = $query->orderBy('level')
             ->orderBy('title')
-            ->get();
+            ->paginate($this->perPage);
 
         // Obtener instructores para el modal de filtros
         $instructors = \App\Models\Instructor::withCount('lessons')
@@ -72,11 +77,17 @@ class CourseCatalog extends Component
     public function filterByLevel($level)
     {
         $this->selectedLevel = $level;
+        $this->resetPage();
     }
 
     public function updatingSearch()
     {
-        // Se ejecuta cuando cambia el search
+        $this->resetPage();
+    }
+
+    public function updatedSelectedInstructor()
+    {
+        $this->resetPage();
     }
 
     public function clearFilters()
@@ -84,5 +95,11 @@ class CourseCatalog extends Component
         $this->selectedInstructor = null;
         $this->selectedLevel = 'all';
         $this->search = '';
+        $this->resetPage();
+    }
+
+    public function loadMore()
+    {
+        $this->perPage += 12;
     }
 }

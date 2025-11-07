@@ -34,43 +34,59 @@
 
         <!-- Favoritos Tab Content -->
         @if($tab === 'favoritos')
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
                 @forelse($savedLessons as $lesson)
-                    <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="group bg-white rounded-xl overflow-hidden border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300">
-                        <!-- Thumbnail -->
-                        <div class="aspect-video bg-gradient-to-br from-purple-primary to-purple-light relative overflow-hidden">
-                            @if($lesson->thumbnail)
-                                <img
-                                    src="{{ asset('storage/' . $lesson->thumbnail) }}"
-                                    alt="{{ $lesson->title }}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.style.display='none';this.parentElement.querySelector('.placeholder-icon').style.display='flex';">
-                            @endif
-                            <div class="placeholder-icon absolute inset-0 flex items-center justify-center {{ $lesson->thumbnail ? 'hidden' : '' }}">
-                                <svg class="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <!-- Like indicator -->
-                            <div class="absolute top-2 right-2">
-                                <svg class="w-6 h-6 text-red-500 fill-current drop-shadow-lg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
-                                </svg>
-                            </div>
-                        </div>
+                    <div class="group rounded-lg overflow-hidden">
+                        <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                            <div class="aspect-video relative rounded-lg overflow-hidden">
+                                @if($lesson->thumbnail_url)
+                                    <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                @endif
 
-                        <!-- Content -->
-                        <div class="p-4">
-                            <h3 class="font-semibold text-black group-hover:text-purple-primary transition line-clamp-2 mb-2">
-                                {{ $lesson->title }}
-                            </h3>
-                            <p class="text-sm text-gray-dark mb-2">{{ $lesson->module->course->title }}</p>
-                            @if($lesson->instructor)
-                                <p class="text-xs text-gray-medium">{{ $lesson->instructor->name }}</p>
-                            @endif
-                        </div>
-                    </a>
+                                <!-- Tags on image -->
+                                <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                    @php
+                                        $levelColors = [
+                                            'principiante' => 'bg-green-500',
+                                            'intermedio' => 'bg-blue-500',
+                                            'avanzado' => 'bg-red-500'
+                                        ];
+                                        $courseLevel = $lesson->module?->course?->level;
+                                        $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                    @endphp
+                                    @if($courseLevel)
+                                        <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                    @endif
+                                    @if($lesson->duration)
+                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                    @endif
+                                </div>
+
+                                <!-- Heart icon (top-right) -->
+                                <div class="absolute top-2 right-2 p-1.5 bg-black/50 rounded-full">
+                                    <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                @if($lesson->instructor)
+                                    <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                @endif
+                            </div>
+                        </a>
+                    </div>
                 @empty
                     <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-light/50">
                         <svg class="mx-auto h-12 w-12 text-gray-light mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,44 +104,60 @@
 
         <!-- Historial Tab Content -->
         @if($tab === 'historial')
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 md:gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
                 @forelse($watchedLessons as $lesson)
-                    <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="group bg-white rounded-xl overflow-hidden border border-gray-light/50 shadow-sm hover:shadow-md transition-all duration-300">
-                        <!-- Thumbnail -->
-                        <div class="aspect-video bg-gradient-to-br from-purple-primary to-purple-light relative overflow-hidden">
-                            @if($lesson->thumbnail)
-                                <img
-                                    src="{{ asset('storage/' . $lesson->thumbnail) }}"
-                                    alt="{{ $lesson->title }}"
-                                    class="w-full h-full object-cover"
-                                    onerror="this.style.display='none';this.parentElement.querySelector('.placeholder-icon').style.display='flex';">
-                            @endif
-                            <div class="placeholder-icon absolute inset-0 flex items-center justify-center {{ $lesson->thumbnail ? 'hidden' : '' }}">
-                                <svg class="w-12 h-12 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
-                            </div>
-                            <!-- Watch indicator -->
-                            <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-full p-1.5">
-                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
-                                </svg>
-                            </div>
-                        </div>
+                    <div class="group rounded-lg overflow-hidden">
+                        <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                            <div class="aspect-video relative rounded-lg overflow-hidden">
+                                @if($lesson->thumbnail_url)
+                                    <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                            </svg>
+                                        </div>
+                                    </div>
+                                @endif
 
-                        <!-- Content -->
-                        <div class="p-4">
-                            <h3 class="font-semibold text-black group-hover:text-purple-primary transition line-clamp-2 mb-2">
-                                {{ $lesson->title }}
-                            </h3>
-                            <p class="text-sm text-gray-dark mb-2">{{ $lesson->module->course->title }}</p>
-                            @if($lesson->instructor)
-                                <p class="text-xs text-gray-medium">{{ $lesson->instructor->name }}</p>
-                            @endif
-                        </div>
-                    </a>
+                                <!-- Tags on image -->
+                                <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                                    @php
+                                        $levelColors = [
+                                            'principiante' => 'bg-green-500',
+                                            'intermedio' => 'bg-blue-500',
+                                            'avanzado' => 'bg-red-500'
+                                        ];
+                                        $courseLevel = $lesson->module?->course?->level;
+                                        $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                                    @endphp
+                                    @if($courseLevel)
+                                        <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                                    @endif
+                                    @if($lesson->duration)
+                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                    @endif
+                                </div>
+
+                                <!-- Watch indicator (top-right) -->
+                                <div class="absolute top-2 right-2 bg-black/60 backdrop-blur-sm rounded-full p-1.5">
+                                    <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <div class="pt-2">
+                                <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                @if($lesson->instructor)
+                                    <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                @endif
+                            </div>
+                        </a>
+                    </div>
                 @empty
                     <div class="col-span-full text-center py-12 bg-white rounded-xl border border-gray-light/50">
                         <svg class="mx-auto h-12 w-12 text-gray-light mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -12,6 +12,9 @@ use Livewire\Attributes\Title;
 class RequestAccess extends Component
 {
     public $existingRequest = null;
+    public string $countryCode = '+51';
+    public string $phoneNumber = '';
+    public string $selectedMembershipType = 'monthly';
 
     public function mount()
     {
@@ -35,9 +38,25 @@ class RequestAccess extends Component
             return;
         }
 
+        // Validate phone number
+        $this->validate([
+            'countryCode' => ['required', 'string'],
+            'phoneNumber' => ['required', 'string', 'min:6', 'max:15', 'regex:/^[0-9]+$/'],
+            'selectedMembershipType' => ['required', 'in:monthly,quarterly'],
+        ], [
+            'phoneNumber.required' => 'El número de teléfono es requerido.',
+            'phoneNumber.min' => 'El número de teléfono debe tener al menos 6 dígitos.',
+            'phoneNumber.max' => 'El número de teléfono no debe exceder 15 dígitos.',
+            'phoneNumber.regex' => 'El número de teléfono solo debe contener números.',
+        ]);
+
         AccessRequest::create([
             'user_id' => auth()->id(),
             'status' => 'pending',
+            'request_type' => 'new',
+            'membership_type' => $this->selectedMembershipType,
+            'country_code' => $this->countryCode,
+            'phone_number' => $this->phoneNumber,
         ]);
 
         $this->existingRequest = AccessRequest::where('user_id', auth()->id())

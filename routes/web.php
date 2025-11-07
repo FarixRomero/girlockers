@@ -112,6 +112,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         Route::post('lessons/{id}/move-up', [App\Http\Controllers\Api\LessonController::class, 'moveUp'])->name('lessons.move-up');
         Route::post('lessons/{id}/move-down', [App\Http\Controllers\Api\LessonController::class, 'moveDown'])->name('lessons.move-down');
         Route::post('lessons/{id}/toggle-trial', [App\Http\Controllers\Api\LessonController::class, 'toggleTrial'])->name('lessons.toggle-trial');
+        Route::post('lessons/bunny/duration', [App\Http\Controllers\Api\LessonController::class, 'getBunnyDuration'])->name('lessons.bunny.duration');
     });
 });
 

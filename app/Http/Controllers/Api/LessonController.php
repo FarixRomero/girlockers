@@ -286,4 +286,47 @@ class LessonController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get video duration from Bunny.net
+     */
+    public function getBunnyDuration(Request $request)
+    {
+        try {
+            $videoId = $request->input('video_id');
+
+            if (!$videoId) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Video ID is required'
+                ], 400);
+            }
+
+            $bunnyService = new BunnyService();
+            $videoInfo = $bunnyService->getVideoInfo($videoId);
+
+            if ($videoInfo && isset($videoInfo['length'])) {
+                // Convert seconds to minutes
+                $durationInMinutes = ceil($videoInfo['length'] / 60);
+
+                return response()->json([
+                    'success' => true,
+                    'duration' => $durationInMinutes,
+                    'duration_seconds' => $videoInfo['length']
+                ]);
+            }
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Could not retrieve video duration'
+            ], 404);
+
+        } catch (\Exception $e) {
+            Log::error('Error getting Bunny video duration: ' . $e->getMessage());
+            return response()->json([
+                'success' => false,
+                'message' => 'Error: ' . $e->getMessage()
+            ], 500);
+        }
+    }
 }

@@ -26,6 +26,8 @@ class User extends Authenticatable
         'role',
         'has_full_access',
         'access_granted_at',
+        'membership_expires_at',
+        'membership_type',
     ];
 
     /**
@@ -51,6 +53,7 @@ class User extends Authenticatable
             'role' => UserRole::class,
             'has_full_access' => 'boolean',
             'access_granted_at' => 'datetime',
+            'membership_expires_at' => 'datetime',
         ];
     }
 
@@ -71,13 +74,36 @@ class User extends Authenticatable
     }
 
     /**
-     * Grant full access to user
+     * Grant full access to user with membership duration
      */
-    public function grantFullAccess(): void
+    public function grantFullAccess(string $membershipType = 'monthly'): void
     {
+        $months = $membershipType === 'quarterly' ? 3 : 1;
+
         $this->update([
             'has_full_access' => true,
             'access_granted_at' => now(),
+            'membership_expires_at' => now()->addMonths($months),
+            'membership_type' => $membershipType,
+        ]);
+    }
+
+    /**
+     * Extend membership duration
+     */
+    public function extendMembership(string $membershipType = 'monthly'): void
+    {
+        $months = $membershipType === 'quarterly' ? 3 : 1;
+
+        // If membership already expired or doesn't exist, start from now
+        $baseDate = $this->membership_expires_at && $this->membership_expires_at->isFuture()
+            ? $this->membership_expires_at
+            : now();
+
+        $this->update([
+            'has_full_access' => true,
+            'membership_expires_at' => $baseDate->addMonths($months),
+            'membership_type' => $membershipType,
         ]);
     }
 
@@ -89,7 +115,46 @@ class User extends Authenticatable
         $this->update([
             'has_full_access' => false,
             'access_granted_at' => null,
+            'membership_expires_at' => null,
+            'membership_type' => null,
         ]);
+    }
+
+    /**
+     * Check if membership is expired
+     */
+    public function isMembershipExpired(): bool
+    {
+        if (!$this->membership_expires_at) {
+            return false;
+        }
+
+        return $this->membership_expires_at->isPast();
+    }
+
+    /**
+     * Check if membership is expiring soon (within 7 days)
+     */
+    public function isMembershipExpiringSoon(): bool
+    {
+        if (!$this->membership_expires_at) {
+            return false;
+        }
+
+        return $this->membership_expires_at->isFuture() &&
+               $this->membership_expires_at->diffInDays(now()) <= 7;
+    }
+
+    /**
+     * Get days until membership expires
+     */
+    public function getDaysUntilExpiration(): ?int
+    {
+        if (!$this->membership_expires_at) {
+            return null;
+        }
+
+        return max(0, $this->membership_expires_at->diffInDays(now()));
     }
 
     /**

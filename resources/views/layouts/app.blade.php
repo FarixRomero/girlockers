@@ -100,8 +100,8 @@
 
             <!-- Main Content Area -->
             <div class="flex-1 flex flex-col overflow-hidden">
-                <!-- Mobile Top Bar with Notifications (Only on Dashboard) -->
-                @if(request()->routeIs('dashboard'))
+                <!-- Mobile Top Bar with Notifications (Not on Dashboard or Course Show) -->
+                @if(!request()->routeIs('dashboard') && !request()->routeIs('courses.show'))
                     <div class="lg:hidden bg-white border-b border-gray-light sticky top-0 z-40">
                         <div class="flex items-center justify-between px-4 py-3">
                             <a href="{{ route('dashboard') }}" wire:navigate>

@@ -20,17 +20,50 @@ class StudentManagement extends Component
     public $activeTab = 'users'; // users, requests
     public $statusFilter = 'pending'; // pending, approved, rejected, all
 
-    public function approveAccess($userId)
+    public $selectedMembershipType = 'monthly';
+    public $showMembershipModal = false;
+    public $selectedUserId = null;
+    public $selectedRequestId = null;
+
+    public function approveAccess($userId, $membershipType = 'monthly')
     {
         $user = User::findOrFail($userId);
-        $user->grantFullAccess();
+
+        // If user already has access, extend it. Otherwise grant new access.
+        if ($user->has_full_access) {
+            $user->extendMembership($membershipType);
+            $action = 'extendido';
+        } else {
+            $user->grantFullAccess($membershipType);
+            $action = 'otorgado';
+        }
 
         // Update any pending access requests
         AccessRequest::where('user_id', $userId)
             ->where('status', 'pending')
-            ->update(['status' => 'approved']);
+            ->update([
+                'status' => 'approved',
+                'membership_type' => $membershipType
+            ]);
 
-        session()->flash('success', "Acceso completo otorgado a {$user->name}");
+        $duration = $membershipType === 'quarterly' ? '3 meses' : '1 mes';
+        session()->flash('success', "Acceso {$action} para {$user->name} por {$duration}");
+    }
+
+    public function showApproveModal($userId)
+    {
+        $this->selectedUserId = $userId;
+        $this->selectedMembershipType = 'monthly';
+        $this->showMembershipModal = true;
+    }
+
+    public function confirmApproval()
+    {
+        if ($this->selectedUserId) {
+            $this->approveAccess($this->selectedUserId, $this->selectedMembershipType);
+        }
+        $this->showMembershipModal = false;
+        $this->selectedUserId = null;
     }
 
     public function revokeAccess($userId)
@@ -44,12 +77,27 @@ class StudentManagement extends Component
         session()->flash('success', "Acceso revocado para {$user->name}");
     }
 
-    public function approveRequest($requestId)
+    public function showApproveRequestModal($requestId)
     {
-        $request = AccessRequest::with('user')->findOrFail($requestId);
-        $request->approve();
+        $this->selectedRequestId = $requestId;
+        $request = AccessRequest::findOrFail($requestId);
+        $this->selectedMembershipType = $request->membership_type ?? 'monthly';
+        $this->showMembershipModal = true;
+    }
 
-        session()->flash('success', "Acceso aprobado para {$request->user->name}");
+    public function confirmRequestApproval()
+    {
+        if ($this->selectedRequestId) {
+            $request = AccessRequest::with('user')->findOrFail($this->selectedRequestId);
+            $request->update(['membership_type' => $this->selectedMembershipType]);
+            $request->approve();
+
+            $duration = $this->selectedMembershipType === 'quarterly' ? '3 meses' : '1 mes';
+            $type = $request->isRenewal() ? 'renovado' : 'otorgado';
+            session()->flash('success', "Acceso {$type} para {$request->user->name} por {$duration}");
+        }
+        $this->showMembershipModal = false;
+        $this->selectedRequestId = null;
     }
 
     public function rejectRequest($requestId)
@@ -89,7 +137,13 @@ class StudentManagement extends Component
             });
         }
 
-        $students = $query->withCount(['comments', 'likes', 'accessRequests'])
+        $students = $query->withCount([
+                'comments',
+                'likes',
+                'accessRequests as pending_requests_count' => function ($q) {
+                    $q->where('status', 'pending');
+                }
+            ])
             ->latest()
             ->paginate(20, ['*'], 'studentsPage');
 

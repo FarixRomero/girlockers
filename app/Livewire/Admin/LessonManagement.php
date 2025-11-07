@@ -131,6 +131,9 @@ class LessonManagement extends Component
             // Guardar el video_id en la propiedad para usarlo al guardar
             $this->bunny_video_id = $videoId;
 
+            // Obtener duración automáticamente desde Bunny.net
+            $this->fetchBunnyVideoDuration($videoId);
+
             return [
                 'success' => true,
                 'message' => 'Video vinculado correctamente',
@@ -142,6 +145,34 @@ class LessonManagement extends Component
                 'success' => false,
                 'message' => 'Error al confirmar subida: ' . $e->getMessage()
             ];
+        }
+    }
+
+    /**
+     * Obtiene la duración del video desde Bunny.net y actualiza el campo duration
+     */
+    public function fetchBunnyVideoDuration($videoId = null)
+    {
+        try {
+            $videoId = $videoId ?? $this->bunny_video_id;
+
+            if (!$videoId) {
+                return;
+            }
+
+            $bunnyService = new BunnyService();
+            $videoInfo = $bunnyService->getVideoInfo($videoId);
+
+            if ($videoInfo && isset($videoInfo['length'])) {
+                // Bunny.net devuelve la duración en segundos
+                // Convertir a minutos redondeando
+                $durationInMinutes = ceil($videoInfo['length'] / 60);
+                $this->duration = $durationInMinutes;
+
+                Log::info("Duración obtenida de Bunny.net: {$videoInfo['length']} segundos ({$durationInMinutes} minutos)");
+            }
+        } catch (\Exception $e) {
+            Log::error('Error al obtener duración del video de Bunny.net: ' . $e->getMessage());
         }
     }
 
@@ -170,6 +201,11 @@ class LessonManagement extends Component
         $this->duration = $lesson->duration;
         $this->order = $lesson->order;
         $this->is_trial = $lesson->is_trial;
+
+        // Si es video de Bunny y no tiene duración, intentar obtenerla
+        if ($this->video_type === 'bunny' && $this->bunny_video_id && !$this->duration) {
+            $this->fetchBunnyVideoDuration($this->bunny_video_id);
+        }
 
         $this->showModal = true;
         $this->isEditing = true;

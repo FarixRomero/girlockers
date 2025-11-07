@@ -45,7 +45,15 @@
                     <div class="flex items-center justify-between text-sm">
                         <span class="text-gray-600">Estado:</span>
                         <span class="px-3 py-1 bg-orange-100 text-orange-800 rounded-full text-xs font-bold uppercase">
-                            {{ ucfirst($existingRequest->status) }}
+                            @if($existingRequest->status === 'pending')
+                                Pendiente
+                            @elseif($existingRequest->status === 'approved')
+                                Aprobado
+                            @elseif($existingRequest->status === 'rejected')
+                                Rechazado
+                            @else
+                                {{ ucfirst($existingRequest->status) }}
+                            @endif
                         </span>
                     </div>
                 </div>
@@ -148,6 +156,87 @@
                                 <span class="text-gray-600">Fecha de registro:</span>
                                 <span class="text-gray-900 font-semibold">{{ auth()->user()->created_at->format('d/m/Y') }}</span>
                             </div>
+                        </div>
+                    </div>
+
+                    <!-- Membership Type Selection -->
+                    <div class="mb-8">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Selecciona tu Membresía</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Monthly Option -->
+                            <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition {{ $selectedMembershipType === 'monthly' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                <input
+                                    type="radio"
+                                    wire:model="selectedMembershipType"
+                                    value="monthly"
+                                    class="w-4 h-4 text-purple-600 focus:ring-purple-500 mt-1"
+                                >
+                                <div class="ml-3 flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-bold text-gray-900">Mensual</span>
+                                        <span class="text-sm text-gray-600">1 mes</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Acceso por 30 días</p>
+                                </div>
+                            </label>
+
+                            <!-- Quarterly Option -->
+                            <label class="flex items-start p-4 border-2 rounded-lg cursor-pointer transition {{ $selectedMembershipType === 'quarterly' ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-gray-300' }}">
+                                <input
+                                    type="radio"
+                                    wire:model="selectedMembershipType"
+                                    value="quarterly"
+                                    class="w-4 h-4 text-purple-600 focus:ring-purple-500 mt-1"
+                                >
+                                <div class="ml-3 flex-1">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-bold text-gray-900">Trimestral</span>
+                                        <span class="text-sm text-purple-600 font-bold">¡Popular!</span>
+                                    </div>
+                                    <p class="text-sm text-gray-500">Acceso por 90 días</p>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Phone Number Field -->
+                    <div class="bg-white rounded-lg p-6 mb-8 border border-gray-200">
+                        <h3 class="text-lg font-bold text-gray-900 mb-4">Datos de Contacto</h3>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">
+                                Número de Teléfono <span class="text-red-500">*</span>
+                            </label>
+                            <div class="flex gap-2">
+                                <!-- Country Code Selector -->
+                                <select
+                                    wire:model="countryCode"
+                                    class="w-32 px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                >
+                                    <option value="+51">🇵🇪 +51</option>
+                                    <option value="+1">🇺🇸 +1</option>
+                                    <option value="+52">🇲🇽 +52</option>
+                                    <option value="+54">🇦🇷 +54</option>
+                                    <option value="+55">🇧🇷 +55</option>
+                                    <option value="+56">🇨🇱 +56</option>
+                                    <option value="+57">🇨🇴 +57</option>
+                                    <option value="+58">🇻🇪 +58</option>
+                                    <option value="+593">🇪🇨 +593</option>
+                                    <option value="+34">🇪🇸 +34</option>
+                                    <option value="+44">🇬🇧 +44</option>
+                                </select>
+
+                                <!-- Phone Number Input -->
+                                <input
+                                    type="tel"
+                                    wire:model="phoneNumber"
+                                    placeholder="999 999 999"
+                                    class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent"
+                                >
+                            </div>
+                            @error('phoneNumber')
+                                <p class="mt-2 text-sm text-red-600">{{ $message }}</p>
+                            @enderror
+                            <p class="mt-2 text-xs text-gray-500">El equipo se pondrá en contacto contigo a este número para coordinar el pago</p>
                         </div>
                     </div>
 

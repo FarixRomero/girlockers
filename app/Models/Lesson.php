@@ -7,7 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
+/**
+ * @property int $duration Duration in seconds (auto-detected from Bunny.net or manually entered)
+ * @property int $duration_minutes Computed attribute: duration in minutes (read-only)
+ */
 class Lesson extends Model
 {
     use HasFactory;
@@ -21,8 +26,7 @@ class Lesson extends Model
         'youtube_id',
         'video_path',
         'bunny_video_id',
-        'video_duration',
-        'duration',
+        'duration', // Duration in seconds
         'thumbnail',
         'is_trial',
         'order',
@@ -148,5 +152,19 @@ class Lesson extends Model
 
         // Otherwise, generate URL from storage
         return asset('storage/' . $this->thumbnail);
+    }
+
+    /**
+     * Get duration in minutes (rounded up from seconds)
+     * Used for display purposes in UI
+     */
+    public function getDurationMinutesAttribute(): int
+    {
+        if (!$this->duration) {
+            return 0;
+        }
+
+        // Convert seconds to minutes, round up
+        return (int) ceil($this->duration / 60);
     }
 }

@@ -191,18 +191,25 @@
                 </div>
             </div>
 
-            <!-- Duration & Order -->
-            <div class="grid grid-cols-2 gap-3 md:gap-4">
-                <div>
-                    <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Duración (min)</label>
-                    <input type="number" id="lesson-duration" min="0" value="{{ $lesson ? $lesson->duration : 0 }}"
-                        class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-cream focus:outline-none focus:border-pink-vibrant transition">
-                </div>
+            <!-- Duration (hidden, auto-detected) & Order -->
+            <div class="grid grid-cols-1 gap-3 md:gap-4">
+                <!-- Duration is hidden and auto-detected from Bunny.net (stored in seconds) -->
+                <input type="hidden" id="lesson-duration" value="{{ $lesson ? $lesson->duration : 0 }}">
+
                 <div>
                     <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Orden</label>
                     <input type="number" id="lesson-order" min="1" required value="{{ $lesson ? $lesson->order : $nextOrder }}"
                         class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-cream focus:outline-none focus:border-pink-vibrant transition">
                 </div>
+
+                <!-- Duration info message (shown when auto-detected from Bunny.net) -->
+                <p id="duration-info" class="text-xs text-cream/60 hidden">
+                    <svg class="w-4 h-4 inline text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                    </svg>
+                    <span class="text-green-600 font-medium">Duración detectada automáticamente:</span>
+                    <span id="duration-display" class="font-bold">0</span> minutos
+                </p>
             </div>
 
             <!-- Is Trial -->

@@ -299,8 +299,8 @@
                                                     </div>
 
                                                     <!-- Duration -->
-                                                    @if($lesson->duration)
-                                                        <p class="text-gray-400 text-xs">{{ $lesson->duration }}:00 • {{ $lesson->instructor?->name ?? 'Instructor' }}</p>
+                                                    @if($lesson->duration_minutes)
+                                                        <p class="text-gray-400 text-xs">{{ $lesson->duration_minutes }}:00 • {{ $lesson->instructor?->name ?? 'Instructor' }}</p>
                                                     @endif
                                                 </div>
                                             </a>

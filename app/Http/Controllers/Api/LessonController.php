@@ -45,18 +45,18 @@ class LessonController extends Controller
             'video_path' => 'nullable|string',
             'bunny_video_id' => 'required_if:video_type,bunny|string|nullable',
             'thumbnail' => 'nullable|string',
-            'video_duration' => 'nullable|integer|min:0',
-            'duration' => 'nullable|integer|min:0',
+            'duration' => 'nullable|integer|min:0', // Duration in seconds
             'order' => 'required|integer|min:1',
             'is_trial' => 'boolean',
         ]);
 
-        // Si es video Bunny, obtener información del video
+        // Auto-detect duration from Bunny.net video
         if ($validated['video_type'] === 'bunny' && isset($validated['bunny_video_id'])) {
             $bunnyService = new BunnyService();
             $videoInfo = $bunnyService->getVideoInfo($validated['bunny_video_id']);
             if ($videoInfo && isset($videoInfo['length'])) {
-                $validated['video_duration'] = $videoInfo['length'];
+                // Store duration in seconds (Bunny API returns length in seconds)
+                $validated['duration'] = $videoInfo['length'];
             }
         }
 
@@ -113,29 +113,29 @@ class LessonController extends Controller
             'video_path' => 'nullable|string',
             'bunny_video_id' => 'required_if:video_type,bunny|string|nullable',
             'thumbnail' => 'nullable|string',
-            'video_duration' => 'nullable|integer|min:0',
-            'duration' => 'nullable|integer|min:0',
+            'duration' => 'nullable|integer|min:0', // Duration in seconds
             'order' => 'required|integer|min:1',
             'is_trial' => 'boolean',
         ]);
 
-        // Si es video Bunny, obtener información del video
+        // Auto-detect duration from Bunny.net video
         if ($validated['video_type'] === 'bunny' && isset($validated['bunny_video_id'])) {
-            // Si cambió el video, eliminar el anterior
+            // If video changed, delete the previous one
             if ($lesson->bunny_video_id && $lesson->bunny_video_id !== $validated['bunny_video_id']) {
                 $bunnyService = new BunnyService();
                 $bunnyService->deleteVideo($lesson->bunny_video_id);
             }
 
-            // Obtener duración del nuevo video
+            // Get duration from the new video
             $bunnyService = new BunnyService();
             $videoInfo = $bunnyService->getVideoInfo($validated['bunny_video_id']);
             if ($videoInfo && isset($videoInfo['length'])) {
-                $validated['video_duration'] = $videoInfo['length'];
+                // Store duration in seconds (Bunny API returns length in seconds)
+                $validated['duration'] = $videoInfo['length'];
             }
         }
 
-        // Si cambió de tipo de video, limpiar campos anteriores
+        // If video type changed, clean up previous video resources
         if ($validated['video_type'] !== $lesson->video_type) {
             if ($lesson->video_type === 'local' && $lesson->video_path) {
                 Storage::disk('public')->delete($lesson->video_path);
@@ -289,6 +289,7 @@ class LessonController extends Controller
 
     /**
      * Get video duration from Bunny.net
+     * Returns duration in seconds (to be stored in DB)
      */
     public function getBunnyDuration(Request $request)
     {
@@ -306,13 +307,9 @@ class LessonController extends Controller
             $videoInfo = $bunnyService->getVideoInfo($videoId);
 
             if ($videoInfo && isset($videoInfo['length'])) {
-                // Convert seconds to minutes
-                $durationInMinutes = ceil($videoInfo['length'] / 60);
-
                 return response()->json([
                     'success' => true,
-                    'duration' => $durationInMinutes,
-                    'duration_seconds' => $videoInfo['length']
+                    'duration' => $videoInfo['length'], // Duration in seconds
                 ]);
             }
 

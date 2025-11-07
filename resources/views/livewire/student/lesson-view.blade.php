@@ -126,9 +126,9 @@
                 </span>
             @endif
 
-            @if($lesson->duration)
+            @if($lesson->duration_minutes)
                 <span class="px-3 py-1.5 bg-gray-900 text-white text-xs font-bold uppercase rounded">
-                    {{ $lesson->duration }} MIN
+                    {{ $lesson->duration_minutes }} MIN
                 </span>
             @endif
 

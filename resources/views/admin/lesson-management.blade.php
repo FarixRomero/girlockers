@@ -364,7 +364,8 @@ window.LessonManager = window.LessonManager || {
      */
     renderModule() {
         const module = this.currentModule;
-        const totalDuration = module.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0);
+        // Duration is stored in seconds, convert to minutes for display
+        const totalDuration = Math.ceil(module.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0) / 60);
         const courseId = module.course_id;
         const backUrl = '{{ route('admin.courses.modules', ['courseId' => ':courseId']) }}'.replace(':courseId', courseId);
 
@@ -438,7 +439,7 @@ window.LessonManager = window.LessonManager || {
                                     ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
                                     : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
                                 }
-                                <span class="text-xs text-cream/50">${videoTypeLabel} • ${lesson.duration} min</span>
+                                <span class="text-xs text-cream/50">${videoTypeLabel} • ${Math.ceil((lesson.duration || 0) / 60)} min</span>
                             </div>
                         </div>
                     </div>
@@ -526,7 +527,7 @@ window.LessonManager = window.LessonManager || {
                                         <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        ${lesson.duration} min
+                                        ${Math.ceil((lesson.duration || 0) / 60)} min
                                     </span>
                                 </div>
                             </div>
@@ -1253,10 +1254,14 @@ async function fetchDurationFromBunny() {
         const data = await response.json();
 
         if (data.success && data.duration > 0) {
+            // Store duration in seconds (from Bunny API)
             durationInput.value = data.duration;
-            durationDisplay.textContent = data.duration;
 
-            // Mostrar mensaje de éxito
+            // Display duration in minutes (for user)
+            const durationMinutes = Math.ceil(data.duration / 60);
+            durationDisplay.textContent = durationMinutes;
+
+            // Show success message
             durationInfo.classList.remove('hidden');
         }
 

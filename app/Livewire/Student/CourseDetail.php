@@ -77,9 +77,11 @@ class CourseDetail extends Component
         $completionPercentage = $totalLessons > 0 ? round(($completedLessonsCount / $totalLessons) * 100) : 0;
 
         // Calculate total minutes spent on completed lessons
-        $minutesSpent = auth()->user()->completedLessons()
+        // Note: duration is stored in seconds, so we divide by 60
+        $totalSeconds = auth()->user()->completedLessons()
             ->whereIn('lessons.id', $allLessonIds)
             ->sum('lessons.duration') ?? 0;
+        $minutesSpent = round($totalSeconds / 60);
 
         // Get completed lessons for each module
         $moduleCompletionData = [];

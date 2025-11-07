@@ -66,8 +66,8 @@
                                     @if($courseLevel)
                                         <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
                                     @endif
-                                    @if($lesson->duration)
-                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                    @if($lesson->duration_minutes)
+                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration_minutes }} MIN</span>
                                     @endif
                                 </div>
 
@@ -136,8 +136,8 @@
                                     @if($courseLevel)
                                         <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
                                     @endif
-                                    @if($lesson->duration)
-                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                                    @if($lesson->duration_minutes)
+                                        <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration_minutes }} MIN</span>
                                     @endif
                                 </div>
 

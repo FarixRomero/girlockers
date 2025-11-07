@@ -127,11 +127,10 @@ new #[Layout('layouts.guest')] class extends Component
 
     <!-- Divider -->
     <div class="relative my-8">
-        <div class="absolute inset-0 flex items-center">
-            <div class="w-full border-t border-gray-200"></div>
-        </div>
-        <div class="relative flex justify-center text-sm">
-            <span class="px-4 bg-white text-gray-500">¿Ya tienes cuenta?</span>
+        <div class="flex items-center">
+            <div class="flex-grow border-t border-gray-300"></div>
+            <span class="mx-4 text-sm text-gray-500 font-medium">¿Ya tienes cuenta?</span>
+            <div class="flex-grow border-t border-gray-300"></div>
         </div>
     </div>
 

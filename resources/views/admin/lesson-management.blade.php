@@ -242,12 +242,15 @@
 /**
  * Lesson Manager - Gestión de lecciones con JavaScript puro
  * Soporta navegación Livewire y carga directa de página
+ * Wrapped in IIFE to avoid redeclaration errors on SPA navigation
  */
+(function() {
+    'use strict';
 
 // ============================================================================
 // CONFIGURACIÓN
 // ============================================================================
-window.LessonManagerConfig = window.LessonManagerConfig || {
+window.LessonManagerConfig = {
     moduleId: {{ $moduleId }},
     csrfToken: '{{ csrf_token() }}',
     bunnyCdnHostname: '{{ config('bunny.cdn_hostname') }}',
@@ -1238,6 +1241,8 @@ async function fetchDurationFromBunny() {
         console.error('Error al obtener duración:', error);
     }
 }
+
+})(); // End of IIFE
 </script>
 @endpush
 @endsection

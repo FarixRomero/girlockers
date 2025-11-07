@@ -151,148 +151,80 @@
     </div>
 
     <!-- Lessons Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3 md:gap-6">
         @forelse($lessons as $lesson)
-            <div class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-lg transition relative">
-                <!-- Thumbnail -->
-                <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block relative">
-                    <div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 relative">
+            <div class="group rounded-lg overflow-hidden" style="flex-shrink: 0;">
+                <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
+                    <div class="aspect-video relative rounded-lg overflow-hidden">
                         @if($lesson->thumbnail_url)
                             <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                         @else
-                            <div class="absolute inset-0 flex items-center justify-center">
-                                <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                </svg>
+                            <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
+                                <div class="absolute inset-0 flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-white opacity-80" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
                             </div>
                         @endif
 
                         <!-- Lock icon for premium lessons -->
                         @if(!$lesson->is_trial && !auth()->user()->has_full_access)
-                            <div class="absolute top-3 left-3 bg-black/80 rounded-lg p-2 z-10">
-                                <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                            <div class="absolute top-2 left-2 bg-black/80 rounded-lg p-1.5">
+                                <svg class="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
                                     <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                 </svg>
                             </div>
                         @endif
 
-                        <!-- Title Overlay (bottom) -->
-                        <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">
-                            <h3 class="text-white font-bold text-lg line-clamp-2">{{ $lesson->title }}</h3>
+                        <!-- Tags en la parte inferior de la imagen -->
+                        <div class="absolute bottom-2 left-2 flex flex-wrap gap-1">
+                            @php
+                                $levelColors = [
+                                    'principiante' => 'bg-green-500',
+                                    'intermedio' => 'bg-blue-500',
+                                    'avanzado' => 'bg-red-500'
+                                ];
+                                $courseLevel = $lesson->module?->course?->level;
+                                $levelColor = isset($courseLevel) ? ($levelColors[$courseLevel] ?? 'bg-gray-500') : 'bg-gray-500';
+                            @endphp
+                            @if($courseLevel)
+                                <span class="px-1.5 py-0.5 {{ $levelColor }} text-white text-[10px] font-bold uppercase rounded">{{ $courseLevel }}</span>
+                            @endif
+                            @if($lesson->duration)
+                                <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $lesson->duration }} MIN</span>
+                            @endif
+                            @foreach($lesson->tags->take(1) as $tag)
+                                <span class="px-1.5 py-0.5 bg-black/80 text-white text-[10px] font-bold uppercase rounded">{{ $tag->name }}</span>
+                            @endforeach
                         </div>
-                    </div>
-                </a>
 
-                <!-- Content -->
-                <div class="p-4">
-                    <!-- Tags Row -->
-                    <div class="flex flex-wrap gap-2 mb-3">
-                        <!-- Course Level Badge -->
-                        @php
-                            $levelColors = [
-                                'principiante' => 'bg-orange-500',
-                                'intermedio' => 'bg-blue-500',
-                                'avanzado' => 'bg-red-600'
-                            ];
-                            $levelColor = $levelColors[$lesson->module->course->level] ?? 'bg-gray-500';
-                        @endphp
-                        <span class="px-2 py-1 {{ $levelColor }} text-white text-xs font-bold uppercase rounded">
-                            {{ $lesson->module->course->level }}
-                        </span>
-
-                        <!-- Duration Badge (if available) -->
-                        @if($lesson->duration)
-                            <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">
-                                {{ $lesson->duration }} MIN
-                            </span>
-                        @endif
-
-                        <!-- Tags -->
-                        @foreach($lesson->tags as $tag)
-                            <span class="px-2 py-1 bg-gray-900 text-white text-xs font-bold uppercase rounded">
-                                {{ $tag->name }}
-                            </span>
-                        @endforeach
-                    </div>
-
-                    <!-- Instructor & Course Info -->
-                    <div class="text-sm text-gray-600 mb-2">
-                        <span class="font-medium">{{ $lesson->module->course->title }}</span>
-                        @if($lesson->instructor)
-                            <span class="text-gray-400"> • </span>
-                            <span>{{ $lesson->instructor->name }}</span>
-                        @endif
-                    </div>
-
-                    <!-- Free Class Badge (if applicable) -->
-                    @if($lesson->is_trial)
-                        <div class="flex items-center text-sm">
-                            <span class="text-green-600 font-semibold flex items-center">
-                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                                </svg>
-                                Clase gratis
-                            </span>
-                        </div>
-                    @endif
-                </div>
-
-                <!-- Three-dot menu (top-right) -->
-                <div class="absolute top-4 right-4 z-10" x-data="{ open: false }" @click.away="open = false">
-                    <button @click="open = !open" class="p-2 bg-white/90 hover:bg-white rounded-full shadow-md transition">
-                        <svg class="w-5 h-5 text-gray-700" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M10 6a2 2 0 110-4 2 2 0 010 4zM10 12a2 2 0 110-4 2 2 0 010 4zM10 18a2 2 0 110-4 2 2 0 010 4z"></path>
-                        </svg>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div
-                        x-show="open"
-                        x-transition:enter="transition ease-out duration-100"
-                        x-transition:enter-start="transform opacity-0 scale-95"
-                        x-transition:enter-end="transform opacity-100 scale-100"
-                        x-transition:leave="transition ease-in duration-75"
-                        x-transition:leave-start="transform opacity-100 scale-100"
-                        x-transition:leave-end="transform opacity-0 scale-95"
-                        class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1"
-                        style="display: none;"
-                    >
-                        <!-- Save/Unsave Lesson -->
+                        <!-- Heart icon (top-right) -->
                         <button
-                            wire:click="toggleLike({{ $lesson->id }})"
-                            @click="open = false"
-                            class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition flex items-center"
+                            wire:click.prevent="toggleLike({{ $lesson->id }})"
+                            class="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 rounded-full transition z-10"
                         >
                             @if($lesson->is_liked)
-                                <svg class="w-5 h-5 mr-2 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+                                <svg class="w-4 h-4 text-red-500" fill="currentColor" viewBox="0 0 20 20">
                                     <path d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z"></path>
                                 </svg>
-                                <span>Quitar de guardados</span>
                             @else
-                                <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
                                 </svg>
-                                <span>Guardar clase</span>
                             @endif
                         </button>
+                    </div>
 
+                    <!-- Info abajo sin background -->
+                    <div class="pt-2">
+                        <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                         @if($lesson->instructor)
-                            <!-- View Instructor -->
-                            <a
-                                href="{{ route('instructors.index') }}"
-                                wire:navigate
-                                @click="open = false"
-                                class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition flex items-center"
-                            >
-                                <svg class="w-5 h-5 mr-2 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-                                </svg>
-                                <span>Ver instructores</span>
-                            </a>
+                            <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                         @endif
                     </div>
-                </div>
+                </a>
             </div>
         @empty
             <div class="col-span-full text-center py-12">

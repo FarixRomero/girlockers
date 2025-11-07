@@ -28,39 +28,9 @@
     <!-- Alert Messages -->
     <div id="alert-container" class="hidden mb-6"></div>
 
-    <!-- Module Info Card -->
-    <div class="card-premium mb-6 hidden md:block" id="module-info">
-        <div class="flex items-start justify-between">
-            <div class="flex-1">
-                <p class="text-cream/70 mb-2" id="module-description">Cargando...</p>
-                <div class="flex items-center space-x-4 text-sm text-cream/60">
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span id="lessons-count-detail">0</span> lecciones
-                    </span>
-                    <span class="flex items-center">
-                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <span id="total-duration">0</span> min total
-                    </span>
-                    <span class="px-2 py-1 bg-pink-vibrant/20 text-pink-vibrant text-xs rounded-full font-bold">
-                        Orden: <span id="module-order">-</span>
-                    </span>
-                </div>
-            </div>
-            <a href="{{ route('admin.lessons.create', $moduleId) }}" class="btn-primary ml-4">
-                + Nueva Lección
-            </a>
-        </div>
-    </div>
-
-    <!-- Mobile Nueva Lección Button -->
-    <div class="md:hidden mb-4">
-        <a href="{{ route('admin.lessons.create', $moduleId) }}" class="w-full bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors flex items-center justify-center">
+    <!-- Nueva Lección Button -->
+    <div class="mb-4">
+        <a href="{{ route('admin.lessons.create', $moduleId) }}" class="w-full md:w-auto inline-flex items-center justify-center bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
             <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
             </svg>
@@ -69,7 +39,7 @@
     </div>
 
     <!-- Lessons List -->
-    <div id="lessons-container" class="space-y-4">
+    <div id="lessons-container" class="space-y-2 md:space-y-3">
         <div class="text-center py-12">
             <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-vibrant mx-auto"></div>
             <p class="text-cream/60 mt-4">Cargando lecciones...</p>
@@ -364,21 +334,15 @@ window.LessonManager = window.LessonManager || {
      */
     renderModule() {
         const module = this.currentModule;
-        // Duration is stored in seconds, convert to minutes for display
-        const totalDuration = Math.ceil(module.lessons.reduce((sum, lesson) => sum + (lesson.duration || 0), 0) / 60);
         const courseId = module.course_id;
         const backUrl = '{{ route('admin.courses.modules', ['courseId' => ':courseId']) }}'.replace(':courseId', courseId);
 
-        // Actualizar títulos y descripciones
+        // Actualizar títulos
         document.getElementById('module-title').textContent = `Lecciones de ${module.title}`;
         document.getElementById('course-title').textContent = module.course.title;
-        document.getElementById('module-description').textContent = module.description;
 
-        // Actualizar contadores
+        // Actualizar contadores (solo en el header breadcrumb)
         document.getElementById('lessons-count').textContent = module.lessons.length;
-        document.getElementById('lessons-count-detail').textContent = module.lessons.length;
-        document.getElementById('module-order').textContent = module.order;
-        document.getElementById('total-duration').textContent = totalDuration;
 
         // Actualizar enlaces de navegación
         document.getElementById('back-link').href = backUrl;
@@ -426,72 +390,73 @@ window.LessonManager = window.LessonManager || {
             <div class="card-premium">
                 <!-- Mobile Layout -->
                 <div class="block md:hidden">
-                    <div class="flex items-start gap-3 mb-3">
-                        <!-- Order Badge -->
-                        <div class="w-10 h-10 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold flex-shrink-0">
-                            ${lesson.order}
-                        </div>
-                        <!-- Title & Badge -->
-                        <div class="flex-1 min-w-0">
-                            <h3 class="font-display text-base text-cream font-bold mb-1">${this.escapeHtml(lesson.title)}</h3>
-                            <div class="flex items-center gap-2 flex-wrap">
-                                ${lesson.is_trial
-                                    ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
-                                    : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
+                    <!-- Header con acciones -->
+                    <div class="flex items-center justify-between mb-3">
+                        <div class="flex items-center gap-2">
+                            <!-- Order Badge -->
+                            <div class="w-8 h-8 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-sm flex-shrink-0">
+                                ${lesson.order}
+                            </div>
+                            <div class="flex items-center gap-1">
+                                ${lesson.order > 1
+                                    ? `<button onclick="LessonManager.moveUp(${lesson.id})" class="p-1.5 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover arriba">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
+                                        </svg>
+                                    </button>`
+                                    : ''
                                 }
-                                <span class="text-xs text-cream/50">
-                                    ${videoTypeLabel}${lesson.video_type !== 'youtube' && lesson.duration > 0 ? ' • ' + Math.ceil((lesson.duration || 0) / 60) + ' min' : ''}
-                                </span>
+                                ${lesson.order < this.lessons.length
+                                    ? `<button onclick="LessonManager.moveDown(${lesson.id})" class="p-1.5 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover abajo">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                                        </svg>
+                                    </button>`
+                                    : ''
+                                }
                             </div>
                         </div>
-                    </div>
-
-                    <!-- Thumbnail -->
-                    <a href="/admin/lessons/${lesson.id}/edit" class="block w-32 h-20 rounded-lg overflow-hidden bg-dark/50 mb-3 cursor-pointer flex-shrink-0">
-                        <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
-                            class="w-full h-full object-cover"
-                            onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
-                    </a>
-
-                    <!-- Description -->
-                    <p class="text-cream/60 text-sm mb-3">${this.escapeHtml(lesson.description)}</p>
-
-                    <!-- Actions -->
-                    <div class="flex items-center justify-between gap-2 pt-3 border-t border-cream/10">
                         <div class="flex items-center gap-1">
-                            ${lesson.order > 1
-                                ? `<button onclick="LessonManager.moveUp(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover arriba">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                                    </svg>
-                                </button>`
-                                : '<div class="w-9"></div>'
-                            }
-                            ${lesson.order < this.lessons.length
-                                ? `<button onclick="LessonManager.moveDown(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover abajo">
-                                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                    </svg>
-                                </button>`
-                                : '<div class="w-9"></div>'
-                            }
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <button onclick="LessonManager.toggleTrial(${lesson.id})" class="p-2 text-cream/60 hover:text-green-400 transition-colors rounded-lg hover:bg-cream/10" title="Toggle trial">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="LessonManager.toggleTrial(${lesson.id})" class="p-1.5 text-cream/60 hover:text-green-400 transition-colors rounded-lg hover:bg-cream/10" title="Toggle trial">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                                 </svg>
                             </button>
-                            <a href="/admin/lessons/${lesson.id}/edit" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <a href="/admin/lessons/${lesson.id}/edit" class="p-1.5 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                                 </svg>
                             </a>
-                            <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-cream/60 hover:text-red-400 transition-colors rounded-lg hover:bg-cream/10" title="Eliminar">
-                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-1.5 text-cream/60 hover:text-red-400 transition-colors rounded-lg hover:bg-cream/10" title="Eliminar">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                                 </svg>
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- Contenido -->
+                    <div class="flex items-start gap-3">
+                        <!-- Thumbnail -->
+                        <a href="/admin/lessons/${lesson.id}/edit" class="block w-24 h-16 rounded-lg overflow-hidden bg-dark/50 cursor-pointer flex-shrink-0">
+                            <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
+                                class="w-full h-full object-cover"
+                                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
+                        </a>
+
+                        <!-- Title & Info -->
+                        <div class="flex-1 min-w-0">
+                            <h3 class="font-display text-sm text-cream font-bold mb-1 line-clamp-2">${this.escapeHtml(lesson.title)}</h3>
+                            <div class="flex items-center gap-2 flex-wrap mb-1">
+                                ${lesson.is_trial
+                                    ? '<span class="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Gratis</span>'
+                                    : '<span class="px-2 py-0.5 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
+                                }
+                            </div>
+                            <p class="text-cream/60 text-xs mb-1 line-clamp-2">${this.escapeHtml(lesson.description)}</p>
+                            <span class="text-xs text-cream/50">
+                                ${videoTypeLabel}${lesson.video_type !== 'youtube' && lesson.duration > 0 ? ' • ' + Math.ceil((lesson.duration || 0) / 60) + ' min' : ''}
+                            </span>
                         </div>
                     </div>
                 </div>

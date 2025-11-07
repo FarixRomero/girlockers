@@ -38,52 +38,111 @@ new #[Layout('layouts.guest')] class extends Component
 }; ?>
 
 <div>
-    <form wire:submit="register">
+    <!-- Header Section -->
+    <div class="text-center mb-8">
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Únete a la comunidad</h2>
+        <p class="text-gray-600">Crea tu cuenta y comienza tu viaje en el baile</p>
+    </div>
+
+    <form wire:submit="register" class="space-y-5">
         <!-- Name -->
         <div>
-            <x-input-label for="name" value="Nombre" />
-            <x-text-input wire:model="name" id="name" class="block mt-1 w-full" type="text" name="name" required autofocus autocomplete="name" />
+            <x-input-label for="name" value="Nombre Completo" class="text-gray-700 font-semibold mb-2" />
+            <x-text-input
+                wire:model="name"
+                id="name"
+                class="block w-full px-4 py-3 text-base"
+                type="text"
+                name="name"
+                placeholder="Tu nombre"
+                required
+                autofocus
+                autocomplete="name"
+            />
             <x-input-error :messages="$errors->get('name')" class="mt-2" />
         </div>
 
         <!-- Email Address -->
-        <div class="mt-4">
-            <x-input-label for="email" value="Email" />
-            <x-text-input wire:model="email" id="email" class="block mt-1 w-full" type="email" name="email" required autocomplete="username" />
+        <div>
+            <x-input-label for="email" value="Correo Electrónico" class="text-gray-700 font-semibold mb-2" />
+            <x-text-input
+                wire:model="email"
+                id="email"
+                class="block w-full px-4 py-3 text-base"
+                type="email"
+                name="email"
+                placeholder="tu@email.com"
+                required
+                autocomplete="username"
+            />
             <x-input-error :messages="$errors->get('email')" class="mt-2" />
         </div>
 
         <!-- Password -->
-        <div class="mt-4">
-            <x-input-label for="password" value="Contraseña" />
-
-            <x-text-input wire:model="password" id="password" class="block mt-1 w-full"
-                            type="password"
-                            name="password"
-                            required autocomplete="new-password" />
-
+        <div>
+            <x-input-label for="password" value="Contraseña" class="text-gray-700 font-semibold mb-2" />
+            <x-text-input
+                wire:model="password"
+                id="password"
+                class="block w-full px-4 py-3 text-base"
+                type="password"
+                name="password"
+                placeholder="Mínimo 8 caracteres"
+                required
+                autocomplete="new-password"
+            />
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
         <!-- Confirm Password -->
-        <div class="mt-4">
-            <x-input-label for="password_confirmation" value="Confirmar Contraseña" />
-
-            <x-text-input wire:model="password_confirmation" id="password_confirmation" class="block mt-1 w-full"
-                            type="password"
-                            name="password_confirmation" required autocomplete="new-password" />
-
+        <div>
+            <x-input-label for="password_confirmation" value="Confirmar Contraseña" class="text-gray-700 font-semibold mb-2" />
+            <x-text-input
+                wire:model="password_confirmation"
+                id="password_confirmation"
+                class="block w-full px-4 py-3 text-base"
+                type="password"
+                name="password_confirmation"
+                placeholder="Repite tu contraseña"
+                required
+                autocomplete="new-password"
+            />
             <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2" />
         </div>
 
-        <div class="flex items-center justify-end mt-4">
-            <a class="underline text-sm text-cream/70 hover:text-pink-vibrant rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-pink-vibrant" href="{{ route('login') }}" wire:navigate>
-                ¿Ya tienes cuenta?
-            </a>
+        <!-- Terms Notice -->
+        <div class="pt-2">
+            <p class="text-xs text-gray-500 text-center">
+                Al registrarte, aceptas nuestros términos de servicio y política de privacidad
+            </p>
+        </div>
 
-            <x-primary-button class="ms-4">
-                Registrar
+        <!-- Submit Button -->
+        <div class="pt-2">
+            <x-primary-button class="w-full justify-center text-lg py-3.5">
+                Crear mi cuenta
             </x-primary-button>
         </div>
     </form>
+
+    <!-- Divider -->
+    <div class="relative my-8">
+        <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-200"></div>
+        </div>
+        <div class="relative flex justify-center text-sm">
+            <span class="px-4 bg-white text-gray-500">¿Ya tienes cuenta?</span>
+        </div>
+    </div>
+
+    <!-- Login Link -->
+    <div class="text-center">
+        <a
+            href="{{ route('login') }}"
+            wire:navigate
+            class="inline-block px-8 py-3 text-base font-semibold text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 hover:shadow-md"
+        >
+            Iniciar Sesión
+        </a>
+    </div>
 </div>

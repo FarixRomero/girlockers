@@ -69,6 +69,21 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             'tags' => $tags
         ]);
     })->name('modules.lessons');
+    // Global lesson create (from navbar)
+    Route::get('lessons/create', function () {
+        $courses = \App\Models\Course::with('modules')->orderBy('title')->get();
+        $instructors = \App\Models\Instructor::orderBy('name')->get();
+        $tags = \App\Models\Tag::orderBy('name')->get();
+        return view('admin.lesson-form', [
+            'module' => null,
+            'lesson' => null,
+            'courses' => $courses,
+            'instructors' => $instructors,
+            'tags' => $tags,
+            'nextOrder' => 1
+        ]);
+    })->name('lessons.create-global');
+
     Route::get('modules/{moduleId}/lessons/create', function ($moduleId) {
         $module = \App\Models\Module::with('course')->findOrFail($moduleId);
         $instructors = \App\Models\Instructor::orderBy('name')->get();
@@ -77,6 +92,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return view('admin.lesson-form', [
             'module' => $module,
             'lesson' => null,
+            'courses' => null,
             'instructors' => $instructors,
             'tags' => $tags,
             'nextOrder' => $nextOrder
@@ -89,6 +105,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         return view('admin.lesson-form', [
             'module' => $lesson->module,
             'lesson' => $lesson,
+            'courses' => null,
             'instructors' => $instructors,
             'tags' => $tags,
             'nextOrder' => null

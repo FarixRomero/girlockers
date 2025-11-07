@@ -364,7 +364,7 @@
 
         <!-- Upgrade CTA (if free user) -->
         @if(!$user->hasFullAccess())
-        <div class="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-lg shadow-lg overflow-hidden">
+        <div class="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-lg shadow-lg overflow-hidden mb-6">
             <div class="p-8 text-center text-white">
                 <svg class="w-16 h-16 mx-auto mb-4 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
@@ -380,6 +380,27 @@
             </div>
         </div>
         @endif
+
+        <!-- Logout Section -->
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
+            <div class="p-6 md:p-8">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-900 mb-1">Cerrar Sesión</h3>
+                        <p class="text-sm text-gray-600">Termina tu sesión en este dispositivo</p>
+                    </div>
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <button type="submit" class="px-6 py-3 bg-red-500 text-white font-semibold rounded-lg hover:bg-red-600 transition flex items-center gap-2">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
+                            </svg>
+                            Cerrar Sesión
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Renewal Modal -->

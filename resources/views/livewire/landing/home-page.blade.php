@@ -315,7 +315,7 @@
                 </p>
             </div>
 
-            <!-- Clases Destacadas -->
+            <!-- Cursos Destacados -->
             <div class="mb-16">
                 <h3 class="font-display font-bold text-2xl text-purple-primary mb-8 flex items-center">
                     <span class="bg-purple-ultralight p-3 rounded-lg mr-4">
@@ -323,7 +323,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
                         </svg>
                     </span>
-                    Clases Destacadas
+                    Cursos Destacados
                 </h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
                     @if($featuredCourses && $featuredCourses->count() > 0)
@@ -643,27 +643,45 @@
 
         <div class="container mx-auto px-4 relative z-10">
             <div class="text-center mb-16">
+                <!-- Icono de candado decorativo -->
+                <div class="flex justify-center mb-6">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-purple-primary/20 blur-2xl rounded-full"></div>
+                        <div class="relative bg-gradient-to-br from-purple-primary to-purple-dark p-6 rounded-2xl shadow-2xl transform hover:scale-110 transition-all duration-300">
+                            <svg class="w-12 h-12 md:w-16 md:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
                 <h2 class="pricing-title font-display font-black text-5xl md:text-7xl text-black mb-6 leading-tight">
                     Elige Tu <span class="text-purple-primary">Plan</span>
                 </h2>
-                <p class="pricing-subtitle text-gray-dark text-xl md:text-2xl max-w-3xl mx-auto font-bold">
+                <p class="pricing-subtitle text-gray-dark text-xl md:text-2xl max-w-3xl mx-auto font-bold flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                    </svg>
                     Desbloquea todo tu potencial locker
+                    <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="animation-delay: 0.5s;">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
+                    </svg>
                 </p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 max-w-7xl mx-auto items-center">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
                 <!-- Plan Mensual -->
-                <div class="pricing-card-1 bg-white rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-light relative overflow-hidden group">
+                <div class="pricing-card-1 bg-white rounded-3xl p-8 md:p-10 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-light relative overflow-hidden group">
                     <!-- Efecto de brillo -->
                     <div class="absolute inset-0 bg-gradient-to-br from-purple-primary/0 via-purple-primary/5 to-purple-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
                     <div class="relative z-10">
                         <div class="text-center mb-6">
-                            <div class="inline-block bg-purple-ultralight text-purple-primary text-sm font-bold px-4 py-2 rounded-full uppercase mb-4">
+                            <div class="inline-block bg-purple-ultralight text-purple-primary text-sm font-bold px-5 py-2 rounded-full uppercase mb-4">
                                 Plan Mensual
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl font-black text-black">S/30</span>
+                                <span class="text-6xl md:text-7xl font-black text-black">S/30</span>
                                 <span class="text-gray-dark text-xl font-medium mb-3">/mes</span>
                             </div>
                             <p class="text-gray-dark text-sm">Perfecto para empezar</p>
@@ -703,16 +721,11 @@
                     </div>
                 </div>
 
-                <!-- Candado 3D en el centro -->
-                <div class="hidden lg:block">
-                    <div id="lock-3d-container" class="w-full h-[500px] rounded-3xl"></div>
-                </div>
-
-                <!-- Plan Semestral (Destacado) -->
-                <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
-                    <!-- Badge de descuento -->
+                <!-- Plan Trimestral (Destacado) -->
+                <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 md:p-10 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
+                    <!-- Badge de ahorro -->
                     <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
-                        ¡Ahorra 40%!
+                        ¡Ahorra S/40!
                     </div>
 
                     <!-- Efecto de brillo -->
@@ -724,15 +737,15 @@
 
                     <div class="relative z-10">
                         <div class="text-center mb-6">
-                            <div class="inline-block bg-white text-purple-primary text-sm font-bold px-4 py-2 rounded-full uppercase mb-4">
-                                Plan Semestral
+                            <div class="inline-block bg-white text-purple-primary text-sm font-bold px-5 py-2 rounded-full uppercase mb-4">
+                                Plan Trimestral
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-gray-light line-through text-2xl font-bold">S/180</span>
+                                <span class="text-gray-light line-through text-xl font-bold">S/60</span>
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl font-black text-white">S/100</span>
-                                <span class="text-purple-ultralight text-xl font-medium mb-3">/6 meses</span>
+                                <span class="text-6xl md:text-7xl font-black text-white">S/50</span>
+                                <span class="text-purple-ultralight text-xl font-medium mb-3">/3 meses</span>
                             </div>
                             <p class="text-purple-ultralight text-sm font-medium">¡Mejor valor!</p>
                         </div>

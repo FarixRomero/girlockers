@@ -15,8 +15,26 @@ class AdminSeeder extends Seeder
     {
         User::create([
             'name' => 'Admin Girl Lockers',
-            'email' => 'admin@girlockers.com',
+            'email' => 'admin@girlslockers.com',
             'password' => Hash::make('password'),
+            'role' => 'admin',
+            'has_full_access' => true,
+            'access_granted_at' => now(),
+            'email_verified_at' => now(),
+        ]);
+        User::create([
+            'name' => 'Admin Girl Lockers',
+            'email' => 'user@girlslockers.com',
+            'password' => Hash::make('password'),
+            'role' => 'student',
+            'has_full_access' => true,
+            'access_granted_at' => now(),
+            'email_verified_at' => now(),
+        ]);
+        User::create([
+            'name' => 'Admin Girl Lockers',
+            'email' => 'admin@admin.com',
+            'password' => Hash::make('admin123'),
             'role' => 'admin',
             'has_full_access' => true,
             'access_granted_at' => now(),

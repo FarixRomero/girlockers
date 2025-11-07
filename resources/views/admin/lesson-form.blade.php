@@ -8,20 +8,32 @@
     <div class="mb-4 md:mb-6">
         <div class="flex items-center justify-between mb-2">
             <h2 class="font-display text-xl md:text-2xl text-cream">{{ $lesson ? 'Editar Lección' : 'Nueva Lección' }}</h2>
-            <a href="{{ route('admin.modules.lessons', $module->id) }}" class="text-pink-vibrant hover:text-pink-light text-xs md:text-sm flex items-center">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
-                </svg>
-                <span class="hidden md:inline">Volver a Lecciones</span>
-                <span class="md:hidden">Volver</span>
-            </a>
+            @if($module)
+                <a href="{{ route('admin.modules.lessons', $module->id) }}" class="text-pink-vibrant hover:text-pink-light text-xs md:text-sm flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span class="hidden md:inline">Volver a Lecciones</span>
+                    <span class="md:hidden">Volver</span>
+                </a>
+            @else
+                <a href="{{ route('admin.dashboard') }}" wire:navigate class="text-pink-vibrant hover:text-pink-light text-xs md:text-sm flex items-center">
+                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    </svg>
+                    <span class="hidden md:inline">Volver al Dashboard</span>
+                    <span class="md:hidden">Volver</span>
+                </a>
+            @endif
         </div>
-        <p class="text-cream/60 text-xs md:text-sm">
-            <a href="{{ route('admin.courses.modules', $module->course_id) }}" class="hover:text-pink-vibrant">
-                {{ $module->course->title }}
-            </a>
-            • {{ $module->title }}
-        </p>
+        @if($module)
+            <p class="text-cream/60 text-xs md:text-sm">
+                <a href="{{ route('admin.courses.modules', $module->course_id) }}" class="hover:text-pink-vibrant">
+                    {{ $module->course->title }}
+                </a>
+                • {{ $module->title }}
+            </p>
+        @endif
     </div>
 
     <!-- Alert Messages -->
@@ -29,6 +41,32 @@
 
     <!-- Form -->
     <form id="lesson-form" onsubmit="LessonFormManager.saveLesson(event)" class="space-y-4 md:space-y-6">
+            @if($courses)
+            <!-- Course & Module Selection (only when creating from global navbar) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Course -->
+                <div>
+                    <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Curso *</label>
+                    <select id="lesson-course" required onchange="LessonFormManager.updateModuleOptions()"
+                        class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-cream focus:outline-none focus:border-pink-vibrant transition">
+                        <option value="">Seleccionar curso...</option>
+                        @foreach($courses as $course)
+                            <option value="{{ $course->id }}">{{ $course->title }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Module -->
+                <div>
+                    <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Módulo *</label>
+                    <select id="lesson-module" required
+                        class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-cream focus:outline-none focus:border-pink-vibrant transition">
+                        <option value="">Primero selecciona un curso...</option>
+                    </select>
+                </div>
+            </div>
+            @endif
+
             <!-- Title -->
             <div>
                 <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Título *</label>
@@ -203,7 +241,7 @@
 
                 <div>
                     <label class="block text-cream text-xs md:text-sm font-bold mb-1.5 md:mb-2">Orden</label>
-                    <input type="number" id="lesson-order" min="1" required value="{{ $lesson ? $lesson->order : $nextOrder }}"
+                    <input type="number" id="lesson-order" min="1" required value="{{ $lesson ? $lesson->order : ($nextOrder ?? 1) }}"
                         class="w-full bg-purple-deeper border border-pink-vibrant/20 rounded-lg px-3 md:px-4 py-2 text-sm md:text-base text-cream focus:outline-none focus:border-pink-vibrant transition">
                 </div>
 
@@ -226,7 +264,7 @@
 
             <!-- Form Actions -->
             <div class="flex flex-col md:flex-row justify-end gap-2 md:gap-3 pt-4 md:pt-6 border-t border-pink-vibrant/20">
-                <a href="{{ route('admin.modules.lessons', $module->id) }}" class="px-4 md:px-6 py-2.5 md:py-3 bg-purple-deep text-cream text-sm md:text-base font-medium rounded-lg hover:bg-purple-darker transition-colors text-center">
+                <a href="{{ $module ? route('admin.modules.lessons', $module->id) : route('admin.dashboard') }}" class="px-4 md:px-6 py-2.5 md:py-3 bg-purple-deep text-cream text-sm md:text-base font-medium rounded-lg hover:bg-purple-darker transition-colors text-center">
                     Cancelar
                 </a>
                 <button type="submit" id="submit-button" class="px-4 md:px-6 py-2.5 md:py-3 bg-purple-primary hover:bg-purple-dark text-white text-sm md:text-base font-bold rounded-lg shadow-sm hover:shadow transition-all">
@@ -246,7 +284,7 @@
 // CONFIGURACIÓN
 // ============================================================================
 window.LessonFormConfig = {
-    moduleId: {{ $module->id }},
+    moduleId: {{ $module ? $module->id : 'null' }},
     lessonId: {{ $lesson ? $lesson->id : 'null' }},
     csrfToken: '{{ csrf_token() }}',
     bunnyCdnHostname: '{{ config('bunny.cdn_hostname') }}',
@@ -261,8 +299,23 @@ window.LessonFormConfig = {
             confirm: '{{ route('admin.lessons.bunny.confirm') }}'
         },
         uploadThumbnail: '/admin/api/upload-thumbnail',
-        backToLessons: '{{ route('admin.modules.lessons', $module->id) }}'
-    }
+        backToLessons: '{{ $module ? route('admin.modules.lessons', $module->id) : route('admin.dashboard') }}'
+    },
+    @if($courses)
+    coursesData: {!! json_encode($courses->map(function($course) {
+        return [
+            'id' => $course->id,
+            'title' => $course->title,
+            'modules' => $course->modules->map(function($module) {
+                return [
+                    'id' => $module->id,
+                    'title' => $module->title,
+                    'nextOrder' => $module->lessons()->max('order') + 1
+                ];
+            })
+        ];
+    })) !!}
+    @endif
 };
 
 const CONFIG = window.LessonFormConfig;
@@ -281,6 +334,33 @@ window.LessonFormManager = {
     // ========================================================================
     init() {
         this.updateVideoFields();
+    },
+
+    // ========================================================================
+    // GESTIÓN DE SELECTORES DE CURSO Y MÓDULO
+    // ========================================================================
+    updateModuleOptions() {
+        const courseSelect = document.getElementById('lesson-course');
+        const moduleSelect = document.getElementById('lesson-module');
+        const courseId = parseInt(courseSelect.value);
+
+        // Limpiar opciones del módulo
+        moduleSelect.innerHTML = '<option value="">Seleccionar módulo...</option>';
+
+        if (!courseId || !CONFIG.coursesData) return;
+
+        // Encontrar el curso seleccionado
+        const course = CONFIG.coursesData.find(c => c.id === courseId);
+        if (!course || !course.modules) return;
+
+        // Agregar opciones de módulos
+        course.modules.forEach(module => {
+            const option = document.createElement('option');
+            option.value = module.id;
+            option.textContent = module.title;
+            option.dataset.nextOrder = module.nextOrder;
+            moduleSelect.appendChild(option);
+        });
     },
 
     // ========================================================================
@@ -331,6 +411,19 @@ window.LessonFormManager = {
 
             const instructorId = document.getElementById('lesson-instructor').value;
 
+            // Obtener module_id del selector si está en modo global, sino del CONFIG
+            let moduleId = CONFIG.moduleId;
+            const moduleSelect = document.getElementById('lesson-module');
+            if (moduleSelect && moduleSelect.value) {
+                moduleId = parseInt(moduleSelect.value);
+
+                // Obtener el nextOrder del módulo seleccionado
+                const selectedOption = moduleSelect.options[moduleSelect.selectedIndex];
+                if (selectedOption && selectedOption.dataset.nextOrder && !CONFIG.lessonId) {
+                    document.getElementById('lesson-order').value = selectedOption.dataset.nextOrder;
+                }
+            }
+
             const formData = {
                 title: document.getElementById('lesson-title').value,
                 description: document.getElementById('lesson-description').value,
@@ -343,7 +436,7 @@ window.LessonFormManager = {
                 duration: parseInt(document.getElementById('lesson-duration').value) || 0,
                 order: parseInt(document.getElementById('lesson-order').value),
                 is_trial: document.getElementById('lesson-is-trial').checked,
-                module_id: CONFIG.moduleId
+                module_id: moduleId
             };
 
             let url, method;

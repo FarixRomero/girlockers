@@ -147,12 +147,12 @@
         </div>
 
         <!-- Quick Actions -->
-        <div class="mt-4 md:mt-8 grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-6 mb-4 md:mb-8">
+        <div class="mt-4 md:mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-8">
             <a href="{{ route('admin.courses.index') }}" wire:navigate class="bg-white rounded-xl md:rounded-2xl p-4 md:p-8 border border-gray-light/50 shadow-sm hover:shadow-md hover:border-purple-primary/30 hover:bg-purple-ultralight/20 transition-all duration-300 group text-center">
                 <svg class="w-8 md:w-12 h-8 md:h-12 text-purple-primary/70 mx-auto mb-2 md:mb-4 group-hover:text-purple-primary group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
                 </svg>
-                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Gestionar Cursos</h3>
+                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Cursos</h3>
                 <p class="text-gray-dark text-xs md:text-sm mt-1 md:mt-2 hidden md:block">Crear, editar y organizar cursos</p>
             </a>
 
@@ -160,15 +160,23 @@
                 <svg class="w-8 md:w-12 h-8 md:h-12 text-purple-primary/70 mx-auto mb-2 md:mb-4 group-hover:text-purple-primary group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path>
                 </svg>
-                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Gestionar Usuarios</h3>
+                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Usuarios</h3>
                 <p class="text-gray-dark text-xs md:text-sm mt-1 md:mt-2 hidden md:block">Administrar estudiantes y permisos</p>
+            </a>
+
+            <a href="{{ route('admin.instructors.index') }}" wire:navigate class="bg-white rounded-xl md:rounded-2xl p-4 md:p-8 border border-gray-light/50 shadow-sm hover:shadow-md hover:border-purple-primary/30 hover:bg-purple-ultralight/20 transition-all duration-300 group text-center">
+                <svg class="w-8 md:w-12 h-8 md:h-12 text-purple-primary/70 mx-auto mb-2 md:mb-4 group-hover:text-purple-primary group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                </svg>
+                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Profesores</h3>
+                <p class="text-gray-dark text-xs md:text-sm mt-1 md:mt-2 hidden md:block">Gestionar instructores de baile</p>
             </a>
 
             <a href="{{ route('admin.comments.index') }}" wire:navigate class="bg-white rounded-xl md:rounded-2xl p-4 md:p-8 border border-gray-light/50 shadow-sm hover:shadow-md hover:border-purple-primary/30 hover:bg-purple-ultralight/20 transition-all duration-300 group text-center">
                 <svg class="w-8 md:w-12 h-8 md:h-12 text-purple-primary/70 mx-auto mb-2 md:mb-4 group-hover:text-purple-primary group-hover:scale-110 transition-all" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 8h10M7 12h4m1 8l-4-4H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-3l-4 4z"></path>
                 </svg>
-                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Moderar Comentarios</h3>
+                <h3 class="font-display text-sm md:text-lg text-black font-bold group-hover:text-purple-primary transition-colors">Comentarios</h3>
                 <p class="text-gray-dark text-xs md:text-sm mt-1 md:mt-2 hidden md:block">Revisar y gestionar comentarios</p>
             </a>
         </div>

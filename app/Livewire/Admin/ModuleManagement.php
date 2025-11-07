@@ -18,7 +18,6 @@ class ModuleManagement extends Component
     // Form fields
     public $moduleId = null;
     public $title = '';
-    public $description = '';
     public $order = 1;
 
     // Modal state
@@ -27,7 +26,6 @@ class ModuleManagement extends Component
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
-        'description' => 'required|min:10',
         'order' => 'required|integer|min:1',
     ];
 
@@ -53,7 +51,6 @@ class ModuleManagement extends Component
 
         $this->moduleId = $module->id;
         $this->title = $module->title;
-        $this->description = $module->description;
         $this->order = $module->order;
 
         $this->showModal = true;
@@ -68,7 +65,7 @@ class ModuleManagement extends Component
 
     public function resetForm()
     {
-        $this->reset(['moduleId', 'title', 'description', 'order']);
+        $this->reset(['moduleId', 'title', 'order']);
         $this->resetValidation();
     }
 
@@ -78,7 +75,6 @@ class ModuleManagement extends Component
 
         $data = [
             'title' => $this->title,
-            'description' => $this->description,
             'order' => $this->order,
             'course_id' => $this->courseId,
         ];

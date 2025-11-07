@@ -123,12 +123,11 @@
 
                         <!-- Module Info -->
                         <div class="flex-1">
-                            <div class="flex items-start justify-between mb-2">
+                            <div class="flex items-start justify-between mb-2 md:mb-3">
                                 <h3 class="font-display text-lg md:text-xl text-black group-hover:text-purple-primary transition-colors duration-300">
                                     {{ $module->title }}
                                 </h3>
                             </div>
-                            <p class="text-gray-dark text-xs md:text-sm mb-3 md:mb-4 leading-relaxed">{{ $module->description }}</p>
 
                             <div class="flex items-center flex-wrap gap-2 md:gap-4 text-sm">
                                 <span class="flex items-center px-2 md:px-3 py-1 md:py-1.5 bg-purple-ultralight rounded-lg text-purple-dark border border-purple-primary/20">
@@ -249,17 +248,6 @@
                                     class="w-full bg-white border border-purple-primary/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-purple-primary focus:bg-purple-ultralight/30 focus:ring-2 focus:ring-purple-primary/20 transition"
                                     placeholder="Ej: Introducción al Hip-Hop">
                                 @error('title') <p class="mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
-                            </div>
-
-                            <!-- Description -->
-                            <div>
-                                <label class="block text-gray-dark text-sm mb-2 font-medium">Descripción *</label>
-                                <textarea
-                                    wire:model="description"
-                                    rows="4"
-                                    class="w-full bg-white border border-purple-primary/20 rounded-lg px-4 py-3 text-black focus:outline-none focus:border-purple-primary focus:bg-purple-ultralight/30 focus:ring-2 focus:ring-purple-primary/20 transition resize-none"
-                                    placeholder="Describe el contenido de este módulo..."></textarea>
-                                @error('description') <p class="mt-1 text-red-500 text-sm">{{ $message }}</p> @enderror
                             </div>
 
                             <!-- Order -->

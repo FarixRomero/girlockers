@@ -15,6 +15,7 @@ document.addEventListener('alpine:init', () => {
         playbackRate: 1,
         controlsVisible: true,
         controlsTimeout: null,
+        completedSent: false,
 
         init() {
             this.$refs.video.volume = this.volume / 100;
@@ -95,6 +96,17 @@ document.addEventListener('alpine:init', () => {
         updateProgress() {
             this.currentTime = this.$refs.video.currentTime;
             this.progress = (this.currentTime / this.duration) * 100;
+
+            // Send progress update every 5 seconds
+            if (Math.floor(this.currentTime) % 5 === 0) {
+                this.sendProgressUpdate(this.progress);
+            }
+
+            // Auto-complete at 90% progress
+            if (this.progress >= 90 && !this.completedSent) {
+                this.markAsCompleted();
+                this.completedSent = true;
+            }
         },
 
         onMetadataLoaded() {
@@ -103,6 +115,22 @@ document.addEventListener('alpine:init', () => {
 
         onEnded() {
             this.isPlaying = false;
+            this.markAsCompleted();
+        },
+
+        sendProgressUpdate(percentage) {
+            // Send to Livewire component
+            if (window.Livewire) {
+                this.$wire.call('updateProgress', Math.round(percentage));
+            }
+        },
+
+        markAsCompleted() {
+            // Send to Livewire component
+            if (window.Livewire && !this.completedSent) {
+                this.$wire.call('markAsCompleted');
+                this.completedSent = true;
+            }
         },
 
         formatTime(seconds) {

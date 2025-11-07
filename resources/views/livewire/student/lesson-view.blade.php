@@ -1,4 +1,13 @@
 <div>
+    <!-- Back Button (Mobile) -->
+    <div class="lg:hidden fixed top-4 left-4 z-50">
+        <a href="{{ url()->previous() }}" wire:navigate class="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </a>
+    </div>
+
     <!-- Video Player Section - calc(100vh - navbar height) -->
     <div class="z-10" style="height: calc(100vh - 3.5rem);">
         @if ($lesson->video_type === 'youtube' && $lesson->youtube_id)

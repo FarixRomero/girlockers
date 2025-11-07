@@ -127,13 +127,14 @@
                 </div>
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-y-auto bg-gray-50 pb-20 lg:pb-0">
+                <main class="flex-1 overflow-y-auto bg-gray-50 {{ request()->routeIs('courses.show') ? 'pb-0' : 'pb-20 lg:pb-0' }}">
                     {{ $slot }}
                 </main>
             </div>
         </div>
 
         <!-- Mobile Bottom Navigation -->
+        @if(!request()->routeIs('courses.show'))
         <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-light shadow-lg z-50">
             <div class="flex justify-around items-center px-2 py-3">
                 <!-- Home -->
@@ -169,5 +170,6 @@
                 </a>
             </div>
         </div>
+        @endif
     </body>
 </html>

@@ -127,6 +127,17 @@ class LessonView extends Component
         $this->lesson->refresh();
     }
 
+    public function markAsCompleted()
+    {
+        LessonViewModel::markAsCompleted(auth()->id(), $this->lesson->id);
+        $this->dispatch('lesson-completed');
+    }
+
+    public function updateProgress($percentage)
+    {
+        LessonViewModel::updateProgress(auth()->id(), $this->lesson->id, $percentage);
+    }
+
     public function render()
     {
         return view('livewire.student.lesson-view')

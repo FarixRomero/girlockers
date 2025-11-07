@@ -77,4 +77,25 @@ class Course extends Model
         // Otherwise, generate URL from storage
         return asset('storage/' . $this->image);
     }
+
+    /**
+     * Get users who favorited this course
+     */
+    public function favoritedBy()
+    {
+        return $this->belongsToMany(User::class, 'course_favorites')
+            ->withTimestamps();
+    }
+
+    /**
+     * Check if course is favorited by a user
+     */
+    public function isFavoritedBy(?User $user): bool
+    {
+        if (!$user) {
+            return false;
+        }
+
+        return $this->favoritedBy()->where('user_id', $user->id)->exists();
+    }
 }

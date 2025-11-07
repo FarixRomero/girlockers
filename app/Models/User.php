@@ -163,7 +163,27 @@ class User extends Authenticatable
     public function viewedLessons()
     {
         return $this->belongsToMany(Lesson::class, 'lesson_views')
-            ->withPivot('viewed_at')
+            ->withPivot('viewed_at', 'completed_at', 'progress_percentage')
             ->orderByPivot('viewed_at', 'desc');
+    }
+
+    /**
+     * Get user's completed lessons
+     */
+    public function completedLessons()
+    {
+        return $this->belongsToMany(Lesson::class, 'lesson_views')
+            ->wherePivotNotNull('completed_at')
+            ->withPivot('viewed_at', 'completed_at', 'progress_percentage')
+            ->orderByPivot('completed_at', 'desc');
+    }
+
+    /**
+     * Get user's favorite courses
+     */
+    public function favoriteCourses()
+    {
+        return $this->belongsToMany(Course::class, 'course_favorites')
+            ->withTimestamps();
     }
 }

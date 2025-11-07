@@ -1,28 +1,34 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
-    <div class="mb-8 flex items-center justify-between">
-        <h1 class="text-4xl font-bold text-gray-900">Cursos</h1>
+    <div class="mb-4 md:mb-8 flex items-center justify-between">
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900">Cursos</h1>
 
-        <!-- Filter Button -->
-        <button wire:click="$set('showFilterModal', true)" class="flex items-center px-4 py-2 border border-gray-900 text-gray-900 font-semibold rounded hover:bg-gray-100 transition">
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <!-- Filter Button (Mobile Only) -->
+        <button wire:click="$set('showFilterModal', true)" class="md:hidden flex items-center px-3 py-2 border border-gray-900 text-gray-900 font-semibold rounded hover:bg-gray-100 transition text-sm">
+            <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
             </svg>
-            FILTER
-            @if($selectedInstructor)
-                <span class="ml-2 px-2 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full">1</span>
+            Filtrar
+            @php
+                $activeFilters = 0;
+                if($selectedLevel !== 'all') $activeFilters++;
+                if($selectedInstructor) $activeFilters++;
+            @endphp
+            @if($activeFilters > 0)
+                <span class="ml-2 px-2 py-0.5 bg-purple-600 text-white text-xs font-bold rounded-full">{{ $activeFilters }}</span>
             @endif
         </button>
     </div>
 
     <!-- Tab-style Filters -->
-    <div class="mb-8">
-        <div class="flex flex-wrap gap-3 mb-6">
+    <div class="mb-4 md:mb-8">
+        <!-- Navigation Tabs -->
+        <div class="flex gap-2 mb-4 overflow-x-auto pb-2 scrollbar-hide">
             <!-- TODAS LAS CLASES -->
             <a
                 href="{{ route('lessons.index', ['nivel' => $selectedLevel, 'instructor' => $selectedInstructor, 'buscar' => $search]) }}"
                 wire:navigate
-                class="px-6 py-2 font-bold text-sm transition bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
+                class="px-4 md:px-6 py-2 font-bold text-xs md:text-sm transition bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 whitespace-nowrap flex-shrink-0"
             >
                 TODAS LAS CLASES
             </a>
@@ -31,31 +37,31 @@
             <a
                 href="{{ route('lessons.index', ['gratis' => 'true', 'nivel' => $selectedLevel, 'instructor' => $selectedInstructor, 'buscar' => $search]) }}"
                 wire:navigate
-                class="px-6 py-2 font-bold text-sm transition bg-white text-gray-900 border border-gray-300 hover:bg-gray-50"
+                class="px-4 md:px-6 py-2 font-bold text-xs md:text-sm transition bg-white text-gray-900 border border-gray-300 hover:bg-gray-50 whitespace-nowrap flex-shrink-0"
             >
                 CLASES GRATIS
             </a>
 
             <!-- CURSOS -->
             <button
-                class="px-6 py-2 font-bold text-sm transition bg-gray-900 text-white"
+                class="px-4 md:px-6 py-2 font-bold text-xs md:text-sm transition bg-gray-900 text-white whitespace-nowrap flex-shrink-0"
             >
                 CURSOS
             </button>
         </div>
 
         <!-- Search Bar -->
-        <div class="mb-4">
+        <div class="mb-3 md:mb-4">
             <input
                 type="text"
                 wire:model.live.debounce.300ms="search"
                 placeholder="Buscar cursos..."
-                class="w-full px-4 py-3 border border-gray-300 rounded focus:ring-2 focus:ring-gray-900 focus:border-transparent"
+                class="w-full px-3 md:px-4 py-2 md:py-3 text-sm md:text-base border border-gray-300 rounded focus:ring-2 focus:ring-gray-900 focus:border-transparent"
             >
         </div>
 
-        <!-- Level Filter Pills -->
-        <div class="flex flex-wrap gap-2 items-center">
+        <!-- Level Filter Pills (Desktop Only) -->
+        <div class="hidden md:flex flex-wrap gap-2 items-center">
             <span class="text-sm text-gray-600 font-medium">Nivel:</span>
             <button
                 wire:click="filterByLevel('all')"
@@ -91,6 +97,32 @@
                 </button>
             @endif
         </div>
+
+        <!-- Active Filters Chips (Mobile Only) -->
+        @if($selectedLevel !== 'all' || $selectedInstructor)
+            <div class="md:hidden flex flex-wrap gap-2 items-center mt-3">
+                <span class="text-xs text-gray-600 font-medium">Filtros activos:</span>
+
+                @if($selectedLevel !== 'all')
+                    <button
+                        wire:click="filterByLevel('all')"
+                        class="inline-flex items-center px-3 py-1 text-xs font-medium rounded-full {{ $selectedLevel === 'principiante' ? 'bg-orange-500 text-white' : ($selectedLevel === 'intermedio' ? 'bg-blue-500 text-white' : 'bg-red-600 text-white') }}"
+                    >
+                        {{ ucfirst($selectedLevel) }}
+                        <svg class="w-3 h-3 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                        </svg>
+                    </button>
+                @endif
+
+                <button
+                    wire:click="clearFilters"
+                    class="text-xs text-purple-600 hover:text-purple-700 font-medium underline"
+                >
+                    Limpiar todo
+                </button>
+            </div>
+        @endif
     </div>
 
     <!-- Courses Grid -->
@@ -149,6 +181,37 @@
 
                 <!-- Content -->
                 <div class="p-6 space-y-6">
+                    <!-- Level Filter -->
+                    <div>
+                        <label class="block text-sm font-bold text-gray-900 mb-3">FILTRAR POR NIVEL</label>
+                        <div class="grid grid-cols-2 gap-3">
+                            <button
+                                wire:click="filterByLevel('all')"
+                                class="px-4 py-2 text-sm font-medium rounded transition {{ $selectedLevel === 'all' ? 'bg-gray-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                            >
+                                TODOS
+                            </button>
+                            <button
+                                wire:click="filterByLevel('principiante')"
+                                class="px-4 py-2 text-sm font-medium rounded transition {{ $selectedLevel === 'principiante' ? 'bg-orange-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                            >
+                                PRINCIPIANTE
+                            </button>
+                            <button
+                                wire:click="filterByLevel('intermedio')"
+                                class="px-4 py-2 text-sm font-medium rounded transition {{ $selectedLevel === 'intermedio' ? 'bg-blue-500 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                            >
+                                INTERMEDIO
+                            </button>
+                            <button
+                                wire:click="filterByLevel('avanzado')"
+                                class="px-4 py-2 text-sm font-medium rounded transition {{ $selectedLevel === 'avanzado' ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200' }}"
+                            >
+                                AVANZADO
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Instructors Filter -->
                     <div>
                         <label class="block text-sm font-bold text-gray-900 mb-3">FILTRAR POR INSTRUCTOR</label>

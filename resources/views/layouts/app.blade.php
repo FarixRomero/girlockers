@@ -24,13 +24,9 @@
             <aside x-data="{ collapsed: false }" :class="collapsed ? 'w-20' : 'w-64'" class="hidden lg:flex lg:flex-col bg-gray-900 border-r border-gray-800 transition-all duration-300">
                 <!-- Logo & Toggle -->
                 <div class="flex items-center justify-between h-16 px-4 border-b border-gray-800">
-                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center space-x-2 overflow-hidden">
-                        <div class="flex items-center space-x-1 flex-shrink-0">
-                            <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-                            <span class="w-2 h-2 bg-purple-500 rounded-full"></span>
-                        </div>
-                        <span x-show="!collapsed" x-transition class="font-script text-xl font-bold text-white tracking-wider whitespace-nowrap">Girls Lockers</span>
+                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center overflow-hidden">
+                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="!collapsed" x-transition class="h-14 w-auto object-contain">
+                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="collapsed" x-transition class="h-10 w-10 object-contain">
                     </a>
                     <button @click="collapsed = !collapsed" class="p-1 hover:bg-gray-800 rounded transition flex-shrink-0" :title="collapsed ? 'Expandir' : 'Colapsar'">
                         <svg class="w-5 h-5 text-gray-400 hover:text-white transition-transform duration-300" :class="collapsed ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -104,18 +100,20 @@
 
             <!-- Main Content Area -->
             <div class="flex-1 flex flex-col overflow-hidden">
-                <!-- Mobile Top Bar with Notifications -->
-                <div class="lg:hidden bg-white border-b border-gray-light sticky top-0 z-40">
-                    <div class="flex items-center justify-between px-4 py-3">
-                        <a href="{{ route('dashboard') }}" wire:navigate>
-                            <h1 class="font-script text-2xl text-purple-primary italic font-bold">Girls Lockers</h1>
-                        </a>
-                        <div class="flex items-center space-x-3">
-                            <!-- Notifications Icon -->
-                            @livewire('student.notifications')
+                <!-- Mobile Top Bar with Notifications (Only on Dashboard) -->
+                @if(request()->routeIs('dashboard'))
+                    <div class="lg:hidden bg-white border-b border-gray-light sticky top-0 z-40">
+                        <div class="flex items-center justify-between px-4 py-3">
+                            <a href="{{ route('dashboard') }}" wire:navigate>
+                                <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-10 w-auto object-contain">
+                            </a>
+                            <div class="flex items-center space-x-3">
+                                <!-- Notifications Icon -->
+                                @livewire('student.notifications')
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <!-- Desktop Top Bar with Notifications -->
                 <div class="hidden lg:flex items-center justify-between h-16 px-6 bg-white border-b border-gray-light">

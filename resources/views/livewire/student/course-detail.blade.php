@@ -1,11 +1,11 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     @php
-        $levelConfig = [
-            'beginner' => ['name' => 'Principiante', 'icon' => '🌱', 'color' => 'bg-green-500/20 text-green-400'],
-            'intermediate' => ['name' => 'Intermedio', 'icon' => '🔥', 'color' => 'bg-orange-500/20 text-orange-400'],
-            'advanced' => ['name' => 'Avanzado', 'icon' => '💎', 'color' => 'bg-purple-500/20 text-purple-400'],
+        $levelColors = [
+            'principiante' => 'bg-orange-500 text-white',
+            'intermedio' => 'bg-blue-500 text-white',
+            'avanzado' => 'bg-red-600 text-white',
         ];
-        $config = $levelConfig[$course->level] ?? $levelConfig['beginner'];
+        $levelColor = $levelColors[strtolower($course->level)] ?? 'bg-gray-500 text-white';
         $totalLessons = $course->modules->sum(fn($module) => $module->lessons->count());
         $trialLessons = $course->modules->flatMap->lessons->where('is_trial', true)->count();
     @endphp
@@ -13,11 +13,10 @@
     <!-- Course Header -->
     <div class="mb-8">
         <div class="mb-4">
-            <a href="{{ route('courses.index') }}" wire:navigate class="text-pink-vibrant hover:text-pink-light inline-flex items-center text-sm">
-                <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <a href="{{ route('courses.index') }}" wire:navigate class="inline-flex items-center justify-center w-10 h-10 rounded-full bg-gray-100 hover:bg-gray-200 text-gray-700 hover:text-gray-900 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Volver al catálogo
             </a>
         </div>
 
@@ -36,8 +35,8 @@
 
                 <!-- Course Info -->
                 <div class="lg:col-span-2">
-                    <span class="px-4 py-2 rounded-full text-sm font-bold {{ $config['color'] }} inline-block mb-4">
-                        {{ $config['icon'] }} {{ $config['name'] }}
+                    <span class="px-4 py-2 rounded text-xs font-bold uppercase {{ $levelColor }} inline-block mb-4">
+                        {{ $course->level }}
                     </span>
 
                     <h1 class="font-display text-3xl md:text-4xl text-cream mb-4">
@@ -116,45 +115,82 @@
                 </button>
 
                 @if(in_array($module->id, $expandedModules))
-                    <div class="mt-4 pt-4 border-t border-pink-vibrant/20 space-y-2">
+                    <div class="mt-4 pt-4 border-t border-pink-vibrant/20 space-y-3">
                         @foreach($module->lessons as $lesson)
                             @php
                                 $canAccess = $lesson->isAccessibleBy(auth()->user());
+                                $lessonLevelColors = [
+                                    'principiante' => 'bg-orange-500 text-white',
+                                    'intermedio' => 'bg-blue-500 text-white',
+                                    'avanzado' => 'bg-red-600 text-white',
+                                ];
+                                $lessonLevelColor = $lessonLevelColors[strtolower($course->level)] ?? 'bg-gray-500 text-white';
                             @endphp
 
                             <a
                                 href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
                                 {{ $canAccess ? 'wire:navigate' : '' }}
-                                class="flex items-center justify-between p-3 rounded-lg hover:bg-purple-deep/50 cursor-pointer transition group">
-                                <div class="flex items-center flex-1">
-                                    <div class="w-10 h-10 rounded-lg bg-gradient-pink flex items-center justify-center mr-3 flex-shrink-0">
+                                class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-deep/50 cursor-pointer transition group">
+                                <!-- Lesson Thumbnail -->
+                                <div class="relative w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">
+                                    @if($lesson->thumbnail)
+                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
+                                            <svg class="w-6 h-6 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">
+                                                <path d="M8 5v14l11-7z"></path>
+                                            </svg>
+                                        </div>
+                                    @endif
+
+                                    <!-- Lock/Play overlay -->
+                                    <div class="absolute inset-0 bg-black/40 flex items-center justify-center">
                                         @if($canAccess)
-                                            <svg class="w-5 h-5 text-cream" fill="currentColor" viewBox="0 0 24 24">
+                                            <svg class="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 24 24">
                                                 <path d="M8 5v14l11-7z"></path>
                                             </svg>
                                         @else
-                                            <svg class="w-5 h-5 text-cream" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                                            <svg class="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 20 20">
+                                                <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"></path>
                                             </svg>
-                                        @endif
-                                    </div>
-                                    <div class="flex-1">
-                                        <div class="flex items-center">
-                                            <h4 class="text-cream {{ $canAccess ? 'group-hover:text-pink-vibrant' : '' }} transition">
-                                                {{ $lesson->title }}
-                                            </h4>
-                                            @if($lesson->is_trial)
-                                                <span class="ml-2 px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full">Gratis</span>
-                                            @endif
-                                        </div>
-                                        @if($lesson->description)
-                                            <p class="text-cream/60 text-sm mt-1">{{ Str::limit($lesson->description, 80) }}</p>
                                         @endif
                                     </div>
                                 </div>
 
+                                <!-- Lesson Info -->
+                                <div class="flex-1 min-w-0">
+                                    <h4 class="text-cream {{ $canAccess ? 'group-hover:text-pink-vibrant' : '' }} transition font-medium mb-1">
+                                        {{ $lesson->title }}
+                                    </h4>
+
+                                    <!-- Tags and Level -->
+                                    <div class="flex flex-wrap gap-1.5 mb-1">
+                                        <!-- Level Badge -->
+                                        <span class="px-2 py-0.5 {{ $lessonLevelColor }} text-xs font-bold uppercase rounded">
+                                            {{ $course->level }}
+                                        </span>
+
+                                        <!-- Trial Badge -->
+                                        @if($lesson->is_trial)
+                                            <span class="px-2 py-0.5 bg-green-500 text-white text-xs font-bold uppercase rounded">Gratis</span>
+                                        @endif
+
+                                        <!-- Lesson Tags -->
+                                        @foreach($lesson->tags as $tag)
+                                            <span class="px-2 py-0.5 bg-gray-700 text-white text-xs font-bold uppercase rounded">
+                                                {{ $tag->name }}
+                                            </span>
+                                        @endforeach
+                                    </div>
+
+                                    @if($lesson->description)
+                                        <p class="text-cream/60 text-xs mt-1 line-clamp-1">{{ $lesson->description }}</p>
+                                    @endif
+                                </div>
+
+                                <!-- Arrow Icon -->
                                 @if($canAccess)
-                                    <svg class="w-5 h-5 text-pink-vibrant group-hover:translate-x-1 transition flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-5 h-5 text-pink-vibrant group-hover:translate-x-1 transition flex-shrink-0 mt-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
                                     </svg>
                                 @endif

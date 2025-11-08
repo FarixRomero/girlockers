@@ -39,7 +39,7 @@ class CourseManagement extends Component
         'description' => 'required|min:10',
         'instructor_id' => 'nullable|exists:instructors,id',
         'level' => 'required|in:principiante,intermedio,avanzado',
-        'image' => 'nullable|image|max:2048',
+        'image' => 'nullable|image|max:10240',
         'is_published' => 'boolean',
     ];
 

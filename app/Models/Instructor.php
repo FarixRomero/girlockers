@@ -79,7 +79,7 @@ class Instructor extends Model
             return $this->avatar;
         }
 
-        // Otherwise, generate URL from storage
-        return asset('storage/' . $this->avatar);
+        // Otherwise, generate URL from S3
+        return \Storage::disk('s3')->url($this->avatar);
     }
 }

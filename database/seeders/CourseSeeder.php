@@ -18,13 +18,17 @@ class CourseSeeder extends Seeder
         // Obtener la instructora Tatiana Cerna
         $tatiana = Instructor::first();
 
+        // Default images from S3 (relative paths)
+        $defaultCourseImage = 'courses/nL4oVY3ZBeLzy9jox4JG8HdftxzIEkgxqO7Gi4w8.jpg';
+        $defaultLessonThumbnail = 'lessons/thumbnails/0hM1AnAmePn00bIKF3ZxmaX9G44weDIltT8W9Bw2.jpg';
+
         // Locking Básico Course
         $lockingBasico = Course::create([
             'title' => 'Locking Básico',
             'slug' => 'locking-basico',
             'description' => 'Aprende los fundamentos del Locking desde cero. Este curso te enseñará las técnicas básicas y movimientos esenciales del estilo Locking, perfecto para principiantes que quieren dominar esta técnica de baile funk.',
             'level' => 'principiante',
-            'image' => null,
+            'image' => $defaultCourseImage,
             'is_published' => true,
         ]);
 
@@ -62,6 +66,7 @@ class CourseSeeder extends Seeder
                 'bunny_video_id' => $bunnyVideoId,
                 'youtube_id' => null,
                 'video_path' => null,
+                'thumbnail' => $defaultLessonThumbnail,
                 'duration' => 180, // 3 minutos por defecto
                 'is_trial' => $lessonData['is_trial'] ?? false,
                 'instructor_id' => $tatiana?->id,

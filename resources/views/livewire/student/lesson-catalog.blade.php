@@ -164,7 +164,7 @@
 
                         <!-- Heart icon (top-right) -->
                         <button
-                            wire:click.prevent="toggleLike({{ $lesson->id }})"
+                            wire:click.stop="toggleLike({{ $lesson->id }})"
                             class="absolute top-2 right-2 p-1.5 bg-black/50 hover:bg-black/70 rounded-full transition z-10"
                         >
                             @if($lesson->is_liked)

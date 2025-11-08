@@ -15,7 +15,7 @@
     <a href="{{ route('courses.show', $course) }}" wire:navigate class="block relative">
         @if($course->image)
             <div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 relative">
-                <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="absolute inset-0 w-full h-full object-cover">
+                <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="absolute inset-0 w-full h-full object-cover">
 
                 <!-- Title Overlay (bottom) -->
                 <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4">

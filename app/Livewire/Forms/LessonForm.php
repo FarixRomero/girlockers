@@ -54,7 +54,7 @@ class LessonForm extends Form
 
         if ($lesson->thumbnail) {
             $this->existingThumbnail = $lesson->thumbnail;
-            $this->thumbnailPreview = asset('storage/' . $lesson->thumbnail);
+            $this->thumbnailPreview = $lesson->thumbnail_url;
         }
     }
 

@@ -30,7 +30,7 @@ class InstructorManagement extends Component
         'name' => 'required|min:3|max:255',
         'description' => 'nullable|string',
         'instagram' => 'nullable|string|max:255',
-        'avatar' => 'nullable|image|max:2048',
+        'avatar' => 'nullable|image|max:10240',
     ];
 
     /**

@@ -74,8 +74,8 @@ class Course extends Model
             return $this->image;
         }
 
-        // Otherwise, generate URL from storage
-        return asset('storage/' . $this->image);
+        // Otherwise, generate URL from S3
+        return \Storage::disk('s3')->url($this->image);
     }
 
     /**

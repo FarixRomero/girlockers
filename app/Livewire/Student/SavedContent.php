@@ -17,7 +17,7 @@ class SavedContent extends Component
     public function render()
     {
         // Get user's liked lessons (Favoritos)
-        $savedLessons = auth()->user()->likes()
+        $savedLessons = auth()->user()->likedLessons()
             ->with(['module.course', 'instructor', 'tags'])
             ->withCount('likes')
             ->orderBy('lesson_likes.created_at', 'desc')

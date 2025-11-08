@@ -89,7 +89,7 @@
                             <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
                                 <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($lesson->thumbnail)
-                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                             <div class="absolute inset-0 flex items-center justify-center">
@@ -173,7 +173,7 @@
                             <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
                                 <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($lesson->thumbnail)
-                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                             <div class="absolute inset-0 flex items-center justify-center">
@@ -257,7 +257,7 @@
                             <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
                                 <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($lesson->thumbnail)
-                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                             <div class="absolute inset-0 flex items-center justify-center">
@@ -339,7 +339,7 @@
                     <div class="aspect-video relative">
                         @if($course->image)
                             <!-- Course Image -->
-                            <img src="{{ asset('storage/' . $course->image) }}"
+                            <img src="{{ $course->image_url }}"
                                  alt="{{ $course->title }}"
                                  class="w-full h-full object-cover">
                         @else

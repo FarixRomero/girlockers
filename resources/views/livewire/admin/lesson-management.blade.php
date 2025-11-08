@@ -34,7 +34,7 @@
                             <!-- Thumbnail -->
                             <div class="w-20 h-14 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                                 @if($lesson->thumbnail)
-                                    <img src="{{ asset('storage/' . $lesson->thumbnail) }}"
+                                    <img src="{{ $lesson->thumbnail_url }}"
                                          alt="{{ $lesson->title }}"
                                          class="w-full h-full object-cover"
                                          onerror="this.style.display='none';this.parentElement.style.backgroundColor='#e5e7eb';this.parentElement.innerHTML='<div class=\'flex items-center justify-center h-full text-gray-400 text-xs\'>Sin Imagen</div>'">

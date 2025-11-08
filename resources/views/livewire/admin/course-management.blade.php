@@ -82,7 +82,7 @@
                 <a href="{{ route('admin.courses.modules', $course->id) }}" wire:navigate class="flex items-center gap-3 relative z-10">
                     <!-- Course Image -->
                     @if($course->image)
-                        <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg flex-shrink-0">
+                        <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-lg flex-shrink-0">
                     @else
                         <div class="w-16 h-16 md:w-20 md:h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-lg flex items-center justify-center flex-shrink-0">
                             <svg class="w-8 h-8 md:w-10 md:h-10 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

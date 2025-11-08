@@ -17,6 +17,7 @@ use App\Livewire\Admin\CourseManagement;
 use App\Livewire\Admin\ModuleManagement;
 use App\Livewire\Admin\InstructorManagement;
 use App\Livewire\Admin\TagManagement;
+use App\Livewire\Admin\LandingConfig;
 use App\Http\Controllers\VideoStreamController;
 use Illuminate\Support\Facades\Route;
 
@@ -77,6 +78,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('lessons/{lessonId}/edit', \App\Livewire\Admin\LessonEdit::class)->name('lessons.edit');
     Route::get('instructors', InstructorManagement::class)->name('instructors.index');
     Route::get('tags', TagManagement::class)->name('tags.index');
+    Route::get('landing-config', LandingConfig::class)->name('landing-config.index');
 
     // Bunny.net video upload endpoints
     Route::post('lessons/bunny/init-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'initUpload'])->name('lessons.bunny.init');

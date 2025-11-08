@@ -152,8 +152,8 @@ class Lesson extends Model
             return $this->thumbnail;
         }
 
-        // Otherwise, generate URL from storage
-        return asset('storage/' . $this->thumbnail);
+        // Otherwise, generate URL from S3
+        return \Storage::disk('s3')->url($this->thumbnail);
     }
 
     /**

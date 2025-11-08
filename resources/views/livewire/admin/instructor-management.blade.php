@@ -72,7 +72,7 @@
                     <div class="flex items-start justify-between gap-3 mb-3">
                         <div class="flex items-center gap-3 flex-1 min-w-0">
                             @if($instructor->avatar)
-                                <img src="{{ asset('storage/' . $instructor->avatar) }}"
+                                <img src="{{ $instructor->photo_url }}"
                                      alt="{{ $instructor->name }}"
                                      class="w-14 h-14 object-cover rounded-full shadow-sm flex-shrink-0">
                             @else
@@ -176,7 +176,7 @@
                                 <td class="py-4 px-6">
                                     <div class="flex items-center">
                                         @if($instructor->avatar)
-                                            <img src="{{ asset('storage/' . $instructor->avatar) }}" alt="{{ $instructor->name }}" class="w-12 h-12 object-cover rounded-full mr-4 shadow-sm">
+                                            <img src="{{ $instructor->photo_url }}" alt="{{ $instructor->name }}" class="w-12 h-12 object-cover rounded-full mr-4 shadow-sm">
                                         @else
                                             <div class="w-12 h-12 bg-gradient-to-br from-purple-primary to-purple-light rounded-full flex items-center justify-center mr-4 shadow-sm">
                                                 <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">

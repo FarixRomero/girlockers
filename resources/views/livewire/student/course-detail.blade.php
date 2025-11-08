@@ -15,7 +15,7 @@
         <!-- Background Image -->
         <div class="relative h-96 overflow-hidden">
             @if($course->image)
-                <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-full h-full object-cover">
+                <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="w-full h-full object-cover">
             @else
                 <div class="w-full h-full bg-gradient-to-br from-purple-600 via-purple-500 to-pink-500"></div>
             @endif
@@ -125,7 +125,7 @@
                                 <!-- Avatar -->
                                 <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0 overflow-hidden">
                                     @if($course->instructor->avatar)
-                                        <img src="{{ asset('storage/' . $course->instructor->avatar) }}" alt="{{ $course->instructor->name }}" class="w-full h-full object-cover">
+                                        <img src="{{ $course->instructor->photo_url }}" alt="{{ $course->instructor->name }}" class="w-full h-full object-cover">
                                     @else
                                         {{ substr($course->instructor->name, 0, 1) }}
                                     @endif
@@ -252,7 +252,7 @@
                                                 <!-- Thumbnail -->
                                                 <div class="relative w-32 h-24 flex-shrink-0">
                                                     @if($lesson->thumbnail)
-                                                        <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                                        <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                                     @else
                                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500"></div>
                                                     @endif
@@ -360,7 +360,7 @@
                     <!-- Course Image -->
                     <div class="lg:col-span-1">
                         @if($course->image)
-                            <img src="{{ asset('storage/' . $course->image) }}" alt="{{ $course->title }}" class="w-full aspect-video object-cover rounded-2xl">
+                            <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="w-full aspect-video object-cover rounded-2xl">
                         @else
                             <div class="w-full aspect-video bg-gradient-card rounded-2xl flex items-center justify-center">
                                 <span class="text-8xl">💃</span>
@@ -470,7 +470,7 @@
                                     <!-- Lesson Thumbnail -->
                                     <div class="relative w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">
                                         @if($lesson->thumbnail)
-                                            <img src="{{ asset('storage/' . $lesson->thumbnail) }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                                            <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
                                         @else
                                             <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center">
                                                 <svg class="w-6 h-6 text-white opacity-80" fill="currentColor" viewBox="0 0 24 24">

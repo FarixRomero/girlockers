@@ -6,7 +6,7 @@
             <!-- Video de YouTube en modo autoplay y loop -->
             <iframe
                 class="absolute top-1/2 left-1/2 w-[177.77777778vh] h-[56.25vw] min-h-screen min-w-full -translate-x-1/2 -translate-y-1/2"
-                src="https://www.youtube.com/embed/HefC_rMCs-Q?autoplay=1&mute=1&loop=1&playlist=HefC_rMCs-Q&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+                src="https://www.youtube.com/embed/{{ $config['hero_video_url'] ?? 'HefC_rMCs-Q' }}?autoplay=1&mute=1&loop=1&playlist={{ $config['hero_video_url'] ?? 'HefC_rMCs-Q' }}&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
                 title="Girls Lockers Hero Video"
                 frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -20,26 +20,25 @@
             <div class="max-w-4xl mx-auto">
                 <!-- Titular Principal en Blanco -->
                 <h1 class="font-display font-black text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight page-enter">
-                    <span class="text-white">TU ESPACIO.</span>
+                    <span class="text-white">{{ $config['hero_title_1'] ?? 'TU ESPACIO.' }}</span>
                     <br>
-                    <span class="text-white">TU RITMO.</span>
+                    <span class="text-white">{{ $config['hero_title_2'] ?? 'TU RITMO.' }}</span>
                     <br>
-                    <span class="text-purple-light">TU PODER.</span>
+                    <span class="text-purple-light">{{ $config['hero_title_3'] ?? 'TU PODER.' }}</span>
                 </h1>
 
                 <p class="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto mb-12 page-enter font-medium" style="animation-delay: 0.1s;">
-                    La primera comunidad y plataforma de aprendizaje de locking,<br class="hidden md:block">
-                    creada <span class="text-purple-light font-bold">por</span> y <span class="text-purple-light font-bold">para</span> mujeres.
+                    {{ $config['hero_subtitle'] ?? 'La primera comunidad y plataforma de aprendizaje de locking, creada por y para mujeres.' }}
                 </p>
 
                 <div class="flex flex-col sm:flex-row gap-6 justify-center page-enter" style="animation-delay: 0.2s;">
                     <a href="{{ route('register') }}" wire:navigate
                        class="px-10 py-5 bg-purple-primary hover:bg-purple-dark text-white font-bold text-lg rounded-lg shadow-purple-glow-lg transition-all duration-300 transform hover:scale-105">
-                        ÚNETE A LA COMUNIDAD
+                        {{ $config['hero_button_primary'] ?? 'ÚNETE A LA COMUNIDAD' }}
                     </a>
                     <a href="#boveda"
                        class="px-10 py-5 bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-purple-primary font-bold text-lg rounded-lg transition-all duration-300">
-                        EXPLORA LA BÓVEDA
+                        {{ $config['hero_button_secondary'] ?? 'EXPLORA LA BÓVEDA' }}
                     </a>
                 </div>
             </div>
@@ -152,15 +151,15 @@
                         <!-- Stats pequeñas -->
                         <div class="grid grid-cols-3 gap-4 mt-8">
                             <div class="mission-stat-1 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">500+</div>
+                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_lockers'] ?? '500+' }}</div>
                                 <div class="text-gray-dark text-sm uppercase tracking-wider">Lockers</div>
                             </div>
                             <div class="mission-stat-2 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">50+</div>
+                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_lessons'] ?? '50+' }}</div>
                                 <div class="text-gray-dark text-sm uppercase tracking-wider">Lecciones</div>
                             </div>
                             <div class="mission-stat-3 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">24/7</div>
+                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_access'] ?? '24/7' }}</div>
                                 <div class="text-gray-dark text-sm uppercase tracking-wider">Acceso</div>
                             </div>
                         </div>
@@ -401,8 +400,8 @@
                         <div class="aspect-video">
                             <iframe
                                 class="w-full h-full"
-                                src="https://www.youtube.com/embed/HefC_rMCs-Q"
-                                title="Historia del Locking"
+                                src="https://www.youtube.com/embed/{{ $config['video_1_url'] ?? 'HefC_rMCs-Q' }}"
+                                title="{{ $config['video_1_title'] ?? 'Historia del Locking' }}"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen>
@@ -410,10 +409,10 @@
                         </div>
                         <div class="p-6">
                             <span class="inline-block bg-purple-ultralight text-purple-primary text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">
-                                Historia
+                                {{ $config['video_1_tag'] ?? 'Historia' }}
                             </span>
                             <h4 class="font-display font-bold text-lg text-black">
-                                Los Orígenes del Locking
+                                {{ $config['video_1_title'] ?? 'Los Orígenes del Locking' }}
                             </h4>
                         </div>
                     </div>
@@ -423,8 +422,8 @@
                         <div class="aspect-video">
                             <iframe
                                 class="w-full h-full"
-                                src="https://www.youtube.com/embed/8b18KD5O3y8"
-                                title="Batalla Icónica"
+                                src="https://www.youtube.com/embed/{{ $config['video_2_url'] ?? '8b18KD5O3y8' }}"
+                                title="{{ $config['video_2_title'] ?? 'Batalla Icónica' }}"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen>
@@ -432,10 +431,10 @@
                         </div>
                         <div class="p-6">
                             <span class="inline-block bg-purple-ultralight text-purple-primary text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">
-                                Batalla
+                                {{ $config['video_2_tag'] ?? 'Batalla' }}
                             </span>
                             <h4 class="font-display font-bold text-lg text-black">
-                                Momentos Legendarios
+                                {{ $config['video_2_title'] ?? 'Momentos Legendarios' }}
                             </h4>
                         </div>
                     </div>
@@ -484,22 +483,22 @@
 
                         <div class="flex items-center mb-6">
                             <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-primary via-purple-light to-purple-primary flex items-center justify-center text-white font-black text-2xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                                MG
+                                {{ $config['testimonial_1']['initials'] ?? 'MG' }}
                             </div>
                             <div class="ml-5">
-                                <p class="text-black font-black text-xl tracking-tight">@LockerGirl_Lima</p>
+                                <p class="text-black font-black text-xl tracking-tight">{{ $config['testimonial_1']['username'] ?? '@LockerGirl_Lima' }}</p>
                                 <p class="text-purple-primary font-bold text-sm flex items-center mt-1">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                     </svg>
-                                    Lima, Perú
+                                    {{ $config['testimonial_1']['location'] ?? 'Lima, Perú' }}
                                 </p>
                             </div>
                         </div>
 
                         <p class="text-gray-dark text-lg leading-relaxed font-medium">
                             <span class="text-5xl text-purple-primary/30 leading-none">"</span>
-                            Aquí encontré la <span class="font-bold text-purple-primary">confianza</span> para empezar a batallar. La comunidad es increíble y las instructoras son top nivel.
+                            {!! nl2br(e($config['testimonial_1']['text'] ?? 'Aquí encontré la confianza para empezar a batallar. La comunidad es increíble y las instructoras son top nivel.')) !!}
                             <span class="text-5xl text-purple-primary/30 leading-none">"</span>
                         </p>
 
@@ -533,22 +532,22 @@
 
                         <div class="flex items-center mb-6">
                             <div class="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-purple-primary font-black text-2xl shadow-2xl transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
-                                SK
+                                {{ $config['testimonial_2']['initials'] ?? 'SK' }}
                             </div>
                             <div class="ml-5">
-                                <p class="text-white font-black text-xl tracking-tight">@Soul_Locker_Mx</p>
+                                <p class="text-white font-black text-xl tracking-tight">{{ $config['testimonial_2']['username'] ?? '@Soul_Locker_Mx' }}</p>
                                 <p class="text-purple-ultralight font-bold text-sm flex items-center mt-1">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                     </svg>
-                                    Ciudad de México
+                                    {{ $config['testimonial_2']['location'] ?? 'Ciudad de México' }}
                                 </p>
                             </div>
                         </div>
 
                         <p class="text-white text-lg leading-relaxed font-medium">
                             <span class="text-5xl text-white/30 leading-none">"</span>
-                            Por fin un espacio donde puedo ser <span class="font-bold text-purple-ultralight">yo misma</span>. Las lecciones son claras y la progresión es perfecta para principiantes.
+                            {!! nl2br(e($config['testimonial_2']['text'] ?? 'Por fin un espacio donde puedo ser yo misma. Las lecciones son claras y la progresión es perfecta para principiantes.')) !!}
                             <span class="text-5xl text-white/30 leading-none">"</span>
                         </p>
 
@@ -578,22 +577,22 @@
 
                         <div class="flex items-center mb-6">
                             <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-light via-purple-primary to-purple-light flex items-center justify-center text-white font-black text-2xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                                LP
+                                {{ $config['testimonial_3']['initials'] ?? 'LP' }}
                             </div>
                             <div class="ml-5">
-                                <p class="text-black font-black text-xl tracking-tight">@LaPunkera</p>
+                                <p class="text-black font-black text-xl tracking-tight">{{ $config['testimonial_3']['username'] ?? '@LaPunkera' }}</p>
                                 <p class="text-purple-primary font-bold text-sm flex items-center mt-1">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
                                         <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
                                     </svg>
-                                    Buenos Aires
+                                    {{ $config['testimonial_3']['location'] ?? 'Buenos Aires' }}
                                 </p>
                             </div>
                         </div>
 
                         <p class="text-gray-dark text-lg leading-relaxed font-medium">
                             <span class="text-5xl text-purple-light/30 leading-none">"</span>
-                            La bóveda de recursos es <span class="font-bold text-purple-primary">oro puro</span>. Videos históricos que nunca había visto. Esto es cultura locker de verdad.
+                            {!! nl2br(e($config['testimonial_3']['text'] ?? 'La bóveda de recursos es oro puro. Videos históricos que nunca había visto. Esto es cultura locker de verdad.')) !!}
                             <span class="text-5xl text-purple-light/30 leading-none">"</span>
                         </p>
 
@@ -657,37 +656,23 @@
                                 Plan Mensual
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl md:text-7xl font-black text-black">S/30</span>
+                                <span class="text-6xl md:text-7xl font-black text-black">S/{{ $config['pricing_monthly_price'] ?? '30' }}</span>
                                 <span class="text-gray-dark text-xl font-medium mb-3">/mes</span>
                             </div>
                             <p class="text-gray-dark text-sm">Perfecto para empezar</p>
                         </div>
 
                         <ul class="space-y-4 mb-8">
-                            <li class="flex items-start text-gray-dark">
-                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Acceso a todas las clases</span>
-                            </li>
-                            <li class="flex items-start text-gray-dark">
-                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">La Bóveda completa</span>
-                            </li>
-                            <li class="flex items-start text-gray-dark">
-                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Comunidad privada</span>
-                            </li>
-                            <li class="flex items-start text-gray-dark">
-                                <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Contenido nuevo semanal</span>
-                            </li>
+                            @if(isset($config['pricing_monthly_features']) && is_array($config['pricing_monthly_features']))
+                                @foreach($config['pricing_monthly_features'] as $feature)
+                                    <li class="flex items-start text-gray-dark">
+                                        <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span class="font-medium">{{ $feature }}</span>
+                                    </li>
+                                @endforeach
+                            @endif
                         </ul>
 
                         <a href="{{ route('register') }}" wire:navigate
@@ -700,8 +685,11 @@
                 <!-- Plan Trimestral (Destacado) -->
                 <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 md:p-10 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
                     <!-- Badge de ahorro -->
+                    @php
+                        $savings = ($config['pricing_quarterly_original_price'] ?? 60) - ($config['pricing_quarterly_price'] ?? 50);
+                    @endphp
                     <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
-                        ¡Ahorra S/40!
+                        ¡Ahorra S/{{ $savings }}!
                     </div>
 
                     <!-- Efecto de brillo -->
@@ -717,52 +705,26 @@
                                 Plan Trimestral
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-gray-light line-through text-xl font-bold">S/60</span>
+                                <span class="text-gray-light line-through text-xl font-bold">S/{{ $config['pricing_quarterly_original_price'] ?? '60' }}</span>
                             </div>
                             <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl md:text-7xl font-black text-white">S/50</span>
+                                <span class="text-6xl md:text-7xl font-black text-white">S/{{ $config['pricing_quarterly_price'] ?? '50' }}</span>
                                 <span class="text-purple-ultralight text-xl font-medium mb-3">/3 meses</span>
                             </div>
                             <p class="text-purple-ultralight text-sm font-medium">¡Mejor valor!</p>
                         </div>
 
                         <ul class="space-y-4 mb-8">
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Acceso a todas las clases</span>
-                            </li>
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">La Bóveda completa</span>
-                            </li>
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Comunidad privada</span>
-                            </li>
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-purple-ultralight mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-medium">Contenido nuevo semanal</span>
-                            </li>
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-yellow-300 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-bold">Sesiones exclusivas en vivo</span>
-                            </li>
-                            <li class="flex items-start text-white">
-                                <svg class="w-6 h-6 text-yellow-300 mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                </svg>
-                                <span class="font-bold">Feedback personalizado</span>
-                            </li>
+                            @if(isset($config['pricing_quarterly_features']) && is_array($config['pricing_quarterly_features']))
+                                @foreach($config['pricing_quarterly_features'] as $index => $feature)
+                                    <li class="flex items-start text-white">
+                                        <svg class="w-6 h-6 {{ $index >= 4 ? 'text-yellow-300' : 'text-purple-ultralight' }} mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
+                                        </svg>
+                                        <span class="{{ $index >= 4 ? 'font-bold' : 'font-medium' }}">{{ $feature }}</span>
+                                    </li>
+                                @endforeach
+                            @endif
                         </ul>
 
                         <a href="{{ route('register') }}" wire:navigate
@@ -860,13 +822,13 @@
                 <div>
                     <h4 class="font-display font-bold text-black mb-4">Síguenos</h4>
                     <div class="flex gap-4">
-                        <a href="#" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
+                        <a href="{{ $config['social_instagram'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
+                        <a href="{{ $config['social_tiktok'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
                         </a>
-                        <a href="#" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
+                        <a href="{{ $config['social_youtube'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
                             <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
                         </a>
                     </div>

@@ -12,6 +12,43 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        <!-- Dynamic Brand Color -->
+        <style>
+            :root {
+                --color-primary: {{ $brandingColor ?? '#9333ea' }};
+            }
+            .bg-purple-primary, .bg-purple-500, .bg-purple-600, .bg-pink-vibrant {
+                background-color: var(--color-primary) !important;
+            }
+            .text-purple-primary, .text-purple-500, .text-purple-600 {
+                color: var(--color-primary) !important;
+            }
+            .border-purple-primary, .border-purple-500, .border-purple-600 {
+                border-color: var(--color-primary) !important;
+            }
+            .hover\:bg-purple-primary:hover, .hover\:bg-purple-600:hover, .hover\:bg-purple-700:hover {
+                background-color: var(--color-primary) !important;
+            }
+            /* Ensure text is white on primary color backgrounds */
+            .bg-purple-primary, .bg-purple-500, .bg-purple-600, .bg-pink-vibrant,
+            .hover\:bg-purple-600:hover, .hover\:bg-purple-700:hover {
+                color: white !important;
+            }
+            /* Gradients */
+            .from-purple-600 {
+                --tw-gradient-from: var(--color-primary) !important;
+            }
+            .to-purple-500, .to-purple-600 {
+                --tw-gradient-to: var(--color-primary) !important;
+            }
+            .hover\:from-purple-700:hover {
+                --tw-gradient-from: var(--color-primary) !important;
+            }
+            .hover\:to-purple-600:hover {
+                --tw-gradient-to: var(--color-primary) !important;
+            }
+        </style>
     </head>
     <body class="font-body antialiased bg-purple-darkest">
         <div class="min-h-screen flex">

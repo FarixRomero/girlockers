@@ -65,37 +65,54 @@ class DatabaseSeeder extends Seeder
     }
 
     /**
-     * Limpiar archivos de storage al hacer reseed
+     * Limpiar archivos de storage local al hacer reseed
+     * NOTA: No limpia S3, solo archivos locales antiguos
      */
     private function cleanStorageFiles(): void
     {
-        $this->command->info('Limpiando archivos de storage...');
+        $this->command->info('Limpiando archivos locales antiguos...');
 
-        // Limpiar archivos de lessons en storage público
+        // Limpiar archivos de lessons en storage público local
         $publicLessonsPath = public_path('storage/lessons');
         if (File::exists($publicLessonsPath)) {
             File::cleanDirectory($publicLessonsPath);
-            $this->command->info('✓ Archivos de public/storage/lessons eliminados');
+            $this->command->info('✓ Archivos locales de public/storage/lessons eliminados');
         }
 
-        // Limpiar archivos de lessons en storage privado
-        if (Storage::exists('lessons')) {
-            Storage::deleteDirectory('lessons');
-            Storage::makeDirectory('lessons');
-            $this->command->info('✓ Archivos de storage/app/lessons eliminados');
+        // Limpiar archivos de lessons en storage privado local (no S3)
+        $privateLessonsPath = storage_path('app/lessons');
+        if (File::exists($privateLessonsPath)) {
+            File::cleanDirectory($privateLessonsPath);
+            $this->command->info('✓ Archivos locales de storage/app/lessons eliminados');
         }
 
-        // Limpiar archivos de cursos
+        // Limpiar archivos de cursos en storage público local
         $publicCoursesPath = public_path('storage/courses');
         if (File::exists($publicCoursesPath)) {
             File::cleanDirectory($publicCoursesPath);
-            $this->command->info('✓ Archivos de public/storage/courses eliminados');
+            $this->command->info('✓ Archivos locales de public/storage/courses eliminados');
         }
 
-        if (Storage::exists('courses')) {
-            Storage::deleteDirectory('courses');
-            Storage::makeDirectory('courses');
-            $this->command->info('✓ Archivos de storage/app/courses eliminados');
+        // Limpiar archivos de cursos en storage privado local (no S3)
+        $privateCoursesPath = storage_path('app/courses');
+        if (File::exists($privateCoursesPath)) {
+            File::cleanDirectory($privateCoursesPath);
+            $this->command->info('✓ Archivos locales de storage/app/courses eliminados');
         }
+
+        // Limpiar archivos de instructores en storage local
+        $publicInstructorsPath = public_path('storage/instructors');
+        if (File::exists($publicInstructorsPath)) {
+            File::cleanDirectory($publicInstructorsPath);
+            $this->command->info('✓ Archivos locales de public/storage/instructors eliminados');
+        }
+
+        $privateInstructorsPath = storage_path('app/instructors');
+        if (File::exists($privateInstructorsPath)) {
+            File::cleanDirectory($privateInstructorsPath);
+            $this->command->info('✓ Archivos locales de storage/app/instructors eliminados');
+        }
+
+        $this->command->info('✓ Limpieza completada (S3 no fue afectado)');
     }
 }

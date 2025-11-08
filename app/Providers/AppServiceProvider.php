@@ -4,8 +4,10 @@ namespace App\Providers;
 
 use App\Models\Comment;
 use App\Models\Lesson;
+use App\Models\LandingConfig;
 use App\Models\User;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -41,6 +43,13 @@ class AppServiceProvider extends ServiceProvider
         // Gate: delete-comment (admin or comment author)
         Gate::define('delete-comment', function (User $user, Comment $comment) {
             return $user->isAdmin() || $user->id === $comment->user_id;
+        });
+
+        // Share branding config with all views
+        View::composer('*', function ($view) {
+            $primaryColor = LandingConfig::getValue('branding_primary_color', '#9333ea');
+
+            $view->with('brandingColor', $primaryColor);
         });
     }
 }

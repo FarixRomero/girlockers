@@ -13,7 +13,7 @@
                 <div class="aspect-video bg-gradient-to-br from-purple-500 to-pink-500 relative overflow-hidden">
                     @if($lesson->thumbnail)
                         <img
-                            src="{{ asset('storage/' . $lesson->thumbnail) }}"
+                            src="{{ $lesson->thumbnail_url }}"
                             alt="{{ $lesson->title }}"
                             class="w-full h-full object-cover"
                             onerror="this.style.display='none';this.parentElement.querySelector('.placeholder-icon').style.display='flex';">

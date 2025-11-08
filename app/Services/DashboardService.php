@@ -17,9 +17,10 @@ class DashboardService
      */
     public function getUserStats(User $user): array
     {
-        // Get completed lessons count and total minutes in a single query
-        $likesData = $user->likes()
-            ->selectRaw('COUNT(*) as completed_lessons, SUM(duration) as total_minutes')
+        // Get completed lessons count and total minutes directly from Lesson model
+        $likesData = Lesson::join('lesson_likes', 'lessons.id', '=', 'lesson_likes.lesson_id')
+            ->where('lesson_likes.user_id', $user->id)
+            ->selectRaw('COUNT(DISTINCT lessons.id) as completed_lessons, SUM(lessons.duration) as total_minutes')
             ->first();
 
         return [

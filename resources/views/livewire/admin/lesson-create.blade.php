@@ -35,8 +35,8 @@
         <div class="bg-white rounded-lg border border-gray-200 mb-4 overflow-hidden">
             <!-- Preview Area -->
             <div class="h-48 md:h-64 w-full bg-gray-100 flex items-center justify-center relative">
-                @if($thumbnailPreview)
-                    <img src="{{ $thumbnailPreview }}" class="w-full h-full object-cover" alt="Preview">
+                @if($form->thumbnailPreview)
+                    <img src="{{ $form->thumbnailPreview }}" class="w-full h-full object-cover" alt="Preview">
                 @else
                     <div class="text-center px-4">
                         <svg class="w-16 h-16 mx-auto text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -81,17 +81,17 @@
 
                     <!-- Bunny.net Video ID (oculto, se llena automáticamente) -->
                     <input type="hidden"
-                           wire:model="bunny_video_id"
+                           wire:model="form.bunny_video_id"
                            id="bunnyVideoId">
                 </div>
 
                 <div>
                     <label class="flex items-center justify-between cursor-pointer">
                         <span class="text-sm text-gray-700">Miniatura</span>
-                        <input type="file" wire:model.live="thumbnail" class="hidden" accept="image/*">
-                        <span class="text-sm text-purple-500 font-medium">{{ $thumbnailPreview ? 'Cambiar' : 'Subir' }}</span>
+                        <input type="file" wire:model.live="form.thumbnail" class="hidden" accept="image/*">
+                        <span class="text-sm text-purple-500 font-medium">{{ $form->thumbnailPreview ? 'Cambiar' : 'Subir' }}</span>
                     </label>
-                    @error('thumbnail') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
+                    @error('form.thumbnail') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
             </div>
         </div>
@@ -101,24 +101,24 @@
             <!-- Title -->
             <div>
                 <input type="text"
-                       wire:model="title"
+                       wire:model="form.title"
                        placeholder="Título"
                        class="w-full px-4 py-3 text-base border-0 focus:outline-none focus:ring-0 placeholder-gray-400 bg-transparent">
-                @error('title') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
+                @error('form.title') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
             </div>
 
             <!-- Description -->
             <div>
-                <textarea wire:model="description"
+                <textarea wire:model="form.description"
                           rows="3"
                           placeholder="Descripción"
                           class="w-full px-4 py-3 text-base border-0 focus:outline-none focus:ring-0 placeholder-gray-400 resize-none bg-transparent"></textarea>
-                @error('description') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
+                @error('form.description') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
             </div>
 
             <!-- Module Selection -->
             <div>
-                <select wire:model="module_id"
+                <select wire:model="form.module_id"
                         class="w-full px-4 py-3 text-base border-0 focus:outline-none focus:ring-0 text-gray-900 bg-transparent appearance-none cursor-pointer"
                         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M9 5l7 7-7 7\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5rem;">
                     <option value="" class="text-gray-400">Módulo</option>
@@ -130,23 +130,23 @@
                         </optgroup>
                     @endforeach
                 </select>
-                @error('module_id') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
+                @error('form.module_id') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
             </div>
 
             <!-- Instructor Selection -->
             <div>
-                <select wire:model="instructor_id"
+                <select wire:model="form.instructor_id"
                         class="w-full px-4 py-3 text-base border-0 focus:outline-none focus:ring-0 text-gray-900 bg-transparent appearance-none cursor-pointer"
                         style="background-image: url('data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' fill=\'none\' viewBox=\'0 0 24 24\' stroke=\'%236b7280\'%3E%3Cpath stroke-linecap=\'round\' stroke-linejoin=\'round\' stroke-width=\'2\' d=\'M9 5l7 7-7 7\'/%3E%3C/svg%3E'); background-repeat: no-repeat; background-position: right 1rem center; background-size: 1.5rem;">
                     @foreach($instructors as $instructor)
                         <option value="{{ $instructor->id }}">{{ $instructor->name }}</option>
                     @endforeach
                 </select>
-                @error('instructor_id') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
+                @error('form.instructor_id') <span class="text-xs text-red-500 mt-1 block px-4">{{ $message }}</span> @enderror
             </div>
 
             <!-- Tags -->
-            <div x-data="{ selectedTags: @entangle('selectedTags'), showTags: false }">
+            <div x-data="{ selectedTags: @entangle('form.selectedTags'), showTags: false }">
                 <div @click="showTags = !showTags" class="flex items-center justify-between cursor-pointer px-4 py-3">
                     <span class="text-base" :class="selectedTags.length > 0 ? 'text-gray-900' : 'text-gray-400'">
                         <span x-show="selectedTags.length === 0">Etiquetas</span>
@@ -174,7 +174,7 @@
                     <span class="text-base text-gray-900">Lección de prueba</span>
                     <div class="relative">
                         <input type="checkbox"
-                               wire:model="is_trial"
+                               wire:model="form.is_trial"
                                class="sr-only peer">
                         <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </div>

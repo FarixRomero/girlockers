@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\User;
 use App\Models\AccessRequest;
 use App\Services\AccessService;
+use App\Livewire\Traits\HasSearchableQueries;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -14,9 +15,7 @@ use Livewire\Attributes\Title;
 #[Title('Gestión de Estudiantes - Admin')]
 class StudentManagement extends Component
 {
-    use WithPagination;
-
-    public $search = '';
+    use WithPagination, HasSearchableQueries;
     public $filterAccess = 'all'; // all, trial, premium, pending
     public $activeTab = 'users'; // users, requests
     public $statusFilter = 'pending'; // pending, approved, rejected, all
@@ -107,13 +106,8 @@ class StudentManagement extends Component
     {
         $query = User::where('role', 'student');
 
-        // Search
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('email', 'like', '%' . $this->search . '%');
-            });
-        }
+        // Apply search using HasSearchableQueries trait
+        $query = $this->applySearch($query, ['name', 'email']);
 
         // Filter
         if ($this->filterAccess === 'trial') {

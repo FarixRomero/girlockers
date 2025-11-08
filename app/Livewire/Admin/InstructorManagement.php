@@ -3,7 +3,9 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Instructor;
+use App\Services\FileUploadService;
 use App\Livewire\Traits\ModalCrudTrait;
+use App\Livewire\Traits\HasSearchableQueries;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -14,9 +16,7 @@ use Livewire\Attributes\Title;
 #[Title('Gestión de Instructores - Admin')]
 class InstructorManagement extends Component
 {
-    use WithPagination, WithFileUploads, ModalCrudTrait;
-
-    public $search = '';
+    use WithPagination, WithFileUploads, ModalCrudTrait, HasSearchableQueries;
 
     // Form fields
     public $instructorId = null;
@@ -78,8 +78,14 @@ class InstructorManagement extends Component
             'instagram' => $this->instagram,
         ];
 
+        // Handle avatar upload using FileUploadService
         if ($this->avatar) {
-            $data['avatar'] = $this->avatar->store('instructors', 'public');
+            $fileUploadService = app(FileUploadService::class);
+            $data['avatar'] = $fileUploadService->uploadImage(
+                $this->avatar,
+                'instructors',
+                $this->isEditing ? $this->existingAvatar : null
+            );
         }
 
         if ($this->isEditing) {
@@ -113,13 +119,8 @@ class InstructorManagement extends Component
     {
         $query = Instructor::withCount('lessons');
 
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%')
-                  ->orWhere('instagram', 'like', '%' . $this->search . '%');
-            });
-        }
+        // Apply search using HasSearchableQueries trait
+        $query = $this->applySearch($query, ['name', 'description', 'instagram']);
 
         $instructors = $query->latest()->paginate(10);
 

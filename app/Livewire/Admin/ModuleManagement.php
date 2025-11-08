@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Course;
 use App\Models\Module;
 use App\Livewire\Traits\ModalCrudTrait;
+use App\Livewire\Traits\HasOrderableItems;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -13,7 +14,7 @@ use Livewire\Attributes\Title;
 #[Title('Gestión de Módulos - Admin')]
 class ModuleManagement extends Component
 {
-    use ModalCrudTrait;
+    use ModalCrudTrait, HasOrderableItems;
 
     public $courseId;
     public $course;
@@ -112,40 +113,36 @@ class ModuleManagement extends Component
         $this->refreshCourse();
     }
 
-    public function moveUp($moduleId)
+    /**
+     * Get the model class for orderable items
+     */
+    protected function getOrderableModel(): string
     {
-        $module = Module::findOrFail($moduleId);
-        $previousModule = Module::where('course_id', $this->courseId)
-            ->where('order', '<', $module->order)
-            ->orderBy('order', 'desc')
-            ->first();
-
-        if ($previousModule) {
-            $tempOrder = $module->order;
-            $module->update(['order' => $previousModule->order]);
-            $previousModule->update(['order' => $tempOrder]);
-
-            session()->flash('success', "Módulo '{$module->title}' movido hacia arriba.");
-            $this->refreshCourse();
-        }
+        return Module::class;
     }
 
-    public function moveDown($moduleId)
+    /**
+     * Get the parent column name
+     */
+    protected function getParentColumn(): string
     {
-        $module = Module::findOrFail($moduleId);
-        $nextModule = Module::where('course_id', $this->courseId)
-            ->where('order', '>', $module->order)
-            ->orderBy('order', 'asc')
-            ->first();
+        return 'course_id';
+    }
 
-        if ($nextModule) {
-            $tempOrder = $module->order;
-            $module->update(['order' => $nextModule->order]);
-            $nextModule->update(['order' => $tempOrder]);
+    /**
+     * Get the parent ID
+     */
+    protected function getParentId(): int
+    {
+        return $this->courseId;
+    }
 
-            session()->flash('success', "Módulo '{$module->title}' movido hacia abajo.");
-            $this->refreshCourse();
-        }
+    /**
+     * Reload items after reordering
+     */
+    protected function reloadItems(): void
+    {
+        $this->refreshCourse();
     }
 
     private function refreshCourse()

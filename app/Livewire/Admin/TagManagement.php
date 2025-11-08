@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Tag;
 use App\Livewire\Traits\ModalCrudTrait;
+use App\Livewire\Traits\HasSearchableQueries;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -14,9 +15,7 @@ use Illuminate\Support\Str;
 #[Title('Gestión de Tags - Admin')]
 class TagManagement extends Component
 {
-    use WithPagination, ModalCrudTrait;
-
-    public $search = '';
+    use WithPagination, ModalCrudTrait, HasSearchableQueries;
 
     // Form fields
     public $tagId = null;
@@ -106,12 +105,8 @@ class TagManagement extends Component
     {
         $query = Tag::withCount('lessons');
 
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('name', 'like', '%' . $this->search . '%')
-                  ->orWhere('slug', 'like', '%' . $this->search . '%');
-            });
-        }
+        // Apply search using HasSearchableQueries trait
+        $query = $this->applySearch($query, ['name', 'slug']);
 
         $tags = $query->latest()->paginate(15);
 

@@ -4,11 +4,13 @@ namespace App\Livewire\Admin;
 
 use App\Models\Lesson;
 use App\Models\Module;
+use App\Livewire\Traits\HasOrderableItems;
 use Livewire\Component;
 use Livewire\Attributes\On;
 
 class LessonManagement extends Component
 {
+    use HasOrderableItems;
     public Module $module;
     public $courseTitle;
     public $lessonsCount;
@@ -28,63 +30,40 @@ class LessonManagement extends Component
     }
 
     /**
-     * Move lesson up in order
+     * Get the model class for orderable items
      */
-    public function moveUp($lessonId)
+    protected function getOrderableModel(): string
     {
-        $lesson = Lesson::findOrFail($lessonId);
-
-        $previousLesson = Lesson::where('module_id', $this->module->id)
-            ->where('order', '<', $lesson->order)
-            ->orderBy('order', 'desc')
-            ->first();
-
-        if ($previousLesson) {
-            // Swap orders
-            $tempOrder = $lesson->order;
-            $lesson->update(['order' => $previousLesson->order]);
-            $previousLesson->update(['order' => $tempOrder]);
-
-            // Reload lessons
-            $this->module->load([
-                'lessons' => function ($query) {
-                    $query->with(['instructor:id,name', 'tags:id,name'])
-                        ->orderBy('order');
-                }
-            ]);
-
-            session()->flash('message', 'Lección movida hacia arriba');
-        }
+        return Lesson::class;
     }
 
     /**
-     * Move lesson down in order
+     * Get the parent column name
      */
-    public function moveDown($lessonId)
+    protected function getParentColumn(): string
     {
-        $lesson = Lesson::findOrFail($lessonId);
+        return 'module_id';
+    }
 
-        $nextLesson = Lesson::where('module_id', $this->module->id)
-            ->where('order', '>', $lesson->order)
-            ->orderBy('order', 'asc')
-            ->first();
+    /**
+     * Get the parent ID
+     */
+    protected function getParentId(): int
+    {
+        return $this->module->id;
+    }
 
-        if ($nextLesson) {
-            // Swap orders
-            $tempOrder = $lesson->order;
-            $lesson->update(['order' => $nextLesson->order]);
-            $nextLesson->update(['order' => $tempOrder]);
-
-            // Reload lessons
-            $this->module->load([
-                'lessons' => function ($query) {
-                    $query->with(['instructor:id,name', 'tags:id,name'])
-                        ->orderBy('order');
-                }
-            ]);
-
-            session()->flash('message', 'Lección movida hacia abajo');
-        }
+    /**
+     * Reload items after reordering
+     */
+    protected function reloadItems(): void
+    {
+        $this->module->load([
+            'lessons' => function ($query) {
+                $query->with(['instructor:id,name', 'tags:id,name'])
+                    ->orderBy('order');
+            }
+        ]);
     }
 
     /**
@@ -104,7 +83,7 @@ class LessonManagement extends Component
         ]);
 
         $status = $lesson->is_trial ? 'gratuita' : 'premium';
-        session()->flash('message', "Lección marcada como {$status}");
+        session()->flash('success', "Lección marcada como {$status}");
     }
 
     /**
@@ -138,7 +117,7 @@ class LessonManagement extends Component
 
         $this->lessonsCount = $this->module->lessons->count();
 
-        session()->flash('message', 'Lección eliminada exitosamente');
+        session()->flash('success', 'Lección eliminada exitosamente');
     }
 
     public function render()

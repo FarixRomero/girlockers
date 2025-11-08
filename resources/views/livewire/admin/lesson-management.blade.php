@@ -18,9 +18,9 @@
 
     <div class="max-w-3xl mx-auto px-4 py-6 pb-24">
         <!-- Alert Messages -->
-        @if (session()->has('message'))
+        @if (session()->has('success'))
             <div class="mb-4 p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
-                {{ session('message') }}
+                {{ session('success') }}
             </div>
         @endif
 

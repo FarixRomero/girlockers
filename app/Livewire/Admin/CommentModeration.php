@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Comment;
+use App\Livewire\Traits\HasSearchableQueries;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -12,9 +13,7 @@ use Livewire\Attributes\Title;
 #[Title('Moderación de Comentarios - Admin')]
 class CommentModeration extends Component
 {
-    use WithPagination;
-
-    public $search = '';
+    use WithPagination, HasSearchableQueries;
 
     public function deleteComment($commentId)
     {
@@ -30,12 +29,8 @@ class CommentModeration extends Component
     {
         $query = Comment::with(['user', 'lesson.module.course']);
 
-        if ($this->search) {
-            $query->where('content', 'like', '%' . $this->search . '%')
-                  ->orWhereHas('user', function ($q) {
-                      $q->where('name', 'like', '%' . $this->search . '%');
-                  });
-        }
+        // Apply search using HasSearchableQueries trait
+        $query = $this->applySearch($query, ['content', 'user.name']);
 
         $comments = $query->latest()->paginate(20);
 

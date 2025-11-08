@@ -5,7 +5,9 @@ namespace App\Livewire\Admin;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Services\NotificationService;
+use App\Services\FileUploadService;
 use App\Livewire\Traits\ModalCrudTrait;
+use App\Livewire\Traits\HasSearchableQueries;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -17,9 +19,7 @@ use Illuminate\Support\Str;
 #[Title('Gestión de Cursos - Admin')]
 class CourseManagement extends Component
 {
-    use WithPagination, WithFileUploads, ModalCrudTrait;
-
-    public $search = '';
+    use WithPagination, WithFileUploads, ModalCrudTrait, HasSearchableQueries;
     public $filterLevel = 'all';
     public $filterPublished = 'all';
 
@@ -116,8 +116,14 @@ class CourseManagement extends Component
             'is_published' => $this->is_published,
         ];
 
+        // Handle image upload using FileUploadService
         if ($this->image) {
-            $data['image'] = $this->image->store('courses', 'public');
+            $fileUploadService = app(FileUploadService::class);
+            $data['image'] = $fileUploadService->uploadImage(
+                $this->image,
+                'courses',
+                $this->isEditing ? $this->existingImage : null
+            );
         }
 
         if ($this->isEditing) {
@@ -168,12 +174,8 @@ class CourseManagement extends Component
                 $query->withCount('lessons');
             }, 'instructor']);
 
-        if ($this->search) {
-            $query->where(function ($q) {
-                $q->where('title', 'like', '%' . $this->search . '%')
-                  ->orWhere('description', 'like', '%' . $this->search . '%');
-            });
-        }
+        // Apply search using HasSearchableQueries trait
+        $query = $this->applySearch($query, ['title', 'description']);
 
         if ($this->filterLevel !== 'all') {
             $query->where('level', $this->filterLevel);

@@ -26,7 +26,7 @@ git commit -m "$commit_message"
 
 # Empujar los cambios al repositorio remoto
 echo -e "${YELLOW}→ Subiendo cambios a GitHub...${NC}"
-git push origin main
+git push origin master
 
 # Conectar por SSH y ejecutar los comandos en la instancia EC2
 echo ""
@@ -36,9 +36,10 @@ cd /home/ubuntu/proyectos/girlockers
 
 echo "→ Descargando últimos cambios..."
 git pull origin master
-
+sudo chown -R www-data:www-data storage bootstrap/cache
+sudo chmod -R 775 storage bootstrap/cache
 echo "→ Instalando dependencias de Composer..."
-composer install --no-dev --optimize-autoloader --no-interaction
+composer install 
 
 echo "→ Limpiando TODOS los caches (SIN regenerar)..."
 php artisan config:clear

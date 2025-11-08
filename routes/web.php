@@ -53,6 +53,11 @@ Route::middleware(['auth'])->group(function () {
 
 // Admin Routes
 Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(function () {
+    // Redirect /admin to /admin/dashboard
+    Route::get('/', function () {
+        return redirect()->route('admin.dashboard');
+    });
+
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('users', StudentManagement::class)->name('users.index');
     Route::get('comments', CommentModeration::class)->name('comments.index');

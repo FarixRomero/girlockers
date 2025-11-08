@@ -27,8 +27,33 @@ class CourseDetail extends Component
         // Check if course is favorited
         $this->isFavorited = $course->isFavoritedBy(auth()->user());
 
-        // Expand first module by default
-        if ($course->modules->isNotEmpty()) {
+        // Load modules with lessons to find the next lesson
+        $this->course->load([
+            'modules' => fn($query) => $query->orderBy('order'),
+            'modules.lessons' => fn($query) => $query->orderBy('order'),
+        ]);
+
+        // Get completed lesson IDs
+        $allLessonIds = $this->course->modules->flatMap->lessons->pluck('id');
+        $completedLessonIds = auth()->user()->completedLessons()
+            ->whereIn('lessons.id', $allLessonIds)
+            ->pluck('lessons.id');
+
+        // Find the module containing the next incomplete lesson
+        $moduleToExpand = null;
+        foreach ($this->course->modules as $module) {
+            foreach ($module->lessons as $lesson) {
+                if (!$completedLessonIds->contains($lesson->id) && $lesson->isAccessibleBy(auth()->user())) {
+                    $moduleToExpand = $module;
+                    break 2;
+                }
+            }
+        }
+
+        // If no incomplete lesson found, expand the first module
+        if ($moduleToExpand) {
+            $this->expandedModules[] = $moduleToExpand->id;
+        } elseif ($course->modules->isNotEmpty()) {
             $this->expandedModules[] = $course->modules->first()->id;
         }
     }
@@ -55,6 +80,12 @@ class CourseDetail extends Component
         } else {
             $this->expandedModules[] = $moduleId;
         }
+    }
+
+    public function markLessonAsCompleted($lessonId)
+    {
+        // Mark lesson as completed
+        \App\Models\LessonView::markAsCompleted(auth()->id(), $lessonId);
     }
 
     public function render()

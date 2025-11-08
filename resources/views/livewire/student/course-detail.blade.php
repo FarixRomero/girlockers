@@ -63,12 +63,12 @@
                 <button
                     wire:click="$set('activeTab', 'overview')"
                     class="flex-1 py-3 rounded-lg font-bold text-sm transition {{ $activeTab === 'overview' ? 'bg-white text-gray-900' : 'bg-gray-800 text-white hover:bg-gray-700' }}">
-                    Overview
+                    Resumen
                 </button>
                 <button
                     wire:click="$set('activeTab', 'classes')"
                     class="flex-1 py-3 rounded-lg font-bold text-sm transition {{ $activeTab === 'classes' ? 'bg-white text-gray-900' : 'bg-gray-800 text-white hover:bg-gray-700' }}">
-                    Classes
+                    Clases
                 </button>
             </div>
         </div>
@@ -90,7 +90,7 @@
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <p class="text-white text-xl font-bold">{{ $completionPercentage }}% Complete</p>
+                                <p class="text-white text-xl font-bold">{{ $completionPercentage }}% Completado</p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
@@ -98,7 +98,7 @@
                                         <path d="M2 6a2 2 0 012-2h6a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V6zM14.553 7.106A1 1 0 0014 8v4a1 1 0 00.553.894l2 1A1 1 0 0018 13V7a1 1 0 00-1.447-.894l-2 1z"></path>
                                     </svg>
                                 </div>
-                                <p class="text-white text-lg font-semibold">{{ $completedLessons }} of {{ $totalLessons }} Lessons</p>
+                                <p class="text-white text-lg font-semibold">{{ $completedLessons }} de {{ $totalLessons }} Clases</p>
                             </div>
                             <div class="flex items-center gap-3">
                                 <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center flex-shrink-0">
@@ -106,21 +106,21 @@
                                         <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
                                     </svg>
                                 </div>
-                                <p class="text-white text-lg font-semibold">{{ $minutesSpent }} Minutes Spent</p>
+                                <p class="text-white text-lg font-semibold">{{ $minutesSpent }} Minutos Practicando</p>
                             </div>
                         </div>
                     </div>
 
                     <!-- Course Info -->
                     <div>
-                        <h2 class="text-gray-900 text-xl font-bold mb-3">About this Course</h2>
+                        <h2 class="text-gray-900 text-xl font-bold mb-3">Acerca de este Curso</h2>
                         <p class="text-gray-700 leading-relaxed">{{ $course->description }}</p>
                     </div>
 
                     <!-- Instructor Info -->
                     @if($course->instructor)
                         <div class="bg-gray-100 rounded-lg p-5">
-                            <h2 class="text-gray-900 text-xl font-bold mb-4">Instructor</h2>
+                            <h2 class="text-gray-900 text-xl font-bold mb-4">Instructora</h2>
                             <div class="flex items-start gap-4">
                                 <!-- Avatar -->
                                 <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white font-bold text-xl flex-shrink-0 overflow-hidden">
@@ -153,16 +153,16 @@
                     <!-- Stats -->
                     <div class="grid grid-cols-2 gap-4">
                         <div class="bg-gray-100 rounded-lg p-4">
-                            <p class="text-gray-600 text-sm mb-1">Modules</p>
+                            <p class="text-gray-600 text-sm mb-1">Módulos</p>
                             <p class="text-gray-900 text-2xl font-bold">{{ $course->modules->count() }}</p>
                         </div>
                         <div class="bg-gray-100 rounded-lg p-4">
-                            <p class="text-gray-600 text-sm mb-1">Lessons</p>
+                            <p class="text-gray-600 text-sm mb-1">Clases</p>
                             <p class="text-gray-900 text-2xl font-bold">{{ $totalLessons }}</p>
                         </div>
                         @if($trialLessons > 0)
                         <div class="bg-gray-100 rounded-lg p-4">
-                            <p class="text-gray-600 text-sm mb-1">Free Lessons</p>
+                            <p class="text-gray-600 text-sm mb-1">Clases Gratis</p>
                             <p class="text-green-500 text-2xl font-bold">{{ $trialLessons }}</p>
                         </div>
                         @endif
@@ -205,7 +205,7 @@
                                         </div>
                                     @endif
                                     <div class="text-left">
-                                        <p class="text-white text-sm font-bold">Stage {{ $loop->iteration }}</p>
+                                        <p class="text-white text-sm font-bold">Etapa {{ $loop->iteration }}</p>
                                         <p class="text-white text-lg font-bold">{{ $module->title }}</p>
                                     </div>
                                 </div>
@@ -229,8 +229,8 @@
                                         @php
                                             $moduleData = $moduleCompletionData[$module->id] ?? ['total' => 0, 'completed' => 0, 'isFullyCompleted' => false];
                                         @endphp
-                                        <h4 class="text-white text-lg font-bold mb-2">Day {{ $dayNumber }}</h4>
-                                        <p class="text-green-500 text-sm font-semibold mb-3">{{ $moduleData['completed'] }} of {{ $module->lessons->count() }} completed</p>
+                                        <h4 class="text-white text-lg font-bold mb-2">Día {{ $dayNumber }}</h4>
+                                        <p class="text-green-500 text-sm font-semibold mb-3">{{ $moduleData['completed'] }} de {{ $module->lessons->count() }} completadas</p>
 
                                         @foreach($module->lessons as $lesson)
                                             @php
@@ -247,6 +247,7 @@
                                             <a
                                                 href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
                                                 {{ $canAccess ? 'wire:navigate' : '' }}
+                                                wire:click="markLessonAsCompleted({{ $lesson->id }})"
                                                 class="flex gap-3 bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition">
                                                 <!-- Thumbnail -->
                                                 <div class="relative w-32 h-24 flex-shrink-0">
@@ -289,7 +290,7 @@
                                                             {{ $course->level }}
                                                         </span>
                                                         @if($lesson->is_trial)
-                                                            <span class="px-2 py-0.5 bg-green-500 text-white text-xs font-bold uppercase rounded">Free</span>
+                                                            <span class="px-2 py-0.5 bg-green-500 text-white text-xs font-bold uppercase rounded">Gratis</span>
                                                         @endif
                                                         @foreach($lesson->tags as $tag)
                                                             <span class="px-2 py-0.5 bg-gray-700 text-white text-xs font-bold uppercase rounded">
@@ -311,7 +312,7 @@
                         </div>
                     @empty
                         <div class="text-center py-12">
-                            <p class="text-gray-400">No modules available yet.</p>
+                            <p class="text-gray-400">No hay módulos disponibles aún.</p>
                         </div>
                     @endforelse
                 </div>
@@ -321,21 +322,21 @@
         <!-- Bottom CTA Button -->
         <div class="fixed bottom-0 left-0 right-0 z-50 lg:hidden">
             @if($nextLesson)
-                <a href="{{ route('lessons.show', $nextLesson) }}" wire:navigate class="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition text-center">
-                    {{ $completedLessons > 0 ? 'CONTINUE PROGRAM' : 'START PROGRAM' }}
+                <a href="{{ route('lessons.show', $nextLesson) }}" wire:navigate wire:click="markLessonAsCompleted({{ $nextLesson->id }})" class="block w-full py-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-lg transition text-center">
+                    {{ $completedLessons > 0 ? 'CONTINUAR PROGRAMA' : 'COMENZAR PROGRAMA' }}
                 </a>
             @else
                 @if($completedLessons >= $totalLessons && $totalLessons > 0)
                     <button class="w-full py-4 bg-green-600 text-white font-bold text-lg cursor-default">
-                        🎉 YOU COMPLETED ALL ACCESSIBLE LESSONS!
+                        🎉 ¡COMPLETASTE TODAS LAS CLASES ACCESIBLES!
                     </button>
                 @elseif($totalLessons === 0)
                     <button class="w-full py-4 bg-gray-600 text-white font-bold text-lg cursor-not-allowed" disabled>
-                        NO LESSONS AVAILABLE YET
+                        NO HAY CLASES DISPONIBLES AÚN
                     </button>
                 @else
                     <a href="{{ route('request-access') }}" wire:navigate class="block w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-lg transition text-center">
-                        🔓 REQUEST ACCESS TO CONTINUE
+                        🔓 SOLICITA ACCESO PARA CONTINUAR
                     </a>
                 @endif
             @endif
@@ -464,6 +465,7 @@
                                 <a
                                     href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
                                     {{ $canAccess ? 'wire:navigate' : '' }}
+                                    wire:click="markLessonAsCompleted({{ $lesson->id }})"
                                     class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-deep/50 cursor-pointer transition group">
                                     <!-- Lesson Thumbnail -->
                                     <div class="relative w-24 h-16 rounded-lg overflow-hidden flex-shrink-0">

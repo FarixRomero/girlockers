@@ -9,27 +9,22 @@
         <!-- Profile Information Section -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
             <div class="p-6 md:p-8">
-                <div class="flex items-center mb-6">
-                    <div class="w-16 h-16 md:w-20 md:h-20 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-2xl md:text-3xl font-bold mr-4">
-                        {{ strtoupper(substr($user->name, 0, 1)) }}
-                    </div>
-                    <div class="flex-1">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ $user->name }}</h2>
-                        <p class="text-gray-600">{{ $user->email }}</p>
-                        <div class="flex items-center gap-2 mt-2">
-                            @if($user->hasFullAccess())
-                                <span class="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full">
-                                    Premium
-                                </span>
-                            @else
-                                <span class="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold rounded-full">
-                                    Gratis
-                                </span>
-                            @endif
-                            <span class="text-xs text-gray-500">
-                                Miembro desde {{ $user->created_at->format('M Y') }}
+                <div class="mb-6">
+                    <h2 class="text-xl md:text-2xl font-bold text-gray-900">{{ $user->name }}</h2>
+                    <p class="text-gray-600">{{ $user->email }}</p>
+                    <div class="flex items-center gap-2 mt-2">
+                        @if($user->hasFullAccess())
+                            <span class="px-3 py-1 bg-gradient-to-r from-purple-500 to-pink-500 text-white text-xs font-bold rounded-full">
+                                Premium
                             </span>
-                        </div>
+                        @else
+                            <span class="px-3 py-1 bg-gray-200 text-gray-700 text-xs font-bold rounded-full">
+                                Gratis
+                            </span>
+                        @endif
+                        <span class="text-xs text-gray-500">
+                            Miembro desde {{ $user->created_at->format('M Y') }}
+                        </span>
                     </div>
                 </div>
 
@@ -45,6 +40,53 @@
                             </p>
                         </div>
                     @endif
+
+                    <!-- Avatar Upload -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-semibold text-gray-900 mb-3">Foto de Perfil</label>
+                        <div class="flex items-start gap-4">
+                            <!-- Preview -->
+                            <div class="flex-shrink-0">
+                                @if ($avatar)
+                                    <img src="{{ $avatar->temporaryUrl() }}" class="w-24 h-24 rounded-full object-cover border-2 border-gray-200">
+                                @elseif($user->avatar_url)
+                                    <img src="{{ $user->avatar_url }}" class="w-24 h-24 rounded-full object-cover border-2 border-gray-200">
+                                @else
+                                    <div class="w-24 h-24 rounded-full bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center text-white text-3xl font-bold border-2 border-gray-200">
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    </div>
+                                @endif
+                            </div>
+
+                            <!-- Upload Button -->
+                            <div class="flex-1">
+                                <label for="avatar-upload" class="cursor-pointer inline-flex items-center px-4 py-2 bg-white border border-gray-300 rounded-lg text-sm font-semibold text-gray-700 hover:bg-gray-50 transition">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                                    </svg>
+                                    Seleccionar imagen
+                                </label>
+                                <input
+                                    type="file"
+                                    id="avatar-upload"
+                                    wire:model="avatar"
+                                    accept="image/*"
+                                    class="hidden"
+                                >
+                                <p class="text-xs text-gray-500 mt-2">JPG, PNG o GIF. Tamaño máximo 10MB.</p>
+                                @error('avatar') <span class="text-red-500 text-sm mt-1 block">{{ $message }}</span> @enderror
+
+                                <!-- Loading indicator -->
+                                <div wire:loading wire:target="avatar" class="text-sm text-gray-600 mt-2 flex items-center">
+                                    <svg class="animate-spin h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24">
+                                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                    </svg>
+                                    Cargando imagen...
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <!-- Name -->

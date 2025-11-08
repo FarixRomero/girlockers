@@ -23,6 +23,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'avatar',
         'role',
         'has_full_access',
         'access_granted_at',
@@ -250,5 +251,23 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Course::class, 'course_favorites')
             ->withTimestamps();
+    }
+
+    /**
+     * Get the user avatar URL
+     */
+    public function getAvatarUrlAttribute(): ?string
+    {
+        if (!$this->avatar) {
+            return null;
+        }
+
+        // If it's already a full URL, return it
+        if (str_starts_with($this->avatar, 'http://') || str_starts_with($this->avatar, 'https://')) {
+            return $this->avatar;
+        }
+
+        // Otherwise, generate URL from S3
+        return \Storage::disk('s3')->url($this->avatar);
     }
 }

@@ -3,15 +3,21 @@
 namespace App\Livewire\Traits;
 
 use App\Models\User;
+use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 use Illuminate\Validation\Rules\Password;
+use Livewire\WithFileUploads;
 
 trait ManagesUserProfile
 {
+    use WithFileUploads;
+
     public string $name = '';
     public string $email = '';
+    public $avatar;
+    public ?string $existingAvatar = null;
     public string $current_password = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -21,8 +27,10 @@ trait ManagesUserProfile
      */
     public function mountProfile(): void
     {
-        $this->name = Auth::user()->name;
-        $this->email = Auth::user()->email;
+        $user = Auth::user();
+        $this->name = $user->name;
+        $this->email = $user->email;
+        $this->existingAvatar = $user->avatar;
     }
 
     /**
@@ -35,7 +43,21 @@ trait ManagesUserProfile
         $validated = $this->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
+            'avatar' => ['nullable', 'image', 'max:10240'], // 10MB max
         ]);
+
+        // Handle avatar upload
+        if ($this->avatar) {
+            $fileUploadService = app(FileUploadService::class);
+            $avatarPath = $fileUploadService->uploadImage(
+                $this->avatar,
+                'users/avatars',
+                $this->existingAvatar
+            );
+            $validated['avatar'] = $avatarPath;
+            $this->existingAvatar = $avatarPath;
+            $this->reset('avatar');
+        }
 
         $user->fill($validated);
 

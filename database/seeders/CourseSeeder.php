@@ -54,7 +54,7 @@ class CourseSeeder extends Seeder
         ];
 
         // Video de Bunny.net CDN
-        $bunnyVideoId = 'ef02ab89-3eab-45e9-8106-3261f609602e';
+        $bunnyVideoId = '76a98998-217f-4269-929d-9ce9d2c096b7';
 
         $lessonOrder = 1;
         foreach ($lessons as $lessonData) {

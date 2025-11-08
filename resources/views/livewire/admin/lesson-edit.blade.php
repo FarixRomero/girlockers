@@ -152,39 +152,20 @@
                 </div>
             </div>
 
-            <!-- Duration Input -->
-            <div class="bg-white rounded-lg border border-gray-200 px-4 py-3">
-                <label class="block">
-                    <span class="text-base text-gray-900 font-medium block mb-2">Duración</span>
-                    <div class="grid grid-cols-2 gap-3">
-                        <div>
-                            <input type="number"
-                                   wire:model="form.duration_minutes"
-                                   placeholder="Minutos"
-                                   min="0"
-                                   class="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <span class="text-xs text-gray-500 mt-1 block">Minutos</span>
-                        </div>
-                        <div>
-                            <input type="number"
-                                   wire:model="form.duration_seconds"
-                                   placeholder="Segundos"
-                                   min="0"
-                                   max="59"
-                                   class="w-full px-3 py-2 text-base border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                            <span class="text-xs text-gray-500 mt-1 block">Segundos</span>
-                        </div>
-                    </div>
-                    <p class="text-xs text-gray-500 mt-2">
-                        <svg class="w-4 h-4 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        Se detecta automáticamente al subir video
-                    </p>
-                </label>
-                @error('form.duration_minutes') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
-                @error('form.duration_seconds') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
+            <!-- Duration (Hidden inputs, visible as detail) -->
+            <input type="hidden" wire:model="form.duration_minutes">
+            <input type="hidden" wire:model="form.duration_seconds">
+
+            @if($form->duration_minutes > 0 || $form->duration_seconds > 0)
+            <div class="px-4 py-2">
+                <p class="text-xs text-gray-500">
+                    <svg class="w-3 h-3 inline mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    Duración: {{ $form->duration_minutes }}:{{ str_pad($form->duration_seconds, 2, '0', STR_PAD_LEFT) }} min
+                </p>
             </div>
+            @endif
 
             <!-- Trial Lesson Toggle -->
             <div class="px-4 py-3">

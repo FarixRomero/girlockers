@@ -89,6 +89,9 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
         ]);
     })->name('lessons.create-global');
 
+    // New Instagram-style lesson create (proof of concept)
+    Route::get('lessons/create-new', \App\Livewire\Admin\LessonCreate::class)->name('lessons.create-new');
+
     Route::get('modules/{moduleId}/lessons/create', function ($moduleId) {
         $module = \App\Models\Module::with('course')->findOrFail($moduleId);
         $instructors = \App\Models\Instructor::orderBy('name')->get();

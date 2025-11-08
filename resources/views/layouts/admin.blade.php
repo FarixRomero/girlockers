@@ -94,26 +94,28 @@
             <!-- Main Content -->
             <div class="flex-1 flex flex-col min-w-0">
                 <!-- Top Navbar -->
-                <div class="bg-purple-darker border-b border-pink-vibrant/20 px-4 lg:px-8 py-3 flex items-center justify-between">
-                    <!-- Left: Nueva Lección -->
-                    <a href="{{ route('admin.lessons.create-global') }}" wire:navigate class="flex items-center gap-2 px-4 py-2 bg-pink-vibrant hover:bg-pink-light text-cream font-semibold rounded-lg transition-colors shadow-sm">
-                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                        </svg>
-                        <span class="hidden md:inline">Nueva Lección</span>
-                    </a>
+                @if(!request()->routeIs('admin.lessons.create-new'))
+                    <div class="bg-purple-darker border-b border-pink-vibrant/20 px-4 lg:px-8 py-3 flex items-center justify-between">
+                        <!-- Left: Nueva Lección -->
+                        <a href="{{ route('admin.lessons.create-global') }}" wire:navigate class="flex items-center gap-2 px-4 py-2 bg-pink-vibrant hover:bg-pink-light text-cream font-semibold rounded-lg transition-colors shadow-sm">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                            </svg>
+                            <span class="hidden md:inline">Nueva Lección</span>
+                        </a>
 
-                    <!-- Center: Girls Lockers Logo (solo en mobile) -->
-                    <div class="lg:hidden">
-                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-12">
+                        <!-- Center: Girls Lockers Logo (solo en mobile) -->
+                        <div class="lg:hidden">
+                            <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-12">
+                        </div>
+
+                        <!-- Right: Notifications -->
+                        @livewire('admin.notification-bell')
                     </div>
-
-                    <!-- Right: Notifications -->
-                    @livewire('admin.notification-bell')
-                </div>
+                @endif
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-y-auto p-4 lg:p-8">
+                <main class="flex-1 overflow-y-auto {{ request()->routeIs('admin.lessons.create-new') ? 'p-0' : 'p-4 lg:p-8' }}">
                     @yield('content', $slot ?? '')
                 </main>
             </div>

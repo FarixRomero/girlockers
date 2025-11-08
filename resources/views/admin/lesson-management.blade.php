@@ -3,46 +3,45 @@
 @section('title', 'Gestión de Lecciones - Admin')
 
 @section('content')
-<div id="app" class="pb-20 lg:pb-0">
-    <!-- Header -->
-    <div class="mb-6">
-        <div class="flex items-center justify-between">
-            <div>
-                <h2 class="font-display text-2xl text-cream" id="module-title">Cargando...</h2>
-                <p class="text-cream/60 text-sm mt-1">
-                    <a href="{{ route('admin.courses.modules', ':course_id') }}" id="back-link" class="hover:text-pink-vibrant">
-                        <span id="course-title">...</span>
-                    </a>
-                    • <span id="lessons-count">0</span> lecciones
-                </p>
-            </div>
-            <a href="{{ route('admin.courses.modules', ':course_id') }}" id="back-button" class="text-pink-vibrant hover:text-pink-light text-sm flex items-center">
+<div id="app" class="min-h-screen bg-gray-50">
+    <!-- Header Section -->
+    <div class="bg-white border-b border-gray-200">
+        <div class="max-w-3xl mx-auto px-4 py-4">
+            <a href="{{ route('admin.courses.modules', ':course_id') }}" id="back-link" class="inline-flex items-center text-purple-500 hover:text-purple-600 text-sm font-medium mb-3">
                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
                 </svg>
-                Volver a Módulos
+                Volver
             </a>
+            <h1 class="font-bold text-xl md:text-2xl text-gray-900 mb-1" id="module-title">Cargando...</h1>
+            <p class="text-gray-600 text-sm">
+                <span id="course-title">...</span> • <span id="lessons-count">0</span> lecciones
+            </p>
         </div>
     </div>
 
-    <!-- Alert Messages -->
-    <div id="alert-container" class="hidden mb-6"></div>
+    <div class="max-w-3xl mx-auto px-4 py-6 pb-24">
+        <!-- Alert Messages -->
+        <div id="alert-container" class="hidden mb-4"></div>
 
-    <!-- Nueva Lección Button -->
-    <div class="mb-4">
-        <a href="{{ route('admin.lessons.create', $moduleId) }}" class="w-full md:w-auto inline-flex items-center justify-center bg-purple-primary hover:bg-purple-dark text-white font-bold py-2 px-4 rounded-lg text-sm transition-colors">
-            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-            </svg>
-            Nueva Lección
-        </a>
-    </div>
+        <!-- Lessons List -->
+        <div id="lessons-container" class="space-y-3">
+            <div class="text-center py-12 bg-white rounded-2xl">
+                <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-purple-500 mx-auto"></div>
+                <p class="text-gray-500 mt-4">Cargando lecciones...</p>
+            </div>
+        </div>
 
-    <!-- Lessons List -->
-    <div id="lessons-container" class="space-y-2 md:space-y-3">
-        <div class="text-center py-12">
-            <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-pink-vibrant mx-auto"></div>
-            <p class="text-cream/60 mt-4">Cargando lecciones...</p>
+        <!-- Nueva Lección Button (Fixed Bottom) -->
+        <div class="fixed bottom-4 left-0 right-0 px-4 z-40">
+            <div class="max-w-3xl mx-auto">
+                <a href="{{ route('admin.lessons.create', $moduleId) }}" class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg font-semibold">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                    </svg>
+                    Nueva Lección
+                </a>
+            </div>
         </div>
     </div>
 
@@ -344,12 +343,11 @@ window.LessonManager = window.LessonManager || {
         document.getElementById('module-title').textContent = `Lecciones de ${module.title}`;
         document.getElementById('course-title').textContent = module.course.title;
 
-        // Actualizar contadores (solo en el header breadcrumb)
+        // Actualizar contadores
         document.getElementById('lessons-count').textContent = module.lessons.length;
 
-        // Actualizar enlaces de navegación
+        // Actualizar enlace de navegación
         document.getElementById('back-link').href = backUrl;
-        document.getElementById('back-button').href = backUrl;
     },
 
     /**
@@ -360,13 +358,14 @@ window.LessonManager = window.LessonManager || {
 
         if (this.lessons.length === 0) {
             container.innerHTML = `
-                <div class="card-premium text-center py-12">
-                    <svg class="w-16 h-16 mx-auto text-cream/30 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                    </svg>
-                    <p class="text-cream/60">No hay lecciones aún</p>
-                    <a href="${CONFIG.routes.lessons.create.replace(':moduleId', CONFIG.moduleId)}" class="btn-primary mt-4 inline-block">+ Crear primera lección</a>
+                <div class="bg-white rounded-2xl text-center py-12">
+                    <p class="text-gray-500 text-sm mb-4">No hay lecciones aún</p>
+                    <a href="${CONFIG.routes.lessons.create.replace(':moduleId', CONFIG.moduleId)}" class="inline-flex items-center px-4 py-2 bg-purple-500 hover:bg-purple-600 text-white rounded-lg text-sm font-medium transition">
+                        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
+                        </svg>
+                        Crear primera lección
+                    </a>
                 </div>
             `;
             return;
@@ -387,152 +386,63 @@ window.LessonManager = window.LessonManager || {
 
         const thumbnailUrl = lesson.thumbnail
             ? `/storage/${lesson.thumbnail}`
-            : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="90" viewBox="0 0 160 90"%3E%3Crect fill="%231a1625" width="160" height="90"/%3E%3Ctext fill="%23f472b6" font-family="Arial" font-size="12" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3ESin Imagen%3C/text%3E%3C/svg%3E';
+            : 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="160" height="90" viewBox="0 0 160 90"%3E%3Crect fill="%23e5e7eb" width="160" height="90"/%3E%3Ctext fill="%236b7280" font-family="Arial" font-size="12" x="50%25" y="50%25" text-anchor="middle" dominant-baseline="middle"%3ESin Imagen%3C/text%3E%3C/svg%3E';
 
         return `
-            <div class="card-premium">
-                <!-- Mobile Layout -->
-                <div class="block md:hidden">
-                    <!-- Header con acciones -->
-                    <div class="flex items-center justify-between mb-3">
-                        <div class="flex items-center gap-2">
-                            <!-- Order Badge -->
-                            <div class="w-8 h-8 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-sm flex-shrink-0">
-                                ${lesson.order}
-                            </div>
-                            <div class="flex items-center gap-1">
-                                ${lesson.order > 1
-                                    ? `<button onclick="LessonManager.moveUp(${lesson.id})" class="p-1.5 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover arriba">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
-                                        </svg>
-                                    </button>`
-                                    : ''
-                                }
-                                ${lesson.order < this.lessons.length
-                                    ? `<button onclick="LessonManager.moveDown(${lesson.id})" class="p-1.5 text-cream/60 hover:text-cream transition-colors rounded-lg hover:bg-cream/10" title="Mover abajo">
-                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-                                        </svg>
-                                    </button>`
-                                    : ''
-                                }
-                            </div>
-                        </div>
-                        <div class="flex items-center gap-1">
-                            <button onclick="LessonManager.toggleTrial(${lesson.id})" class="p-1.5 text-cream/60 hover:text-green-400 transition-colors rounded-lg hover:bg-cream/10" title="Toggle trial">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
-                                </svg>
-                            </button>
-                            <a href="/admin/lessons/${lesson.id}/edit" class="p-1.5 text-cream/60 hover:text-pink-vibrant transition-colors rounded-lg hover:bg-cream/10" title="Editar">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </a>
-                            <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-1.5 text-cream/60 hover:text-red-400 transition-colors rounded-lg hover:bg-cream/10" title="Eliminar">
-                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Contenido -->
-                    <div class="flex items-start gap-3">
+            <div class="bg-white rounded-2xl p-4 relative group">
+                <div class="flex items-center gap-3 relative z-10">
+                    <!-- Lesson Info (Clickable to edit) -->
+                    <a href="/admin/lessons/${lesson.id}/edit" class="flex-1 min-w-0 flex items-center gap-3">
                         <!-- Thumbnail -->
-                        <a href="/admin/lessons/${lesson.id}/edit" class="block w-24 h-16 rounded-lg overflow-hidden bg-dark/50 cursor-pointer flex-shrink-0">
+                        <div class="w-20 h-14 rounded-lg overflow-hidden bg-gray-100 flex-shrink-0">
                             <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
                                 class="w-full h-full object-cover"
-                                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
-                        </a>
+                                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#e5e7eb';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-gray-400 text-xs\\'>Sin Imagen</div>'">
+                        </div>
 
                         <!-- Title & Info -->
                         <div class="flex-1 min-w-0">
-                            <h3 class="font-display text-sm text-cream font-bold mb-1 line-clamp-2">${this.escapeHtml(lesson.title)}</h3>
-                            <div class="flex items-center gap-2 flex-wrap mb-1">
-                                ${lesson.is_trial
-                                    ? '<span class="px-2 py-0.5 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Gratis</span>'
-                                    : '<span class="px-2 py-0.5 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
-                                }
-                            </div>
-                            <p class="text-cream/60 text-xs mb-1 line-clamp-2">${this.escapeHtml(lesson.description)}</p>
-                            <span class="text-xs text-cream/50">
-                                ${videoTypeLabel}${lesson.video_type !== 'youtube' && lesson.duration > 0 ? ' • ' + Math.ceil((lesson.duration || 0) / 60) + ' min' : ''}
-                            </span>
+                            <h3 class="font-semibold text-base text-gray-900 line-clamp-1">
+                                ${this.escapeHtml(lesson.title)}
+                            </h3>
+                            <p class="text-sm text-gray-500 line-clamp-1">
+                                ${lesson.is_trial ? 'Gratis' : 'Premium'}
+                                ${lesson.duration > 0 ? ' • ' + Math.ceil((lesson.duration || 0) / 60) + ' min' : ''}
+                            </p>
                         </div>
-                    </div>
-                </div>
+                    </a>
 
-                <!-- Desktop Layout -->
-                <div class="hidden md:flex items-start justify-between">
-                    <div class="flex items-start flex-1">
-                        <!-- Thumbnail Image -->
-                        <div class="w-28 h-20 rounded-lg overflow-hidden bg-dark/50 flex-shrink-0 mr-4">
-                            <img src="${thumbnailUrl}" alt="${this.escapeHtml(lesson.title)}"
-                                class="w-full h-full object-cover"
-                                onerror="this.style.display='none';this.parentElement.style.backgroundColor='#1a1625';this.parentElement.innerHTML='<div class=\\'flex items-center justify-center h-full text-pink-vibrant text-xs\\'>Sin Imagen</div>'">
-                        </div>
-                        <div class="flex items-start flex-1">
-                            <div class="w-12 h-12 rounded-lg bg-gradient-pink flex items-center justify-center text-cream font-bold text-lg mr-4">
-                                ${lesson.order}
-                            </div>
-                            <div class="flex-1">
-                                <div class="flex items-center space-x-2 mb-1">
-                                    <h3 class="font-display text-lg text-cream">${this.escapeHtml(lesson.title)}</h3>
-                                    ${lesson.is_trial
-                                        ? '<span class="px-2 py-1 bg-green-500/20 text-green-400 text-xs rounded-full font-bold">Clase gratis</span>'
-                                        : '<span class="px-2 py-1 bg-orange-500/20 text-orange-400 text-xs rounded-full font-bold">Premium</span>'
-                                    }
-                                </div>
-                                <p class="text-cream/60 text-sm mb-2">${this.escapeHtml(lesson.description)}</p>
-                                <div class="flex items-center space-x-3 text-xs text-cream/50">
-                                    <span class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                        </svg>
-                                        ${videoTypeLabel}
-                                    </span>
-                                    ${lesson.video_type !== 'youtube' && lesson.duration > 0 ? `
-                                    <span class="flex items-center">
-                                        <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        ${Math.ceil((lesson.duration || 0) / 60)} min
-                                    </span>
-                                    ` : ''}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex items-center space-x-2 ml-4">
+                    <!-- Actions -->
+                    <div class="flex items-center gap-0.5 md:gap-1">
+                        <!-- Move Up -->
                         ${lesson.order > 1
-                            ? `<button onclick="LessonManager.moveUp(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors" title="Mover arriba">
+                            ? `<button onclick="event.stopPropagation(); LessonManager.moveUp(${lesson.id})" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"></path>
                                 </svg>
                             </button>`
-                            : '<div class="w-9"></div>'
+                            : ''
                         }
+
+                        <!-- Move Down -->
                         ${lesson.order < this.lessons.length
-                            ? `<button onclick="LessonManager.moveDown(${lesson.id})" class="p-2 text-cream/60 hover:text-cream transition-colors" title="Mover abajo">
+                            ? `<button onclick="event.stopPropagation(); LessonManager.moveDown(${lesson.id})" class="p-2 text-gray-500 hover:text-gray-700 hover:bg-gray-50 rounded-lg transition">
                                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
                                 </svg>
                             </button>`
-                            : '<div class="w-9"></div>'
+                            : ''
                         }
-                        <button onclick="LessonManager.toggleTrial(${lesson.id})" class="p-2 text-cream/60 hover:text-green-400 transition-colors" title="Toggle trial">
+
+                        <!-- Toggle Trial -->
+                        <button onclick="event.stopPropagation(); LessonManager.toggleTrial(${lesson.id})" class="p-2 text-${lesson.is_trial ? 'green' : 'orange'}-500 hover:bg-gray-50 rounded-lg transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
                             </svg>
                         </button>
-                        <a href="/admin/lessons/${lesson.id}/edit" class="p-2 text-cream/60 hover:text-pink-vibrant transition-colors">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                            </svg>
-                        </a>
-                        <button onclick="LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-cream/60 hover:text-red-400 transition-colors">
+
+                        <!-- Delete -->
+                        <button onclick="event.stopPropagation(); LessonManager.deleteLesson(${lesson.id}, '${this.escapeHtml(lesson.title)}')" class="p-2 text-red-500 hover:bg-red-50 rounded-lg transition">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                             </svg>
@@ -1129,21 +1039,16 @@ window.LessonManager = window.LessonManager || {
         if (!container) return;
 
         const colors = {
-            success: { bg: 'bg-green-500/10', border: 'border-green-500/30', text: 'text-green-400' },
-            error: { bg: 'bg-red-500/10', border: 'border-red-500/30', text: 'text-red-400' },
-            info: { bg: 'bg-blue-500/10', border: 'border-blue-500/30', text: 'text-blue-400' }
+            success: { bg: 'bg-green-50', border: 'border-green-200', text: 'text-green-700' },
+            error: { bg: 'bg-red-50', border: 'border-red-200', text: 'text-red-700' },
+            info: { bg: 'bg-blue-50', border: 'border-blue-200', text: 'text-blue-700' }
         };
 
         const color = colors[type] || colors.info;
 
         container.innerHTML = `
-            <div class="p-4 ${color.bg} border ${color.border} rounded-lg">
-                <p class="${color.text} flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                    </svg>
-                    ${message}
-                </p>
+            <div class="p-3 ${color.bg} border ${color.border} rounded-lg">
+                <p class="${color.text} text-sm">${message}</p>
             </div>
         `;
         container.classList.remove('hidden');

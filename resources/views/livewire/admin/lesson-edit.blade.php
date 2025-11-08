@@ -172,7 +172,7 @@
                 <button type="button"
                         wire:click="saveDraft"
                         class="flex-1 px-4 py-3 text-sm font-semibold text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition">
-                    Guardar borrador
+                    Ocultar
                 </button>
                 <button type="button"
                         wire:click="publish"

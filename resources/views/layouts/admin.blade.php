@@ -94,7 +94,7 @@
             <!-- Main Content -->
             <div class="flex-1 flex flex-col min-w-0">
                 <!-- Top Navbar -->
-                @if(!request()->routeIs('admin.lessons.create-global') && !request()->routeIs('admin.lessons.create') && !request()->routeIs('admin.lessons.edit') && !request()->routeIs('admin.courses.modules'))
+                @if(!request()->routeIs('admin.lessons.create-global') && !request()->routeIs('admin.lessons.create') && !request()->routeIs('admin.lessons.edit') && !request()->routeIs('admin.courses.modules') && !request()->routeIs('admin.modules.lessons'))
                     <div class="bg-purple-darker border-b border-pink-vibrant/20 px-4 lg:px-8 py-3 flex items-center justify-between">
                         <!-- Left: Nueva Lección -->
                         <a href="{{ route('admin.lessons.create-global') }}" wire:navigate class="flex items-center gap-2 px-4 py-2 bg-pink-vibrant hover:bg-pink-light text-cream font-semibold rounded-lg transition-colors shadow-sm">
@@ -115,13 +115,13 @@
                 @endif
 
                 <!-- Page Content -->
-                <main class="flex-1 overflow-y-auto {{ request()->routeIs('admin.lessons.create-global') || request()->routeIs('admin.lessons.create') || request()->routeIs('admin.lessons.edit') || request()->routeIs('admin.courses.modules') ? 'p-0' : 'p-4 lg:p-8' }}">
+                <main class="flex-1 overflow-y-auto {{ request()->routeIs('admin.lessons.create-global') || request()->routeIs('admin.lessons.create') || request()->routeIs('admin.lessons.edit') || request()->routeIs('admin.courses.modules') || request()->routeIs('admin.modules.lessons') ? 'p-0' : 'p-4 lg:p-8' }}">
                     @yield('content', $slot ?? '')
                 </main>
             </div>
 
             <!-- Mobile Bottom Navigation -->
-            @if(!request()->routeIs('admin.lessons.create-global') && !request()->routeIs('admin.lessons.create') && !request()->routeIs('admin.lessons.edit') && !request()->routeIs('admin.courses.modules'))
+            @if(!request()->routeIs('admin.lessons.create-global') && !request()->routeIs('admin.lessons.create') && !request()->routeIs('admin.lessons.edit') && !request()->routeIs('admin.courses.modules') && !request()->routeIs('admin.modules.lessons'))
                 <div class="lg:hidden nav-mobile">
                 <div class="flex justify-around items-center">
                     <a href="{{ route('admin.dashboard') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">

@@ -61,6 +61,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('users', StudentManagement::class)->name('users.index');
     Route::get('comments', CommentModeration::class)->name('comments.index');
+    Route::get('profile', \App\Livewire\Admin\AdminProfile::class)->name('profile');
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');
 

@@ -150,7 +150,7 @@
         @endif
 
         <!-- Nuevo Curso Button (Fixed Bottom) -->
-        <div class="fixed bottom-4 left-0 right-0 px-4 lg:hidden">
+        <div class="fixed bottom-24 left-0 right-0 px-4 lg:hidden">
             <div class="max-w-3xl mx-auto">
                 <button wire:click="openCreateModal" class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg font-semibold">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -165,12 +165,12 @@
     <!-- Create/Edit Modal -->
     @if($showModal)
         <div class="fixed inset-0 z-50 overflow-y-auto" x-data="{ show: @entangle('showModal') }">
-            <div class="flex items-end md:items-center justify-center min-h-screen px-0 md:px-4 pt-4 pb-0 md:pb-20 text-center sm:block sm:p-0">
+            <div class="flex items-end md:items-center justify-center min-h-screen px-0 md:px-4 pt-4 pb-20 md:pb-20 text-center sm:block sm:p-0">
                 <!-- Background overlay -->
                 <div class="fixed inset-0 transition-opacity bg-black/50 backdrop-blur-sm" wire:click="closeModal"></div>
 
                 <!-- Modal panel -->
-                <div class="inline-block overflow-hidden text-left align-bottom md:align-middle transition-all transform bg-white rounded-t-2xl md:rounded-2xl shadow-2xl sm:my-8 w-full sm:max-w-lg">
+                <div class="inline-block overflow-hidden text-left align-bottom md:align-middle transition-all transform bg-white rounded-t-2xl md:rounded-2xl shadow-2xl sm:my-8 w-full sm:max-w-lg mb-0 md:mb-0">
                     <form wire:submit="saveCourse">
                         <!-- Header -->
                         <div class="px-4 py-4 border-b border-gray-200">

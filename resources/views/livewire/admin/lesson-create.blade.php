@@ -60,7 +60,7 @@
                     <button type="button"
                             onclick="document.getElementById('videoFile').click()"
                             id="selectVideoBtn"
-                            class="w-full px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition">
+                            class="w-full px-4 py-2 bg-purple-500 text-white text-sm font-medium rounded-lg hover:bg-purple-600 transition">
                         Seleccionar video
                     </button>
                     <p id="videoFileName" class="text-xs text-gray-500 mt-2 hidden"></p>
@@ -69,10 +69,10 @@
                     <div id="uploadProgress" class="hidden mt-3">
                         <div class="flex items-center justify-between mb-1">
                             <span class="text-xs text-gray-600">Subiendo...</span>
-                            <span id="uploadPercent" class="text-xs font-medium text-blue-600">0%</span>
+                            <span id="uploadPercent" class="text-xs font-medium text-purple-600">0%</span>
                         </div>
                         <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="uploadBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
+                            <div id="uploadBar" class="bg-purple-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
                         </div>
                     </div>
 
@@ -89,7 +89,7 @@
                     <label class="flex items-center justify-between cursor-pointer">
                         <span class="text-sm text-gray-700">Miniatura</span>
                         <input type="file" wire:model.live="thumbnail" class="hidden" accept="image/*">
-                        <span class="text-sm text-blue-500 font-medium">{{ $thumbnailPreview ? 'Cambiar' : 'Subir' }}</span>
+                        <span class="text-sm text-purple-500 font-medium">{{ $thumbnailPreview ? 'Cambiar' : 'Subir' }}</span>
                     </label>
                     @error('thumbnail') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
                 </div>
@@ -160,7 +160,7 @@
                     @foreach($tags as $tag)
                         <button type="button"
                                 @click="if(selectedTags.includes({{ $tag->id }})) { selectedTags = selectedTags.filter(id => id !== {{ $tag->id }}) } else { selectedTags.push({{ $tag->id }}) }"
-                                :class="selectedTags.includes({{ $tag->id }}) ? 'bg-blue-50 border-blue-500 text-blue-700' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'"
+                                :class="selectedTags.includes({{ $tag->id }}) ? 'bg-purple-50 border-purple-500 text-purple-700' : 'bg-white border-gray-200 text-gray-700 hover:border-gray-300'"
                                 class="px-3 py-1.5 text-xs font-medium rounded-full border transition">
                             {{ $tag->name }}
                         </button>
@@ -176,7 +176,7 @@
                         <input type="checkbox"
                                wire:model="is_trial"
                                class="sr-only peer">
-                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-500"></div>
+                        <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-purple-500"></div>
                     </div>
                 </label>
             </div>
@@ -192,7 +192,7 @@
                 </button>
                 <button type="button"
                         wire:click="publish"
-                        class="flex-1 px-4 py-3 text-sm font-semibold text-white bg-blue-500 rounded-lg hover:bg-blue-600 transition">
+                        class="flex-1 px-4 py-3 text-sm font-semibold text-white bg-purple-500 rounded-lg hover:bg-purple-600 transition">
                     Publicar
                 </button>
             </div>
@@ -205,7 +205,7 @@
     <!-- Loading Indicator - Solo para acciones de guardar/publicar -->
     <div wire:loading.delay wire:target="saveDraft,publish" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div class="bg-white rounded-lg p-6 flex items-center space-x-3">
-            <svg class="animate-spin h-5 w-5 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <svg class="animate-spin h-5 w-5 text-purple-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
             </svg>

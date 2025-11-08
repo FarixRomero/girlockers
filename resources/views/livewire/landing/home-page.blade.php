@@ -241,7 +241,7 @@
                             La Bóveda de<br>Recursos
                         </h3>
                         <p class="text-white/90 text-center text-lg leading-relaxed font-medium mb-6">
-                            Accede a nuestra colección curada de videos clásicos, entrevistas y galerías de inspiración para nutrir tu cultura locker.
+                            Accede a nuestra colección curada de videos clásicos y entrevistas para nutrir tu cultura locker.
                         </p>
                         <ul class="space-y-4">
                             <li class="flex items-center text-white font-semibold">
@@ -254,7 +254,7 @@
                             </li>
                             <li class="flex items-center text-white font-semibold">
                                 <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Galería de inspiración</span>
+                                <span>Videos clásicos curados</span>
                             </li>
                         </ul>
                     </div>
@@ -442,30 +442,6 @@
                 </div>
             </div>
 
-            <!-- Galería de Inspiración -->
-            <div>
-                <h3 class="font-display font-bold text-2xl text-black mb-8 flex items-center">
-                    <span class="bg-purple-ultralight p-3 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                        </svg>
-                    </span>
-                    Galería de Inspiración
-                </h3>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    @for($i = 1; $i <= 4; $i++)
-                    <div class="relative aspect-square rounded-lg overflow-hidden group cursor-pointer shadow-lg hover:shadow-purple-glow transition-all duration-300 border border-gray-light">
-                        <img src="{{ asset('images/girlslockers.jpg') }}"
-                             alt="Locking Inspiration {{ $i }}"
-                             class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                        <div class="absolute inset-0 bg-gradient-to-t from-purple-primary/60 via-purple-primary/20 to-transparent opacity-60 group-hover:opacity-40 transition-opacity"></div>
-                        <div class="absolute bottom-4 left-4 right-4">
-                            <p class="text-white font-bold text-sm">Estilo Único #{{ $i }}</p>
-                        </div>
-                    </div>
-                    @endfor
-                </div>
-            </div>
         </div>
     </section>
 

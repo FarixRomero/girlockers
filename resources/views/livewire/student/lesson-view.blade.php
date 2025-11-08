@@ -1,6 +1,15 @@
-<div>
-    <!-- Back Button (Mobile & Desktop) -->
-    <div class="fixed top-4 left-4 z-50">
+<div class="relative">
+    <!-- Back Button (Mobile) - Over video -->
+    <div class="lg:hidden fixed top-4 left-4 z-50">
+        <a href="{{ url()->previous() }}" wire:navigate class="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+        </a>
+    </div>
+
+    <!-- Back Button (Desktop) - Over video -->
+    <div class="hidden lg:block absolute top-4 left-4 z-50">
         <a href="{{ url()->previous() }}" wire:navigate class="w-10 h-10 rounded-full bg-black/50 backdrop-blur-sm flex items-center justify-center text-white hover:bg-black/70 transition">
             <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>

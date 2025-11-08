@@ -30,6 +30,12 @@ class LessonForm extends Form
     public bool $is_trial = false;
     public int $duration = 0;
 
+    #[Validate('nullable|integer|min:0')]
+    public int $duration_minutes = 0;
+
+    #[Validate('nullable|integer|min:0|max:59')]
+    public int $duration_seconds = 0;
+
     // UI State
     public ?string $thumbnailPreview = null;
     public ?string $existingThumbnail = null;
@@ -49,6 +55,11 @@ class LessonForm extends Form
         $this->bunny_video_id = $lesson->bunny_video_id ?? '';
         $this->video_type = $lesson->video_type;
         $this->duration = $lesson->duration;
+
+        // Convert duration from seconds to minutes and seconds
+        $this->duration_minutes = floor($lesson->duration / 60);
+        $this->duration_seconds = $lesson->duration % 60;
+
         $this->is_trial = $lesson->is_trial;
         $this->selectedTags = $lesson->tags->pluck('id')->toArray();
 
@@ -66,6 +77,9 @@ class LessonForm extends Form
      */
     public function getData(bool $isPublished = true): array
     {
+        // Calculate total duration in seconds from minutes and seconds
+        $totalDuration = ($this->duration_minutes * 60) + $this->duration_seconds;
+
         return [
             'title' => $this->title,
             'description' => $this->description,
@@ -73,7 +87,7 @@ class LessonForm extends Form
             'instructor_id' => $this->instructor_id,
             'video_type' => 'bunny',
             'bunny_video_id' => $this->bunny_video_id,
-            'duration' => $this->duration,
+            'duration' => $totalDuration > 0 ? $totalDuration : $this->duration,
             'is_trial' => $this->is_trial,
             'is_published' => $isPublished,
         ];

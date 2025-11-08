@@ -1,9 +1,8 @@
 <div class="max-w-full">
-    <!-- Hero Section - Bienvenida con estadísticas -->
-    <!-- Mobile View -->
-    <div class="md:hidden bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-6 px-4">
-        <!-- Header con logo y notificación -->
-        <div class="flex items-center justify-between mb-6">
+    <!-- Hero Section - Bienvenida con estadísticas (unified design for mobile and desktop) -->
+    <div class="bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-6 px-4">
+        <!-- Header con logo y notificación (solo móvil) -->
+        <div class="md:hidden flex items-center justify-between mb-6">
             <a href="{{ route('dashboard') }}" wire:navigate>
                 <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-10 w-auto object-contain">
             </a>
@@ -11,98 +10,71 @@
         </div>
 
         <!-- Título de bienvenida -->
-        <h1 class="text-2xl font-bold text-gray-900 mb-1">
+        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mb-1">
             Bienvenido, {{ $stats['name'] }}
         </h1>
-        <p class="text-gray-600 mb-6">¡Baila, aprende y brilla con nosotras!</p>
+        <p class="text-gray-600 mb-6 md:text-lg">¡Baila, aprende y brilla con nosotras!</p>
 
         <!-- Stats Cards -->
-        <div class="grid grid-cols-2 gap-3 mb-4">
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4">
             <!-- Minutes Dancing -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm">
+            <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-md transition">
                 <div class="flex items-center mb-2">
-                    <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
                     </div>
                 </div>
-                <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['total_minutes'] }}</div>
-                <div class="text-xs text-gray-600 uppercase font-semibold">Minutos<br>Bailando</div>
+                <div class="text-3xl md:text-5xl font-bold text-gray-900 mb-1">{{ $stats['total_minutes'] }}</div>
+                <div class="text-xs md:text-sm text-gray-600 uppercase font-semibold">Minutos <br class="md:hidden">Bailando</div>
             </div>
 
             <!-- Completed Lessons -->
-            <div class="bg-white rounded-2xl p-4 shadow-sm">
+            <div class="bg-white rounded-2xl p-4 md:p-6 shadow-sm hover:shadow-md transition">
                 <div class="flex items-center mb-2">
-                    <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center">
-                        <svg class="w-5 h-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 md:w-6 md:h-6 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
                         </svg>
                     </div>
                 </div>
-                <div class="text-3xl font-bold text-gray-900 mb-1">{{ $stats['completed_lessons'] }}</div>
-                <div class="text-xs text-gray-600 uppercase font-semibold">Clases<br>Completadas</div>
+                <div class="text-3xl md:text-5xl font-bold text-gray-900 mb-1">{{ $stats['completed_lessons'] }}</div>
+                <div class="text-xs md:text-sm text-gray-600 uppercase font-semibold">Clases <br class="md:hidden">Completadas</div>
+            </div>
+
+            <!-- Access Status (solo desktop) -->
+            <div class="hidden md:block bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition">
+                <div class="flex items-center mb-2">
+                    <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                        <svg class="w-6 h-6 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                        </svg>
+                    </div>
+                </div>
+                <div class="text-3xl md:text-5xl font-bold mb-1 {{ $stats['has_access'] ? 'text-purple-600' : 'text-orange-500' }}">
+                    {{ $stats['has_access'] ? 'Premium' : 'Free' }}
+                </div>
+                <div class="text-xs md:text-sm text-gray-600 uppercase font-semibold">Tu Plan</div>
             </div>
         </div>
 
         <!-- Premium CTA Button (only show if user doesn't have full access) -->
         @if(!$stats['has_access'])
         <a href="{{ route('request-access') }}" wire:navigate class="block">
-            <div class="bg-gradient-to-r from-pink-500 via-pink-600 to-orange-500 rounded-2xl p-5 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
+            <div class="bg-gradient-to-r from-pink-500 via-pink-600 to-orange-500 rounded-2xl p-5 md:p-6 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-xl font-bold mb-1">Únete a Premium</h3>
-                        <p class="text-sm text-white/90">Acceso ilimitado a clases y más.</p>
+                        <h3 class="text-xl md:text-2xl font-bold mb-1">Únete a Premium</h3>
+                        <p class="text-sm md:text-base text-white/90">Acceso ilimitado a clases y más.</p>
                     </div>
-                    <div class="bg-white rounded-full px-4 py-2">
-                        <span class="text-pink-600 font-bold text-sm">Brilla ya</span>
+                    <div class="bg-white rounded-full px-4 py-2 md:px-6 md:py-3">
+                        <span class="text-pink-600 font-bold text-sm md:text-base">Brilla ya</span>
                     </div>
                 </div>
             </div>
         </a>
         @endif
-    </div>
-
-    <!-- Desktop View (unchanged) -->
-    <div class="hidden md:block bg-gradient-to-br from-gray-900 via-purple-900 to-black text-white py-6 px-4">
-        <h1 class="text-7xl font-bold mb-4 tracking-tight">
-            Bienvenido,<br>
-            <span class="bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
-                {{ $stats['name'] }}
-            </span>
-        </h1>
-
-        <div class="grid grid-cols-3 gap-4 mt-4">
-            <!-- Minutes Dancing -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
-                <div class="text-7xl font-bold mb-2 bg-gradient-to-r from-pink-400 to-purple-400 bg-clip-text text-transparent">
-                    {{ $stats['total_minutes'] }}
-                </div>
-                <div class="text-xl font-semibold uppercase tracking-wider text-white/90">
-                    Minutos Bailando
-                </div>
-            </div>
-
-            <!-- Completed Lessons -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
-                <div class="text-7xl font-bold mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
-                    {{ $stats['completed_lessons'] }}
-                </div>
-                <div class="text-xl font-semibold uppercase tracking-wider text-white/90">
-                    Clases Completadas
-                </div>
-            </div>
-
-            <!-- Access Status -->
-            <div class="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 hover:bg-white/20 transition">
-                <div class="text-5xl font-bold mb-2 {{ $stats['has_access'] ? 'text-green-400' : 'text-yellow-400' }}">
-                    {{ $stats['has_access'] ? 'PREMIUM' : 'FREE' }}
-                </div>
-                <div class="text-xl font-semibold uppercase tracking-wider text-white/90">
-                    Tu Plan
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- Recent Lessons Carousel -->

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\User;
 use App\Models\AccessRequest;
+use App\Services\AccessService;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -28,23 +29,10 @@ class StudentManagement extends Component
     public function approveAccess($userId, $membershipType = 'monthly')
     {
         $user = User::findOrFail($userId);
+        $accessService = app(AccessService::class);
 
-        // If user already has access, extend it. Otherwise grant new access.
-        if ($user->has_full_access) {
-            $user->extendMembership($membershipType);
-            $action = 'extendido';
-        } else {
-            $user->grantFullAccess($membershipType);
-            $action = 'otorgado';
-        }
-
-        // Update any pending access requests
-        AccessRequest::where('user_id', $userId)
-            ->where('status', 'pending')
-            ->update([
-                'status' => 'approved',
-                'membership_type' => $membershipType
-            ]);
+        $result = $accessService->grantAccess($user, $membershipType);
+        $action = $result['action'] === 'extended' ? 'extendido' : 'otorgado';
 
         $duration = $membershipType === 'quarterly' ? '3 meses' : '1 mes';
         session()->flash('success', "Acceso {$action} para {$user->name} por {$duration}");
@@ -69,10 +57,9 @@ class StudentManagement extends Component
     public function revokeAccess($userId)
     {
         $user = User::findOrFail($userId);
-        $user->update([
-            'has_full_access' => false,
-            'access_granted_at' => null,
-        ]);
+        $accessService = app(AccessService::class);
+
+        $accessService->revokeAccess($user);
 
         session()->flash('success', "Acceso revocado para {$user->name}");
     }
@@ -103,7 +90,9 @@ class StudentManagement extends Component
     public function rejectRequest($requestId)
     {
         $request = AccessRequest::with('user')->findOrFail($requestId);
-        $request->update(['status' => 'rejected']);
+        $accessService = app(AccessService::class);
+
+        $accessService->rejectRequest($request);
 
         session()->flash('success', "Solicitud rechazada para {$request->user->name}");
     }
@@ -154,18 +143,9 @@ class StudentManagement extends Component
         }
         $requests = $requestsQuery->latest()->paginate(20, ['*'], 'requestsPage');
 
-        $stats = [
-            'total' => User::where('role', 'student')->count(),
-            'premium' => User::where('role', 'student')->where('has_full_access', true)->count(),
-            'trial' => User::where('role', 'student')->where('has_full_access', false)->count(),
-            'pending' => AccessRequest::where('status', 'pending')->count(),
-        ];
-
-        $requestStats = [
-            'pending' => AccessRequest::where('status', 'pending')->count(),
-            'approved' => AccessRequest::where('status', 'approved')->count(),
-            'rejected' => AccessRequest::where('status', 'rejected')->count(),
-        ];
+        $accessService = app(AccessService::class);
+        $stats = $accessService->getAccessStats();
+        $requestStats = $accessService->getRequestStats();
 
         return view('livewire.admin.student-management', [
             'students' => $students,

@@ -5,6 +5,7 @@ namespace App\Livewire\Admin;
 use App\Models\Course;
 use App\Models\Instructor;
 use App\Services\NotificationService;
+use App\Livewire\Traits\ModalCrudTrait;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -16,7 +17,7 @@ use Illuminate\Support\Str;
 #[Title('Gestión de Cursos - Admin')]
 class CourseManagement extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithPagination, WithFileUploads, ModalCrudTrait;
 
     public $search = '';
     public $filterLevel = 'all';
@@ -33,10 +34,6 @@ class CourseManagement extends Component
     public $image;
     public $is_published = false;
 
-    // Modal state
-    public $showModal = false;
-    public $isEditing = false;
-
     protected $rules = [
         'title' => 'required|min:3|max:255',
         'description' => 'required|min:10',
@@ -52,39 +49,35 @@ class CourseManagement extends Component
         $this->slug = Str::slug($this->title);
     }
 
-    public function openCreateModal()
+    /**
+     * Get the model instance for editing
+     */
+    protected function getModelForEdit($id)
     {
-        $this->resetForm();
-        $this->showModal = true;
-        $this->isEditing = false;
+        return Course::findOrFail($id);
     }
 
-    public function openEditModal($courseId)
+    /**
+     * Load model data into component properties
+     */
+    protected function loadModelData($model)
     {
-        $course = Course::findOrFail($courseId);
-
-        $this->courseId = $course->id;
-        $this->title = $course->title;
-        $this->slug = $course->slug;
-        $this->description = $course->description;
-        $this->instructor_id = $course->instructor_id;
-        $this->level = $course->level;
-        $this->existingImage = $course->image;
-        $this->is_published = $course->is_published;
-
-        $this->showModal = true;
-        $this->isEditing = true;
+        $this->courseId = $model->id;
+        $this->title = $model->title;
+        $this->slug = $model->slug;
+        $this->description = $model->description;
+        $this->instructor_id = $model->instructor_id;
+        $this->level = $model->level;
+        $this->existingImage = $model->image;
+        $this->is_published = $model->is_published;
     }
 
-    public function closeModal()
+    /**
+     * Get the list of form field names to reset
+     */
+    protected function getFormFields(): array
     {
-        $this->showModal = false;
-        $this->resetForm();
-    }
-
-    public function resetForm()
-    {
-        $this->reset([
+        return [
             'courseId',
             'title',
             'slug',
@@ -94,8 +87,7 @@ class CourseManagement extends Component
             'existingImage',
             'image',
             'is_published',
-        ]);
-        $this->resetValidation();
+        ];
     }
 
     public function saveCourse()

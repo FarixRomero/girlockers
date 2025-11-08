@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Tag;
+use App\Livewire\Traits\ModalCrudTrait;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Attributes\Layout;
@@ -13,7 +14,7 @@ use Illuminate\Support\Str;
 #[Title('Gestión de Tags - Admin')]
 class TagManagement extends Component
 {
-    use WithPagination;
+    use WithPagination, ModalCrudTrait;
 
     public $search = '';
 
@@ -21,10 +22,6 @@ class TagManagement extends Component
     public $tagId = null;
     public $name = '';
     public $slug = '';
-
-    // Modal state
-    public $showModal = false;
-    public $isEditing = false;
 
     protected $rules = [
         'name' => 'required|min:3|max:255',
@@ -36,39 +33,30 @@ class TagManagement extends Component
         $this->slug = Str::slug($this->name);
     }
 
-    public function openCreateModal()
+    /**
+     * Get the model instance for editing
+     */
+    protected function getModelForEdit($id)
     {
-        $this->resetForm();
-        $this->showModal = true;
-        $this->isEditing = false;
+        return Tag::findOrFail($id);
     }
 
-    public function openEditModal($tagId)
+    /**
+     * Load model data into component properties
+     */
+    protected function loadModelData($model)
     {
-        $tag = Tag::findOrFail($tagId);
-
-        $this->tagId = $tag->id;
-        $this->name = $tag->name;
-        $this->slug = $tag->slug;
-
-        $this->showModal = true;
-        $this->isEditing = true;
+        $this->tagId = $model->id;
+        $this->name = $model->name;
+        $this->slug = $model->slug;
     }
 
-    public function closeModal()
+    /**
+     * Get the list of form field names to reset
+     */
+    protected function getFormFields(): array
     {
-        $this->showModal = false;
-        $this->resetForm();
-    }
-
-    public function resetForm()
-    {
-        $this->reset([
-            'tagId',
-            'name',
-            'slug',
-        ]);
-        $this->resetValidation();
+        return ['tagId', 'name', 'slug'];
     }
 
     public function saveTag()

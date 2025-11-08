@@ -4,6 +4,7 @@ namespace App\Livewire\Admin;
 
 use App\Models\Course;
 use App\Models\Module;
+use App\Livewire\Traits\ModalCrudTrait;
 use Livewire\Component;
 use Livewire\Attributes\Layout;
 use Livewire\Attributes\Title;
@@ -12,6 +13,8 @@ use Livewire\Attributes\Title;
 #[Title('Gestión de Módulos - Admin')]
 class ModuleManagement extends Component
 {
+    use ModalCrudTrait;
+
     public $courseId;
     public $course;
 
@@ -19,10 +22,6 @@ class ModuleManagement extends Component
     public $moduleId = null;
     public $title = '';
     public $order = 1;
-
-    // Modal state
-    public $showModal = false;
-    public $isEditing = false;
 
     protected $rules = [
         'title' => 'required|min:3|max:255',
@@ -37,36 +36,41 @@ class ModuleManagement extends Component
         }])->findOrFail($courseId);
     }
 
+    /**
+     * Override to set default order
+     */
     public function openCreateModal()
     {
         $this->resetForm();
-        $this->order = $this->course->modules()->max('order') + 1;
         $this->showModal = true;
         $this->isEditing = false;
+        $this->order = $this->course->modules()->max('order') + 1;
     }
 
-    public function openEditModal($moduleId)
+    /**
+     * Get the model instance for editing
+     */
+    protected function getModelForEdit($id)
     {
-        $module = Module::findOrFail($moduleId);
-
-        $this->moduleId = $module->id;
-        $this->title = $module->title;
-        $this->order = $module->order;
-
-        $this->showModal = true;
-        $this->isEditing = true;
+        return Module::findOrFail($id);
     }
 
-    public function closeModal()
+    /**
+     * Load model data into component properties
+     */
+    protected function loadModelData($model)
     {
-        $this->showModal = false;
-        $this->resetForm();
+        $this->moduleId = $model->id;
+        $this->title = $model->title;
+        $this->order = $model->order;
     }
 
-    public function resetForm()
+    /**
+     * Get the list of form field names to reset
+     */
+    protected function getFormFields(): array
     {
-        $this->reset(['moduleId', 'title', 'order']);
-        $this->resetValidation();
+        return ['moduleId', 'title', 'order'];
     }
 
     public function saveModule()

@@ -117,11 +117,17 @@
         <div class="fixed bottom-4 left-0 right-0 px-4 z-40">
             <div class="max-w-3xl mx-auto">
                 <a href="{{ route('admin.lessons.create', $module->id) }}"
-                   class="w-full flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl shadow-lg font-semibold transition-colors">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   class="group relative w-full flex items-center justify-center px-6 py-3 md:py-4 bg-purple-600 md:bg-gradient-to-r md:from-purple-600 md:to-purple-500 hover:bg-purple-700 md:hover:from-purple-700 md:hover:to-purple-600 text-white rounded-2xl shadow-lg md:shadow-xl md:hover:shadow-2xl font-semibold md:font-bold transition-all md:duration-300 md:transform md:hover:scale-[1.02] md:active:scale-[0.98]">
+                    <!-- Glow effect on hover (desktop only) -->
+                    <div class="hidden md:block absolute inset-0 rounded-2xl bg-gradient-to-r from-purple-400 to-purple-300 opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-300"></div>
+
+                    <!-- Icon -->
+                    <svg class="relative w-5 h-5 md:w-6 md:h-6 mr-2 md:transition-transform md:duration-300 md:group-hover:rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
                     </svg>
-                    Nueva Lección
+
+                    <!-- Text -->
+                    <span class="relative">Nueva Lección</span>
                 </a>
             </div>
         </div>

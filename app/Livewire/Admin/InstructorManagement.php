@@ -3,6 +3,7 @@
 namespace App\Livewire\Admin;
 
 use App\Models\Instructor;
+use App\Livewire\Traits\ModalCrudTrait;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -13,7 +14,7 @@ use Livewire\Attributes\Title;
 #[Title('Gestión de Instructores - Admin')]
 class InstructorManagement extends Component
 {
-    use WithPagination, WithFileUploads;
+    use WithPagination, WithFileUploads, ModalCrudTrait;
 
     public $search = '';
 
@@ -25,10 +26,6 @@ class InstructorManagement extends Component
     public $avatar;
     public $existingAvatar = '';
 
-    // Modal state
-    public $showModal = false;
-    public $isEditing = false;
-
     protected $rules = [
         'name' => 'required|min:3|max:255',
         'description' => 'nullable|string',
@@ -36,44 +33,39 @@ class InstructorManagement extends Component
         'avatar' => 'nullable|image|max:2048',
     ];
 
-    public function openCreateModal()
+    /**
+     * Get the model instance for editing
+     */
+    protected function getModelForEdit($id)
     {
-        $this->resetForm();
-        $this->showModal = true;
-        $this->isEditing = false;
+        return Instructor::findOrFail($id);
     }
 
-    public function openEditModal($instructorId)
+    /**
+     * Load model data into component properties
+     */
+    protected function loadModelData($model)
     {
-        $instructor = Instructor::findOrFail($instructorId);
-
-        $this->instructorId = $instructor->id;
-        $this->name = $instructor->name;
-        $this->description = $instructor->description ?? '';
-        $this->instagram = $instructor->instagram ?? '';
-        $this->existingAvatar = $instructor->avatar;
-
-        $this->showModal = true;
-        $this->isEditing = true;
+        $this->instructorId = $model->id;
+        $this->name = $model->name;
+        $this->description = $model->description ?? '';
+        $this->instagram = $model->instagram ?? '';
+        $this->existingAvatar = $model->avatar;
     }
 
-    public function closeModal()
+    /**
+     * Get the list of form field names to reset
+     */
+    protected function getFormFields(): array
     {
-        $this->showModal = false;
-        $this->resetForm();
-    }
-
-    public function resetForm()
-    {
-        $this->reset([
+        return [
             'instructorId',
             'name',
             'description',
             'instagram',
             'existingAvatar',
             'avatar',
-        ]);
-        $this->resetValidation();
+        ];
     }
 
     public function saveInstructor()

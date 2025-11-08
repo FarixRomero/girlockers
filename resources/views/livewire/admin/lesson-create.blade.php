@@ -306,6 +306,31 @@
                                 })
                             });
 
+                            // Obtener duración del video automáticamente
+                            try {
+                                const durationResponse = await fetch('{{ route("admin.lessons.bunny.duration") }}', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                    },
+                                    body: JSON.stringify({
+                                        video_id: currentVideoId
+                                    })
+                                });
+
+                                const durationData = await durationResponse.json();
+
+                                if (durationData.success && durationData.duration) {
+                                    // Auto-llenar el campo duration en el formulario Livewire
+                                    @this.set('form.duration', durationData.duration);
+                                    console.log('Duración obtenida:', durationData.duration, 'segundos');
+                                }
+                            } catch (error) {
+                                console.warn('No se pudo obtener la duración automáticamente:', error);
+                                // No es crítico, continuar sin duración
+                            }
+
                             // Mantener botón deshabilitado permanentemente después de subida exitosa
                             selectVideoBtn.disabled = true;
                             selectVideoBtn.classList.add('opacity-50', 'cursor-not-allowed');

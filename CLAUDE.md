@@ -17,7 +17,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ### Stack & Patterns
 
 - **Full-Stack Approach**: Livewire components handle both frontend and backend logic
-- **No API Layer**: Uses Livewire's reactive components instead of REST/GraphQL endpoints (except admin lesson management)
+- **No API Layer**: Uses Livewire's reactive components instead of REST/GraphQL endpoints
 - **Blade + Volt**: Templates use both traditional Blade and Livewire Volt (functional components)
 - **File-based Routing**: Routes defined in `routes/web.php` pointing to Livewire components
 
@@ -32,7 +32,7 @@ app/
 ├── Models/             # Eloquent models (User, Course, Module, Lesson, Instructor, Tag, Comment)
 ├── Policies/           # Authorization policies for lesson access control
 ├── Http/Controllers/
-│   ├── Api/            # REST API for admin lesson CRUD operations
+│   ├── Admin/          # Admin-specific controllers (e.g., BunnyUploadController)
 │   └── VideoStreamController.php  # Video streaming with range requests
 resources/
 ├── views/

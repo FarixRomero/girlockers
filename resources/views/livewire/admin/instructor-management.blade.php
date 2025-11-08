@@ -62,8 +62,103 @@
             </div>
         </div>
 
-        <!-- Instructors Table -->
-        <div class="bg-white rounded-2xl border border-gray-light/50 shadow-sm overflow-hidden">
+        <!-- Instructors List -->
+        <!-- Mobile View (Cards) -->
+        <div class="md:hidden space-y-3">
+            @forelse($instructors as $instructor)
+                <div wire:key="instructor-mobile-{{ $instructor->id }}"
+                     class="bg-white rounded-2xl p-4 border border-gray-light/50 shadow-sm">
+                    <!-- Header with Avatar & Actions -->
+                    <div class="flex items-start justify-between gap-3 mb-3">
+                        <div class="flex items-center gap-3 flex-1 min-w-0">
+                            @if($instructor->avatar)
+                                <img src="{{ asset('storage/' . $instructor->avatar) }}"
+                                     alt="{{ $instructor->name }}"
+                                     class="w-14 h-14 object-cover rounded-full shadow-sm flex-shrink-0">
+                            @else
+                                <div class="w-14 h-14 bg-gradient-to-br from-purple-primary to-purple-light rounded-full flex items-center justify-center shadow-sm flex-shrink-0">
+                                    <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                                    </svg>
+                                </div>
+                            @endif
+
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-black font-bold text-base truncate">{{ $instructor->name }}</h3>
+                                @if($instructor->description)
+                                    <p class="text-gray-dark text-sm line-clamp-1">{{ $instructor->description }}</p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Action Buttons -->
+                        <div class="flex items-center gap-1 flex-shrink-0">
+                            <button wire:click="openEditModal({{ $instructor->id }})"
+                                    class="p-2 text-purple-primary hover:bg-purple-ultralight rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                                </svg>
+                            </button>
+                            <button wire:click="deleteInstructor({{ $instructor->id }})"
+                                    wire:confirm="¿Estás seguro de eliminar el instructor '{{ $instructor->name }}'?"
+                                    class="p-2 text-red-600 hover:bg-red-50 rounded-lg transition">
+                                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Info Grid -->
+                    <div class="grid grid-cols-3 gap-3 pt-3 border-t border-gray-light/50">
+                        <!-- Instagram -->
+                        <div class="text-center">
+                            <div class="text-xs text-gray-medium mb-1">Instagram</div>
+                            @if($instructor->instagram)
+                                <a href="https://instagram.com/{{ ltrim($instructor->instagram, '@') }}"
+                                   target="_blank"
+                                   class="text-purple-primary text-xs font-medium hover:underline inline-flex items-center justify-center">
+                                    <svg class="w-3 h-3 mr-0.5" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                    <span class="truncate max-w-[60px]">{{ Str::limit($instructor->instagram, 10) }}</span>
+                                </a>
+                            @else
+                                <span class="text-gray-medium text-xs">-</span>
+                            @endif
+                        </div>
+
+                        <!-- Lecciones -->
+                        <div class="text-center">
+                            <div class="text-xs text-gray-medium mb-1">Lecciones</div>
+                            <div class="text-sm font-bold text-purple-primary">{{ $instructor->lessons_count }}</div>
+                        </div>
+
+                        <!-- Likes -->
+                        <div class="text-center">
+                            <div class="text-xs text-gray-medium mb-1">Likes</div>
+                            <div class="text-sm font-bold text-pink-500 inline-flex items-center justify-center">
+                                <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M3.172 5.172a4 4 0 015.656 0L10 6.343l1.172-1.171a4 4 0 115.656 5.656L10 17.657l-6.828-6.829a4 4 0 010-5.656z" clip-rule="evenodd"></path>
+                                </svg>
+                                {{ $instructor->likes_count }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            @empty
+                <div class="bg-white rounded-2xl text-center py-12">
+                    <svg class="w-16 h-16 text-gray-light mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
+                    </svg>
+                    <p class="text-gray-dark font-medium">No se encontraron instructores</p>
+                    <p class="text-gray-medium text-sm mt-2">Comienza agregando tu primer instructor</p>
+                </div>
+            @endforelse
+        </div>
+
+        <!-- Desktop View (Table) -->
+        <div class="hidden md:block bg-white rounded-2xl border border-gray-light/50 shadow-sm overflow-hidden">
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>

@@ -65,16 +65,8 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');
 
-    // Lesson list view (uses vanilla JS + API, NOT Livewire)
-    Route::get('modules/{moduleId}/lessons', function ($moduleId) {
-        $instructors = \App\Models\Instructor::orderBy('name')->get();
-        $tags = \App\Models\Tag::orderBy('name')->get();
-        return view('admin.lesson-management', [
-            'moduleId' => $moduleId,
-            'instructors' => $instructors,
-            'tags' => $tags
-        ]);
-    })->name('modules.lessons');
+    // Lesson list view (Livewire component)
+    Route::get('modules/{moduleId}/lessons', \App\Livewire\Admin\LessonManagement::class)->name('modules.lessons');
     // Global lesson create (from navbar) - Instagram style
     Route::get('lessons/create', \App\Livewire\Admin\LessonCreate::class)->name('lessons.create-global');
 
@@ -89,22 +81,10 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     // Bunny.net video upload endpoints
     Route::post('lessons/bunny/init-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'initUpload'])->name('lessons.bunny.init');
     Route::post('lessons/bunny/confirm-upload', [App\Http\Controllers\Admin\BunnyUploadController::class, 'confirmUpload'])->name('lessons.bunny.confirm');
+    Route::post('lessons/bunny/duration', [App\Http\Controllers\Admin\BunnyUploadController::class, 'getBunnyDuration'])->name('lessons.bunny.duration');
 
-    // Thumbnail upload
-    Route::post('api/upload-thumbnail', [App\Http\Controllers\Api\LessonController::class, 'uploadThumbnail'])->name('api.upload-thumbnail');
-
-    // API Routes for Lesson Management
-    Route::prefix('api')->name('api.')->group(function () {
-        Route::get('modules/{moduleId}/lessons', [App\Http\Controllers\Api\LessonController::class, 'index'])->name('lessons.index');
-        Route::post('lessons', [App\Http\Controllers\Api\LessonController::class, 'store'])->name('lessons.store');
-        Route::get('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'show'])->name('lessons.show');
-        Route::put('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'update'])->name('lessons.update');
-        Route::delete('lessons/{id}', [App\Http\Controllers\Api\LessonController::class, 'destroy'])->name('lessons.destroy');
-        Route::post('lessons/{id}/move-up', [App\Http\Controllers\Api\LessonController::class, 'moveUp'])->name('lessons.move-up');
-        Route::post('lessons/{id}/move-down', [App\Http\Controllers\Api\LessonController::class, 'moveDown'])->name('lessons.move-down');
-        Route::post('lessons/{id}/toggle-trial', [App\Http\Controllers\Api\LessonController::class, 'toggleTrial'])->name('lessons.toggle-trial');
-        Route::post('lessons/bunny/duration', [App\Http\Controllers\Api\LessonController::class, 'getBunnyDuration'])->name('lessons.bunny.duration');
-    });
+    // Thumbnail upload (used by LessonCreate/LessonEdit)
+    Route::post('api/upload-thumbnail', [App\Http\Controllers\Admin\BunnyUploadController::class, 'uploadThumbnail'])->name('api.upload-thumbnail');
 });
 
 require __DIR__.'/auth.php';

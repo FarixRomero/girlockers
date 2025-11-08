@@ -90,6 +90,24 @@
                                         Pendiente
                                     </span>
                                 @endif
+
+                                @if($student->has_full_access && $student->membership_expires_at)
+                                    @if($student->isMembershipExpired())
+                                        <span class="px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded-full font-medium">
+                                            ⏰ Expirado
+                                        </span>
+                                    @elseif($student->isMembershipExpiringSoon())
+                                        @php $days = $student->getDaysUntilExpiration(); @endphp
+                                        <span class="px-2 py-0.5 bg-orange-100 text-orange-700 text-xs rounded-full font-medium">
+                                            ⏰ {{ $days }} {{ $days == 1 ? 'día' : 'días' }}
+                                        </span>
+                                    @else
+                                        @php $days = $student->getDaysUntilExpiration(); @endphp
+                                        <span class="px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded-full font-medium">
+                                            ⏰ {{ $days }} {{ $days == 1 ? 'día' : 'días' }}
+                                        </span>
+                                    @endif
+                                @endif
                             </div>
                             @if($student->has_full_access && $student->membership_expires_at)
                                 <div class="mt-2 text-xs text-gray-600">

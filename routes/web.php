@@ -74,51 +74,14 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
             'tags' => $tags
         ]);
     })->name('modules.lessons');
-    // Global lesson create (from navbar)
-    Route::get('lessons/create', function () {
-        $courses = \App\Models\Course::with('modules')->orderBy('title')->get();
-        $instructors = \App\Models\Instructor::orderBy('name')->get();
-        $tags = \App\Models\Tag::orderBy('name')->get();
-        return view('admin.lesson-form', [
-            'module' => null,
-            'lesson' => null,
-            'courses' => $courses,
-            'instructors' => $instructors,
-            'tags' => $tags,
-            'nextOrder' => 1
-        ]);
-    })->name('lessons.create-global');
+    // Global lesson create (from navbar) - Instagram style
+    Route::get('lessons/create', \App\Livewire\Admin\LessonCreate::class)->name('lessons.create-global');
 
-    // New Instagram-style lesson create (proof of concept)
-    Route::get('lessons/create-new', \App\Livewire\Admin\LessonCreate::class)->name('lessons.create-new');
+    // Module-specific lesson create - Instagram style
+    Route::get('modules/{moduleId}/lessons/create', \App\Livewire\Admin\LessonCreate::class)->name('lessons.create');
 
-    Route::get('modules/{moduleId}/lessons/create', function ($moduleId) {
-        $module = \App\Models\Module::with('course')->findOrFail($moduleId);
-        $instructors = \App\Models\Instructor::orderBy('name')->get();
-        $tags = \App\Models\Tag::orderBy('name')->get();
-        $nextOrder = $module->lessons()->max('order') + 1;
-        return view('admin.lesson-form', [
-            'module' => $module,
-            'lesson' => null,
-            'courses' => null,
-            'instructors' => $instructors,
-            'tags' => $tags,
-            'nextOrder' => $nextOrder
-        ]);
-    })->name('lessons.create');
-    Route::get('lessons/{lessonId}/edit', function ($lessonId) {
-        $lesson = \App\Models\Lesson::with(['module.course', 'tags'])->findOrFail($lessonId);
-        $instructors = \App\Models\Instructor::orderBy('name')->get();
-        $tags = \App\Models\Tag::orderBy('name')->get();
-        return view('admin.lesson-form', [
-            'module' => $lesson->module,
-            'lesson' => $lesson,
-            'courses' => null,
-            'instructors' => $instructors,
-            'tags' => $tags,
-            'nextOrder' => null
-        ]);
-    })->name('lessons.edit');
+    // Lesson edit - Instagram style
+    Route::get('lessons/{lessonId}/edit', \App\Livewire\Admin\LessonEdit::class)->name('lessons.edit');
     Route::get('instructors', InstructorManagement::class)->name('instructors.index');
     Route::get('tags', TagManagement::class)->name('tags.index');
 

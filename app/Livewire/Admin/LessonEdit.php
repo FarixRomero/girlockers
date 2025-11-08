@@ -11,9 +11,12 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Livewire\Attributes\Validate;
 
-class LessonCreate extends Component
+class LessonEdit extends Component
 {
     use WithFileUploads;
+
+    public $lessonId;
+    public $lesson;
 
     // Form fields
     #[Validate('required|string|max:255')]
@@ -34,27 +37,37 @@ class LessonCreate extends Component
     #[Validate('nullable|image|max:10240')] // 10MB max
     public $thumbnail;
 
-    public $video_type = 'bunny'; // Always use Bunny.net
-
+    public $video_type = 'bunny';
     public $bunny_video_id = '';
-
     public $is_trial = false;
+    public $is_published = true;
     public $duration = 0;
 
     // UI State
     public $thumbnailPreview = null;
+    public $existingThumbnail = null;
 
-    public function mount($moduleId = null)
+    public function mount($lessonId)
     {
-        // Si viene un moduleId, pre-seleccionarlo
-        if ($moduleId) {
-            $this->module_id = $moduleId;
-        }
+        $this->lessonId = $lessonId;
+        $this->lesson = Lesson::with(['module.course', 'tags'])->findOrFail($lessonId);
 
-        // Set default instructor if available
-        $firstInstructor = Instructor::first();
-        if ($firstInstructor) {
-            $this->instructor_id = $firstInstructor->id;
+        // Cargar datos de la lección
+        $this->title = $this->lesson->title;
+        $this->description = $this->lesson->description;
+        $this->module_id = $this->lesson->module_id;
+        $this->instructor_id = $this->lesson->instructor_id;
+        $this->bunny_video_id = $this->lesson->bunny_video_id ?? '';
+        $this->video_type = $this->lesson->video_type;
+        $this->duration = $this->lesson->duration;
+        $this->is_trial = $this->lesson->is_trial;
+        $this->is_published = $this->lesson->is_published;
+        $this->selectedTags = $this->lesson->tags->pluck('id')->toArray();
+
+        // Guardar thumbnail existente
+        if ($this->lesson->thumbnail) {
+            $this->existingThumbnail = $this->lesson->thumbnail;
+            $this->thumbnailPreview = asset('storage/' . $this->lesson->thumbnail);
         }
     }
 
@@ -70,14 +83,8 @@ class LessonCreate extends Component
     {
         $this->validate();
 
-        // Validar que el video haya sido subido
-        if (empty($this->bunny_video_id)) {
-            session()->flash('error', 'Debes subir un video antes de guardar');
-            return;
-        }
-
         try {
-            $lesson = $this->createLesson(false); // false = no publicar
+            $this->updateLesson(false); // false = no publicar
             session()->flash('success', 'Borrador guardado exitosamente');
             return redirect()->route('admin.modules.lessons', $this->module_id);
         } catch (\Exception $e) {
@@ -89,56 +96,44 @@ class LessonCreate extends Component
     {
         $this->validate();
 
-        // Validar que el video haya sido subido
-        if (empty($this->bunny_video_id)) {
-            session()->flash('error', 'Debes subir un video antes de publicar');
-            return;
-        }
-
         try {
-            $lesson = $this->createLesson(true); // true = publicar
-            session()->flash('success', 'Lección publicada exitosamente');
+            $this->updateLesson(true); // true = publicar
+            session()->flash('success', 'Lección actualizada y publicada exitosamente');
             return redirect()->route('admin.modules.lessons', $this->module_id);
         } catch (\Exception $e) {
             session()->flash('error', 'Error al publicar: ' . $e->getMessage());
         }
     }
 
-    private function createLesson($isPublished = true)
+    private function updateLesson($isPublished = true)
     {
-        // Get next order number
-        $module = Module::findOrFail($this->module_id);
-        $nextOrder = $module->lessons()->max('order') + 1;
-
         // Handle thumbnail upload
-        $thumbnailPath = null;
+        $thumbnailPath = $this->existingThumbnail;
         if ($this->thumbnail) {
+            // Delete old thumbnail if exists
+            if ($this->existingThumbnail && file_exists(storage_path('app/public/' . $this->existingThumbnail))) {
+                unlink(storage_path('app/public/' . $this->existingThumbnail));
+            }
             $thumbnailPath = $this->thumbnail->store('lessons/thumbnails', 'public');
         }
 
-        // Create lesson with Bunny.net video
-        $lesson = Lesson::create([
+        // Update lesson
+        $this->lesson->update([
             'title' => $this->title,
             'description' => $this->description,
             'module_id' => $this->module_id,
             'instructor_id' => $this->instructor_id,
             'thumbnail' => $thumbnailPath,
-            'video_path' => null,
-            'video_type' => 'bunny',
-            'youtube_id' => null,
             'bunny_video_id' => $this->bunny_video_id,
             'duration' => $this->duration,
             'is_trial' => $this->is_trial,
             'is_published' => $isPublished,
-            'order' => $nextOrder,
         ]);
 
-        // Attach tags
-        if (!empty($this->selectedTags)) {
-            $lesson->tags()->attach($this->selectedTags);
-        }
+        // Sync tags
+        $this->lesson->tags()->sync($this->selectedTags);
 
-        return $lesson;
+        return $this->lesson;
     }
 
     public function render()
@@ -147,18 +142,8 @@ class LessonCreate extends Component
         $instructors = Instructor::orderBy('name')->get();
         $tags = Tag::orderBy('name')->get();
 
-        // Get modules for selected course
-        $modules = [];
-        if ($this->module_id) {
-            $module = Module::find($this->module_id);
-            if ($module) {
-                $modules = Module::where('course_id', $module->course_id)->orderBy('order')->get();
-            }
-        }
-
-        return view('livewire.admin.lesson-create', [
+        return view('livewire.admin.lesson-edit', [
             'courses' => $courses,
-            'modules' => $modules,
             'instructors' => $instructors,
             'tags' => $tags,
         ])->layout('layouts.admin');

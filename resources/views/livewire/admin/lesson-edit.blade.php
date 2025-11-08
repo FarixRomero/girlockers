@@ -7,7 +7,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
                 </svg>
             </button>
-            <h1 class="text-base font-semibold text-gray-900">Nueva lección</h1>
+            <h1 class="text-base font-semibold text-gray-900">Editar lección</h1>
             <div class="w-6"></div>
         </div>
     </div>
@@ -31,7 +31,28 @@
 
     <!-- Main Content -->
     <div class="max-w-2xl mx-auto px-4 py-6">
-        <!-- Video/Thumbnail Upload Area -->
+        <!-- Video Preview (si existe Bunny.net video) -->
+        @if($bunny_video_id)
+            <div class="bg-white rounded-lg border border-gray-200 mb-4 overflow-hidden">
+                <!-- Bunny.net Video Player -->
+                <div class="aspect-video w-full bg-black">
+                    <iframe
+                        src="https://iframe.mediadelivery.net/embed/{{ config('bunny.library_id') }}/{{ $bunny_video_id }}"
+                        loading="lazy"
+                        style="border: none; width: 100%; height: 100%;"
+                        allow="accelerometer; gyroscope; autoplay; encrypted-media; picture-in-picture;"
+                        allowfullscreen="true">
+                    </iframe>
+                </div>
+                <div class="p-4 border-t border-gray-100">
+                    <p class="text-sm text-gray-600">
+                        <span class="font-medium">Video ID:</span> {{ $bunny_video_id }}
+                    </p>
+                </div>
+            </div>
+        @endif
+
+        <!-- Thumbnail Upload Area -->
         <div class="bg-white rounded-lg border border-gray-200 mb-4 overflow-hidden">
             <!-- Preview Area -->
             <div class="h-48 md:h-64 w-full bg-gray-100 flex items-center justify-center relative">
@@ -49,50 +70,13 @@
             </div>
 
             <!-- Upload Controls -->
-            <div class="p-4 border-t border-gray-100 space-y-3">
-                <!-- Video Upload -->
-                <div class="pt-2 border-t border-gray-100" wire:ignore>
-                    <label class="text-sm text-gray-700 mb-2 block">Video</label>
-                    <input type="file"
-                           id="videoFile"
-                           accept="video/*"
-                           class="hidden">
-                    <button type="button"
-                            onclick="document.getElementById('videoFile').click()"
-                            id="selectVideoBtn"
-                            class="w-full px-4 py-2 bg-blue-500 text-white text-sm font-medium rounded-lg hover:bg-blue-600 transition">
-                        Seleccionar video
-                    </button>
-                    <p id="videoFileName" class="text-xs text-gray-500 mt-2 hidden"></p>
-
-                    <!-- Progress Bar -->
-                    <div id="uploadProgress" class="hidden mt-3">
-                        <div class="flex items-center justify-between mb-1">
-                            <span class="text-xs text-gray-600">Subiendo...</span>
-                            <span id="uploadPercent" class="text-xs font-medium text-blue-600">0%</span>
-                        </div>
-                        <div class="w-full bg-gray-200 rounded-full h-2">
-                            <div id="uploadBar" class="bg-blue-500 h-2 rounded-full transition-all duration-300" style="width: 0%"></div>
-                        </div>
-                    </div>
-
-                    <!-- Upload Status -->
-                    <div id="uploadStatus" class="hidden mt-2"></div>
-
-                    <!-- Bunny.net Video ID (oculto, se llena automáticamente) -->
-                    <input type="hidden"
-                           wire:model="bunny_video_id"
-                           id="bunnyVideoId">
-                </div>
-
-                <div>
-                    <label class="flex items-center justify-between cursor-pointer">
-                        <span class="text-sm text-gray-700">Miniatura</span>
-                        <input type="file" wire:model.live="thumbnail" class="hidden" accept="image/*">
-                        <span class="text-sm text-blue-500 font-medium">{{ $thumbnailPreview ? 'Cambiar' : 'Subir' }}</span>
-                    </label>
-                    @error('thumbnail') <span class="text-xs text-red-500">{{ $message }}</span> @enderror
-                </div>
+            <div class="p-4 border-t border-gray-100">
+                <label class="flex items-center justify-between cursor-pointer">
+                    <span class="text-sm text-gray-700">Miniatura</span>
+                    <input type="file" wire:model.live="thumbnail" class="hidden" accept="image/*">
+                    <span class="text-sm text-blue-500 font-medium">Cambiar miniatura</span>
+                </label>
+                @error('thumbnail') <span class="text-xs text-red-500 mt-1 block">{{ $message }}</span> @enderror
             </div>
         </div>
 
@@ -213,132 +197,4 @@
         </div>
     </div>
 
-    @script
-    <script>
-        (function() {
-            const videoFileInput = document.getElementById('videoFile');
-            const videoFileName = document.getElementById('videoFileName');
-            const uploadProgress = document.getElementById('uploadProgress');
-            const uploadBar = document.getElementById('uploadBar');
-            const uploadPercent = document.getElementById('uploadPercent');
-            const uploadStatus = document.getElementById('uploadStatus');
-            const bunnyVideoIdInput = document.getElementById('bunnyVideoId');
-            const selectVideoBtn = document.getElementById('selectVideoBtn');
-
-            let currentVideoId = null;
-
-            // Manejar selección de archivo
-            videoFileInput.addEventListener('change', async function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-
-                // Mostrar nombre del archivo
-                videoFileName.textContent = `Archivo: ${file.name} (${(file.size / 1024 / 1024).toFixed(2)} MB)`;
-                videoFileName.classList.remove('hidden');
-
-                // Iniciar subida automáticamente
-                await uploadToBunny(file);
-            });
-
-            async function uploadToBunny(file) {
-                try {
-                    // Deshabilitar botón de selección
-                    selectVideoBtn.disabled = true;
-                    selectVideoBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
-                    // Mostrar progreso
-                    uploadProgress.classList.remove('hidden');
-                    uploadStatus.classList.add('hidden');
-
-                    // Paso 1: Inicializar subida (crear video en Bunny.net)
-                    const initResponse = await fetch('{{ route("admin.lessons.bunny.init") }}', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        },
-                        body: JSON.stringify({
-                            title: file.name
-                        })
-                    });
-
-                    const initData = await initResponse.json();
-
-                    if (!initData.success) {
-                        throw new Error(initData.message || 'Error al inicializar subida');
-                    }
-
-                    currentVideoId = initData.video_id;
-
-                    // Paso 2: Subir video directamente a Bunny.net usando PUT
-                    const xhr = new XMLHttpRequest();
-
-                    // Monitorear progreso
-                    xhr.upload.addEventListener('progress', (e) => {
-                        if (e.lengthComputable) {
-                            const percentComplete = Math.round((e.loaded / e.total) * 100);
-                            uploadBar.style.width = percentComplete + '%';
-                            uploadPercent.textContent = percentComplete + '%';
-                        }
-                    });
-
-                    // Manejar completado
-                    xhr.addEventListener('load', async () => {
-                        if (xhr.status === 200 || xhr.status === 201) {
-                            // Actualizar el input hidden de Livewire
-                            bunnyVideoIdInput.value = currentVideoId;
-                            bunnyVideoIdInput.dispatchEvent(new Event('input', { bubbles: true }));
-
-                            // Mostrar mensaje de éxito
-                            uploadStatus.innerHTML = '<p class="text-xs text-green-600 font-medium">✓ Video subido exitosamente</p>';
-                            uploadStatus.classList.remove('hidden');
-                            uploadProgress.classList.add('hidden');
-
-                            // Confirmar subida en backend
-                            await fetch('{{ route("admin.lessons.bunny.confirm") }}', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                },
-                                body: JSON.stringify({
-                                    video_id: currentVideoId
-                                })
-                            });
-
-                            // Mantener botón deshabilitado permanentemente después de subida exitosa
-                            selectVideoBtn.disabled = true;
-                            selectVideoBtn.classList.add('opacity-50', 'cursor-not-allowed');
-                            selectVideoBtn.textContent = 'Video subido';
-                        } else {
-                            throw new Error('Error al subir video: ' + xhr.statusText);
-                        }
-                    });
-
-                    // Manejar errores
-                    xhr.addEventListener('error', () => {
-                        uploadStatus.innerHTML = '<p class="text-xs text-red-600 font-medium">✗ Error al subir video</p>';
-                        uploadStatus.classList.remove('hidden');
-                        uploadProgress.classList.add('hidden');
-                        selectVideoBtn.disabled = false;
-                        selectVideoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    });
-
-                    // Abrir conexión y enviar
-                    xhr.open('PUT', initData.upload_url);
-                    xhr.setRequestHeader('AccessKey', initData.api_key);
-                    xhr.send(file);
-
-                } catch (error) {
-                    console.error('Error:', error);
-                    uploadStatus.innerHTML = `<p class="text-xs text-red-600 font-medium">✗ ${error.message}</p>`;
-                    uploadStatus.classList.remove('hidden');
-                    uploadProgress.classList.add('hidden');
-                    selectVideoBtn.disabled = false;
-                    selectVideoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                }
-            }
-        })();
-    </script>
-    @endscript
 </div>

@@ -13,7 +13,7 @@ class InstructorSeeder extends Seeder
     public function run(): void
     {
         // Default image from S3 (relative path)
-        $defaultAvatar = 'lessons/thumbnails/0hM1AnAmePn00bIKF3ZxmaX9G44weDIltT8W9Bw2.jpg';
+        $defaultAvatar = 'instructors/690fa28e61be0_1762632334.jpg';
 
         $instructors = [
             [

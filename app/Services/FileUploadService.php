@@ -34,54 +34,65 @@ class FileUploadService
                 $this->deleteFile($existingPath);
             }
 
-            // Resize image if needed
-            $image = Image::read($file->getRealPath());
-            $originalWidth = $image->width();
-            $originalHeight = $image->height();
-            $needsResize = false;
+            // Try to read image to check if it needs resizing
+            try {
+                $image = Image::read($file->get());
+                $originalWidth = $image->width();
+                $originalHeight = $image->height();
 
-            // Check if image needs resizing
-            if ($originalWidth > self::MAX_WIDTH || $originalHeight > self::MAX_HEIGHT) {
-                $needsResize = true;
+                // Check if image needs resizing
+                if ($originalWidth > self::MAX_WIDTH || $originalHeight > self::MAX_HEIGHT) {
+                    // Scale down while maintaining aspect ratio
+                    $image->scale(
+                        width: self::MAX_WIDTH,
+                        height: self::MAX_HEIGHT
+                    );
 
-                // Scale down while maintaining aspect ratio
-                $image->scale(
-                    width: self::MAX_WIDTH,
-                    height: self::MAX_HEIGHT
-                );
+                    // Encode as JPEG with quality compression
+                    $encoded = $image->toJpeg(quality: self::JPEG_QUALITY);
+                    $extension = 'jpg';
 
-                Log::info('Image resized', [
-                    'original' => "{$originalWidth}x{$originalHeight}",
-                    'new' => "{$image->width()}x{$image->height()}"
+                    Log::info('Image resized', [
+                        'original' => "{$originalWidth}x{$originalHeight}",
+                        'new' => "{$image->width()}x{$image->height()}",
+                        'original_size' => $file->getSize(),
+                        'new_size' => strlen((string) $encoded)
+                    ]);
+                } else {
+                    // Image is small enough, use as-is
+                    $encoded = $image->encode();
+                    $extension = $file->getClientOriginalExtension();
+
+                    Log::info('Image uploaded without resizing', [
+                        'dimensions' => "{$originalWidth}x{$originalHeight}",
+                        'size' => $file->getSize()
+                    ]);
+                }
+
+                // Generate unique filename
+                $filename = uniqid() . '_' . time() . '.' . $extension;
+                $path = $directory . '/' . $filename;
+
+                // Upload to S3 with public visibility
+                $uploaded = Storage::disk('s3')->put($path, (string) $encoded, 'public');
+
+            } catch (\Exception $imageError) {
+                // If image processing fails, upload the original file
+                Log::warning('Image processing failed, uploading original', [
+                    'error' => $imageError->getMessage()
                 ]);
+
+                $path = $file->store($directory, 's3');
             }
 
-            // Encode image (optimize if resized)
-            if ($needsResize) {
-                $encoded = $image->toJpeg(quality: self::JPEG_QUALITY);
-            } else {
-                // Keep original format and quality if no resize needed
-                $encoded = $image->encode();
-            }
-
-            // Generate unique filename
-            $extension = $needsResize ? 'jpg' : $file->getClientOriginalExtension();
-            $filename = uniqid() . '_' . time() . '.' . $extension;
-            $path = $directory . '/' . $filename;
-
-            // Upload to S3
-            $uploaded = Storage::disk('s3')->put($path, (string) $encoded, 'public');
-
-            if (!$uploaded) {
-                throw new \Exception('Failed to store file');
+            if (!$path) {
+                throw new \Exception('Failed to store file in S3');
             }
 
             Log::info('File uploaded successfully', [
                 'directory' => $directory,
                 'path' => $path,
-                'original_name' => $file->getClientOriginalName(),
-                'resized' => $needsResize,
-                'final_size' => strlen((string) $encoded) . ' bytes'
+                'original_name' => $file->getClientOriginalName()
             ]);
 
             return $path;

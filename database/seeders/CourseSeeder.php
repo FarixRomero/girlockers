@@ -19,8 +19,8 @@ class CourseSeeder extends Seeder
         $tatiana = Instructor::first();
 
         // Default images from S3 (relative paths)
-        $defaultCourseImage = 'courses/nL4oVY3ZBeLzy9jox4JG8HdftxzIEkgxqO7Gi4w8.jpg';
-        $defaultLessonThumbnail = 'lessons/thumbnails/0hM1AnAmePn00bIKF3ZxmaX9G44weDIltT8W9Bw2.jpg';
+        $defaultCourseImage = 'courses/690fa2292bdb6_1762632233.jpg';
+        $defaultLessonThumbnail = 'lessons/thumbnails/690fa1f779560_1762632183.jpg';
 
         // Locking Básico Course
         $lockingBasico = Course::create([

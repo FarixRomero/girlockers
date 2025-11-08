@@ -105,11 +105,11 @@ new #[Layout('layouts.guest')] class extends Component
     </form>
 
     <!-- Divider -->
-    <div class="relative my-8">
+    <div class="relative my-6">
         <div class="flex items-center">
-            <div class="flex-grow border-t border-gray-300"></div>
-            <span class="mx-4 text-sm text-gray-500 font-medium">¿Primera vez aquí?</span>
-            <div class="flex-grow border-t border-gray-300"></div>
+            <div class="flex-grow border-t border-gray-200"></div>
+            <span class="mx-3 mt-4 text-xs text-gray-400 font-normal">¿Primera vez aquí?</span>
+            <div class="flex-grow border-t border-gray-200"></div>
         </div>
     </div>
 

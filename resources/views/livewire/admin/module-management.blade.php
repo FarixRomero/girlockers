@@ -32,9 +32,17 @@
             </div>
         @endif
 
-        <!-- Course Description -->
+        <!-- Course Description & Add Button -->
         <div class="bg-white rounded-2xl p-4 mb-4">
-            <p class="text-gray-600 text-sm leading-relaxed">{{ $course->description }}</p>
+            <div class="flex items-start justify-between gap-4">
+                <p class="text-gray-600 text-sm leading-relaxed flex-1">{{ $course->description }}</p>
+                <button wire:click="openCreateModal" class="hidden lg:flex items-center gap-2 px-4 py-2 bg-purple-600 hover:bg-purple-700 text-white rounded-lg text-sm font-semibold transition-colors flex-shrink-0">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                    </svg>
+                    Nuevo Módulo
+                </button>
+            </div>
         </div>
 
         <!-- Modules List -->
@@ -116,7 +124,7 @@
         <!-- Nuevo Módulo Button (Fixed Bottom) -->
         <div class="fixed bottom-4 left-0 right-0 px-4 lg:hidden">
             <div class="max-w-3xl mx-auto">
-                <button wire:click="openCreateModal" class="w-full flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-500 to-purple-600 text-white rounded-2xl shadow-lg font-semibold">
+                <button wire:click="openCreateModal" class="w-full flex items-center justify-center px-6 py-3 bg-purple-600 hover:bg-purple-700 text-white rounded-2xl shadow-lg font-semibold transition-colors">
                     <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
                     </svg>

@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
         // Create real courses with CourseSeeder
         $this->call(CourseSeeder::class);
 
+        $this->call(LandingConfigSeeder::class);
         // Create test students
         $students = User::factory(10)->create();
         $premiumStudents = User::factory(5)->withFullAccess()->create();

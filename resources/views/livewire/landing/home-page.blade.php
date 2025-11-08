@@ -330,8 +330,8 @@
                         <a href="{{ route('login') }}" wire:navigate class="group">
                             <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-purple-glow transition-all duration-300 transform hover:-translate-y-1 border border-gray-light">
                                 <div class="relative h-48 bg-gray-ultralight overflow-hidden">
-                                    @if($course->thumbnail_url)
-                                        <img src="{{ $course->thumbnail_url }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
+                                    @if($course->image_url)
+                                        <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
                                     @else
                                         <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-primary to-purple-light">
                                             <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">

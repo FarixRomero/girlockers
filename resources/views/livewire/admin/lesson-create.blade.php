@@ -321,38 +321,52 @@
                                 })
                             });
 
-                            // Obtener duración del video automáticamente
-                            try {
-                                const durationResponse = await fetch('{{ route("admin.lessons.bunny.duration") }}', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                                    },
-                                    body: JSON.stringify({
-                                        video_id: currentVideoId
-                                    })
-                                });
+                            // Obtener duración del video automáticamente (con retry)
+                            const getDuration = async (retries = 3, delay = 2000) => {
+                                for (let i = 0; i < retries; i++) {
+                                    try {
+                                        // Esperar antes de intentar (Bunny.net necesita tiempo para procesar)
+                                        if (i > 0) {
+                                            console.log(`Reintentando obtener duración (${i + 1}/${retries})...`);
+                                            await new Promise(resolve => setTimeout(resolve, delay));
+                                        }
 
-                                const durationData = await durationResponse.json();
+                                        const durationResponse = await fetch('{{ route("admin.lessons.bunny.duration") }}', {
+                                            method: 'POST',
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                            },
+                                            body: JSON.stringify({
+                                                video_id: currentVideoId
+                                            })
+                                        });
 
-                                if (durationData.success && durationData.duration) {
-                                    // Convertir segundos a minutos y segundos
-                                    const totalSeconds = parseInt(durationData.duration);
-                                    const minutes = Math.floor(totalSeconds / 60);
-                                    const seconds = totalSeconds % 60;
+                                        const durationData = await durationResponse.json();
 
-                                    // Auto-llenar los campos de duración en el formulario Livewire
-                                    @this.set('form.duration_minutes', minutes);
-                                    @this.set('form.duration_seconds', seconds);
-                                    @this.set('form.duration', totalSeconds);
+                                        if (durationData.success && durationData.duration && durationData.duration > 0) {
+                                            // Convertir segundos a minutos y segundos
+                                            const totalSeconds = parseInt(durationData.duration);
+                                            const minutes = Math.floor(totalSeconds / 60);
+                                            const seconds = totalSeconds % 60;
 
-                                    console.log('Duración obtenida:', minutes, 'minutos y', seconds, 'segundos');
+                                            // Auto-llenar los campos de duración en el formulario Livewire
+                                            @this.set('form.duration_minutes', minutes);
+                                            @this.set('form.duration_seconds', seconds);
+                                            @this.set('form.duration', totalSeconds);
+
+                                            console.log('Duración obtenida:', minutes, 'minutos y', seconds, 'segundos');
+                                            return; // Éxito, salir del loop
+                                        }
+                                    } catch (error) {
+                                        console.warn(`Error al obtener duración (intento ${i + 1}):`, error);
+                                    }
                                 }
-                            } catch (error) {
-                                console.warn('No se pudo obtener la duración automáticamente:', error);
-                                // No es crítico, continuar sin duración
-                            }
+                                console.warn('No se pudo obtener la duración después de varios intentos. El video podría estar procesándose.');
+                            };
+
+                            // Llamar a la función de obtener duración
+                            getDuration();
 
                             // Mantener botón deshabilitado permanentemente después de subida exitosa
                             selectVideoBtn.disabled = true;

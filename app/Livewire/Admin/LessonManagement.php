@@ -94,16 +94,27 @@ class LessonManagement extends Component
     {
         $lesson = Lesson::findOrFail($lessonId);
 
-        // Delete thumbnail if exists
+        // Delete thumbnail if exists (keep in S3, only delete from local public storage)
         if ($lesson->thumbnail && \Storage::disk('public')->exists($lesson->thumbnail)) {
             \Storage::disk('public')->delete($lesson->thumbnail);
         }
 
-        // If Bunny video, optionally delete from Bunny (commented out for safety)
-        // if ($lesson->video_type === 'bunny' && $lesson->bunny_video_id) {
-        //     $bunnyService = new \App\Services\BunnyService();
-        //     $bunnyService->deleteVideo($lesson->bunny_video_id);
-        // }
+        // Delete video from Bunny.net if it's a Bunny video
+        if ($lesson->video_type === 'bunny' && $lesson->bunny_video_id) {
+            try {
+                $bunnyService = new \App\Services\BunnyService();
+                $deleted = $bunnyService->deleteVideo($lesson->bunny_video_id);
+
+                if ($deleted) {
+                    \Log::info("Video eliminado de Bunny.net: {$lesson->bunny_video_id}");
+                } else {
+                    \Log::warning("No se pudo eliminar el video de Bunny.net: {$lesson->bunny_video_id}");
+                }
+            } catch (\Exception $e) {
+                \Log::error("Error al eliminar video de Bunny.net: {$e->getMessage()}");
+                // Continue with lesson deletion even if Bunny deletion fails
+            }
+        }
 
         $lesson->delete();
 

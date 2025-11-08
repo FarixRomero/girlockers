@@ -76,6 +76,29 @@ class LessonEdit extends Component
         }
     }
 
+    /**
+     * Save only duration to database (called when auto-fetched from Bunny.net)
+     */
+    public function saveDuration()
+    {
+        try {
+            // Calculate total duration in seconds
+            $totalDuration = ($this->form->duration_minutes * 60) + $this->form->duration_seconds;
+
+            // Update only the duration field
+            $this->lesson->update([
+                'duration' => $totalDuration
+            ]);
+
+            \Log::info("Duración guardada automáticamente para lección {$this->lesson->id}: {$totalDuration} segundos");
+
+            return true;
+        } catch (\Exception $e) {
+            \Log::error("Error al guardar duración automáticamente: {$e->getMessage()}");
+            return false;
+        }
+    }
+
     public function render()
     {
         $courses = Course::with('modules')->orderBy('title')->get();

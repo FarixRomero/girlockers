@@ -212,4 +212,78 @@
         </div>
     </div>
 
+    @script
+    <script>
+        (function() {
+            // Auto-fetch duration if missing
+            const bunnyVideoId = @js($form->bunny_video_id ?? '');
+            const currentDurationMinutes = @js($form->duration_minutes ?? 0);
+            const currentDurationSeconds = @js($form->duration_seconds ?? 0);
+
+            // Solo intentar obtener duración si:
+            // 1. Tiene bunny_video_id
+            // 2. No tiene duración (0 minutos y 0 segundos)
+            if (bunnyVideoId && currentDurationMinutes === 0 && currentDurationSeconds === 0) {
+                console.log('Lección sin duración detectada. Obteniendo de Bunny.net...');
+
+                const getDuration = async (retries = 10, delay = 3000) => {
+                    for (let i = 0; i < retries; i++) {
+                        try {
+                            // Esperar antes de intentar (excepto en el primer intento)
+                            if (i > 0) {
+                                console.log(`Reintentando obtener duración (${i + 1}/${retries})...`);
+                                await new Promise(resolve => setTimeout(resolve, delay));
+                            }
+
+                            const durationResponse = await fetch('{{ route("admin.lessons.bunny.duration") }}', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                },
+                                body: JSON.stringify({
+                                    video_id: bunnyVideoId
+                                })
+                            });
+
+                            const durationData = await durationResponse.json();
+
+                            if (durationData.success && durationData.duration && durationData.duration > 0) {
+                                // Convertir segundos a minutos y segundos
+                                const totalSeconds = parseInt(durationData.duration);
+                                const minutes = Math.floor(totalSeconds / 60);
+                                const seconds = totalSeconds % 60;
+
+                                // Auto-llenar los campos de duración en el formulario Livewire
+                                await @this.set('form.duration_minutes', minutes);
+                                await @this.set('form.duration_seconds', seconds);
+                                await @this.set('form.duration', totalSeconds);
+
+                                console.log('✅ Duración obtenida:', minutes, 'minutos y', seconds, 'segundos');
+
+                                // Guardar automáticamente en la base de datos
+                                try {
+                                    await @this.call('saveDuration');
+                                    console.log('💾 Duración guardada automáticamente en la base de datos');
+                                } catch (error) {
+                                    console.error('❌ Error al guardar duración:', error);
+                                }
+
+                                return; // Éxito, salir del loop
+                            } else {
+                                console.log(`⏳ Duración aún no disponible (intento ${i + 1}/${retries}). El video podría estar procesándose...`);
+                            }
+                        } catch (error) {
+                            console.warn(`❌ Error al obtener duración (intento ${i + 1}):`, error);
+                        }
+                    }
+                    console.warn('⚠️  No se pudo obtener la duración después de ' + retries + ' intentos. El video podría estar procesándose en Bunny.net.');
+                };
+
+                // Llamar a la función de obtener duración
+                getDuration();
+            }
+        })();
+    </script>
+    @endscript
 </div>

@@ -72,7 +72,7 @@ class LessonCreate extends Component
         }
 
         try {
-            $lesson = $this->createLesson();
+            $lesson = $this->createLesson(false); // false = no publicar
             session()->flash('success', 'Borrador guardado exitosamente');
             return redirect()->route('admin.modules.lessons', $this->module_id);
         } catch (\Exception $e) {
@@ -91,7 +91,7 @@ class LessonCreate extends Component
         }
 
         try {
-            $lesson = $this->createLesson();
+            $lesson = $this->createLesson(true); // true = publicar
             session()->flash('success', 'Lección publicada exitosamente');
             return redirect()->route('admin.modules.lessons', $this->module_id);
         } catch (\Exception $e) {
@@ -99,7 +99,7 @@ class LessonCreate extends Component
         }
     }
 
-    private function createLesson()
+    private function createLesson($isPublished = true)
     {
         // Get next order number
         $module = Module::findOrFail($this->module_id);
@@ -124,6 +124,7 @@ class LessonCreate extends Component
             'bunny_video_id' => $this->bunny_video_id,
             'duration' => $this->duration,
             'is_trial' => $this->is_trial,
+            'is_published' => $isPublished,
             'order' => $nextOrder,
         ]);
 

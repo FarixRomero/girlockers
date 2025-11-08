@@ -121,7 +121,8 @@
             </div>
 
             <!-- Mobile Bottom Navigation -->
-            <div class="lg:hidden nav-mobile">
+            @if(!request()->routeIs('admin.lessons.create-new'))
+                <div class="lg:hidden nav-mobile">
                 <div class="flex justify-around items-center">
                     <a href="{{ route('admin.dashboard') }}" wire:navigate class="nav-item {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
                         <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -152,7 +153,8 @@
                         </button>
                     </form>
                 </div>
-            </div>
+                </div>
+            @endif
         </div>
 
         @stack('scripts')

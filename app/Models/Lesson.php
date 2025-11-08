@@ -29,6 +29,7 @@ class Lesson extends Model
         'duration', // Duration in seconds
         'thumbnail',
         'is_trial',
+        'is_published',
         'order',
         'likes_count',
     ];
@@ -37,6 +38,7 @@ class Lesson extends Model
     {
         return [
             'is_trial' => 'boolean',
+            'is_published' => 'boolean',
             'order' => 'integer',
             'likes_count' => 'integer',
         ];

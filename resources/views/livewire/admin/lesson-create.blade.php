@@ -306,9 +306,10 @@
                                 })
                             });
 
-                            // Habilitar botón nuevamente
-                            selectVideoBtn.disabled = false;
-                            selectVideoBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                            // Mantener botón deshabilitado permanentemente después de subida exitosa
+                            selectVideoBtn.disabled = true;
+                            selectVideoBtn.classList.add('opacity-50', 'cursor-not-allowed');
+                            selectVideoBtn.textContent = 'Video subido';
                         } else {
                             throw new Error('Error al subir video: ' + xhr.statusText);
                         }

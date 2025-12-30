@@ -208,6 +208,22 @@ class User extends Authenticatable
     }
 
     /**
+     * Get user's membership payments
+     */
+    public function membershipPayments(): HasMany
+    {
+        return $this->hasMany(MembershipPayment::class);
+    }
+
+    /**
+     * Get user's active payment tokens (saved cards)
+     */
+    public function paymentTokens(): HasMany
+    {
+        return $this->hasMany(PaymentToken::class)->where('is_active', true);
+    }
+
+    /**
      * Get user's unread notifications
      */
     public function unreadNotifications(): HasMany

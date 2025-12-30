@@ -69,7 +69,7 @@
 
 2. **Admin receives notification**
    - Log out from student account
-   - Log in as admin: `admin@girlockers.com` / `password`
+   - Log in as admin: `admin@girlslockers.com` / `password`
    - Navigate to `/admin/dashboard`
    - ✅ Pending access requests visible
    - ✅ María García's request shows with timestamp

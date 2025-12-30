@@ -148,7 +148,7 @@ php artisan tinker
 # In tinker console:
 $user = new App\Models\User();
 $user->name = 'Admin';
-$user->email = 'admin@girlockers.com';
+$user->email = 'admin@girlslockers.com';
 $user->password = bcrypt('your-secure-password');
 $user->role = 'admin';
 $user->has_full_access = true;

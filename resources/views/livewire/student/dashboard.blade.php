@@ -1,4 +1,80 @@
 <div class="max-w-full">
+    <!-- Payment Success Modal -->
+    @if(session('payment_success'))
+    <div x-data="{ show: true }"
+         x-show="show"
+         x-cloak
+         class="fixed inset-0 z-50 overflow-y-auto"
+         aria-labelledby="modal-title"
+         role="dialog"
+         aria-modal="true">
+        <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <!-- Background overlay -->
+            <div x-show="show"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0"
+                 x-transition:enter-end="opacity-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100"
+                 x-transition:leave-end="opacity-0"
+                 class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
+                 aria-hidden="true"
+                 @click="show = false"></div>
+
+            <!-- Center the modal -->
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+
+            <!-- Modal panel -->
+            <div x-show="show"
+                 x-transition:enter="ease-out duration-300"
+                 x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave="ease-in duration-200"
+                 x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                 x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                 class="inline-block align-bottom bg-white rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <div class="bg-white px-6 pt-6 pb-6">
+                    <div class="sm:flex sm:items-start">
+                        <div class="mx-auto flex-shrink-0 flex items-center justify-center h-16 w-16 rounded-full bg-green-100 sm:mx-0 sm:h-16 sm:w-16">
+                            <svg class="h-10 w-10 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left flex-1">
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2" id="modal-title">
+                                ¡Pago Exitoso!
+                            </h3>
+                            <div class="mt-4">
+                                <p class="text-base text-gray-700 mb-3">
+                                    Tu pago se realizó correctamente. Ahora tienes acceso completo a todas las clases de nuestra plataforma.
+                                </p>
+                                <div class="bg-purple-50 rounded-lg p-4 border border-purple-100">
+                                    <div class="flex items-start">
+                                        <svg class="w-5 h-5 text-purple-600 mr-2 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                        <div class="text-sm text-purple-900">
+                                            <p class="font-semibold mb-1">Membresía {{ session('membership_type') === 'monthly' ? 'Mensual' : 'Trimestral' }} activada</p>
+                                            <p class="text-purple-700">¡Disfruta de todo el contenido premium sin restricciones!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-gray-50 px-6 py-4 sm:flex sm:flex-row-reverse">
+                    <button type="button"
+                            @click="show = false"
+                            class="w-full inline-flex justify-center rounded-lg border border-transparent shadow-sm px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-base font-semibold text-white hover:from-purple-700 hover:to-pink-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500 sm:ml-3 sm:w-auto sm:text-sm">
+                        ¡Empezar a bailar!
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     <!-- Hero Section - Bienvenida con estadísticas (unified design for mobile and desktop) -->
     <div class="bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-6 px-4">
         <!-- Header con logo y notificación (solo móvil) -->
@@ -61,15 +137,15 @@
 
         <!-- Premium CTA Button (only show if user doesn't have full access) -->
         @if(!$stats['has_access'])
-        <a href="{{ route('request-access') }}" wire:navigate class="block">
+        <a href="{{ route('purchase-membership') }}" wire:navigate class="block">
             <div class="bg-gradient-to-r from-pink-500 via-pink-600 to-orange-500 rounded-2xl p-5 md:p-6 text-white shadow-lg hover:shadow-xl transition-all transform hover:scale-[1.02]">
                 <div class="flex items-center justify-between">
                     <div>
-                        <h3 class="text-xl md:text-2xl font-bold mb-1">Únete a Premium</h3>
-                        <p class="text-sm md:text-base text-white/90">Acceso ilimitado a clases y más.</p>
+                        <h3 class="text-xl md:text-2xl font-bold mb-1">Desbloquea tu potencial con Premium</h3>
+                        <p class="text-sm md:text-base text-white/90">Acceso ilimitado a clases y contenido exclusivo de locking.</p>
                     </div>
                     <div class="bg-white rounded-full px-4 py-2 md:px-6 md:py-3">
-                        <span class="text-pink-600 font-bold text-sm md:text-base">Brilla ya</span>
+                        <span class="text-pink-600 font-bold text-sm md:text-base">Únete a Premium</span>
                     </div>
                 </div>
             </div>
@@ -332,7 +408,7 @@
     <!-- Trending Courses -->
     @if($trendingCourses->count() > 0)
     <div class="px-4 py-3 md:py-4 pb-8">
-        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Cursos de Moda</h2>
+        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Cursos</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($trendingCourses as $course)
                 <a href="{{ route('courses.show', $course) }}" wire:navigate class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition">

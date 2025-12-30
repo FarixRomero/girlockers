@@ -71,7 +71,9 @@ class PaymentCallbackController extends Controller
                 // Evitar procesar dos veces
                 if ($payment->isCompleted()) {
                     Log::info('Payment already completed', ['payment_id' => $payment->id]);
-                    return redirect()->route('payment.success', ['payment_id' => $payment->id]);
+                    return redirect()->route('dashboard')
+                        ->with('payment_success', true)
+                        ->with('membership_type', $payment->membership_type);
                 }
 
                 // Procesar el pago
@@ -94,7 +96,9 @@ class PaymentCallbackController extends Controller
                     'user_id' => $payment->user_id,
                 ]);
 
-                return redirect()->route('payment.success', ['payment_id' => $payment->id]);
+                return redirect()->route('dashboard')
+                    ->with('payment_success', true)
+                    ->with('membership_type', $payment->membership_type);
             }
 
             // Si el estado no es PAID, marcar como fallido

@@ -175,7 +175,7 @@
                                 <svg class="w-5 h-5 inline mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                 </svg>
-                                You can view all content but only access free lessons. <a href="{{ route('request-access') }}" wire:navigate class="underline font-bold">Request full access</a> to unlock everything.
+                                You can view all content but only access free lessons. <a href="{{ route('purchase-membership') }}" wire:navigate class="underline font-bold">Request full access</a> to unlock everything.
                             </p>
                         </div>
                     @endif
@@ -245,7 +245,7 @@
                                             @endphp
 
                                             <a
-                                                href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
+                                                href="{{ $canAccess ? route('lessons.show', $lesson) : route('purchase-membership') }}"
                                                 {{ $canAccess ? 'wire:navigate' : '' }}
                                                 wire:click="markLessonAsCompleted({{ $lesson->id }})"
                                                 class="flex gap-3 bg-gray-800 rounded-lg overflow-hidden hover:bg-gray-700 transition">
@@ -335,7 +335,7 @@
                         NO HAY CLASES DISPONIBLES AÚN
                     </button>
                 @else
-                    <a href="{{ route('request-access') }}" wire:navigate class="block w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-lg transition text-center">
+                    <a href="{{ route('purchase-membership') }}" wire:navigate class="block w-full py-4 bg-orange-600 hover:bg-orange-700 text-white font-bold text-lg transition text-center">
                         🔓 SOLICITA ACCESO PARA CONTINUAR
                     </a>
                 @endif
@@ -425,7 +425,7 @@
                                     <svg class="w-5 h-5 mr-2 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                     </svg>
-                                    <span>Puedes ver todo el contenido del curso, pero solo puedes acceder a las lecciones gratuitas. <a href="{{ route('request-access') }}" wire:navigate class="underline font-bold">Solicita acceso completo</a> para desbloquear todas las lecciones.</span>
+                                    <span>Puedes ver todo el contenido del curso, pero solo puedes acceder a las lecciones gratuitas. <a href="{{ route('purchase-membership') }}" wire:navigate class="underline font-bold">Solicita acceso completo</a> para desbloquear todas las lecciones.</span>
                                 </p>
                             </div>
                         @endif
@@ -579,7 +579,7 @@
                                 @endphp
 
                                 <a
-                                    href="{{ $canAccess ? route('lessons.show', $lesson) : route('request-access') }}"
+                                    href="{{ $canAccess ? route('lessons.show', $lesson) : route('purchase-membership') }}"
                                     {{ $canAccess ? 'wire:navigate' : '' }}
                                     wire:click="markLessonAsCompleted({{ $lesson->id }})"
                                     class="flex items-start gap-3 p-3 rounded-lg hover:bg-purple-deep/50 cursor-pointer transition group">

@@ -8,6 +8,7 @@ use App\Models\PaymentToken;
 use App\Services\IzipayService;
 use App\Services\MembershipService;
 use Livewire\Attributes\Layout;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 #[Layout('layouts.app')]
@@ -31,18 +32,9 @@ class PurchaseMembership extends Component
     }
 
     /**
-     * Seleccionar tipo de membresía
+     * Seleccionar tipo de membresía y redirigir a pago
      */
     public function selectMembershipType(string $type)
-    {
-        $this->selectedMembershipType = $type;
-        $this->resetPaymentForm();
-    }
-
-    /**
-     * Crear pago pendiente y redirigir a página de formulario
-     */
-    public function createPaymentIntent()
     {
         try {
             $membershipService = app(MembershipService::class);
@@ -50,15 +42,16 @@ class PurchaseMembership extends Component
             // Crear pago pendiente
             $payment = $membershipService->createPendingPayment(
                 auth()->user(),
-                $this->selectedMembershipType
+                $type
             );
 
-            // Redirigir a la página del formulario de pago
+            // Redirigir directamente a la página del formulario de pago
             return redirect()->route('payment.form', ['paymentId' => $payment->id]);
         } catch (\Exception $e) {
             session()->flash('error', 'Error: ' . $e->getMessage());
         }
     }
+
 
     /**
      * Pagar con tarjeta guardada

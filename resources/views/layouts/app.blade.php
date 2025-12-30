@@ -104,7 +104,7 @@
                 <div class="px-4 py-4 border-t border-gray-800">
                     <!-- User Info (when expanded) -->
                     <div x-show="!collapsed" x-transition class="mb-4">
-                        <div class="flex items-center space-x-3 p-2 bg-gray-800 rounded-lg">
+                        <a href="{{ route('profile') }}" wire:navigate class="flex items-center space-x-3 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition cursor-pointer">
                             <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
                                 {{ substr(auth()->user()->name, 0, 1) }}
                             </div>
@@ -112,7 +112,7 @@
                                 <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ auth()->user()->email }}</p>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <!-- Logout Button -->

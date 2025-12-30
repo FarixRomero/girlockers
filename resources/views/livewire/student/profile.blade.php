@@ -6,6 +6,25 @@
             <p class="text-gray-600">Administra tu información personal y configuración de cuenta</p>
         </div>
 
+        <!-- Upgrade CTA (if free user) -->
+        @if(!$user->hasFullAccess())
+        <div class="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-lg shadow-lg overflow-hidden mb-6">
+            <div class="p-8 text-center text-white">
+                <svg class="w-16 h-16 mx-auto mb-4 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
+                </svg>
+                <h3 class="text-2xl font-bold mb-2">Mejora a Premium</h3>
+                <p class="text-white/90 mb-6">Desbloquea todo el contenido y accede a coreografías exclusivas</p>
+                <a href="{{ route('purchase-membership') }}" wire:navigate class="inline-flex items-center px-6 py-3 bg-white text-purple-600 font-bold rounded-lg hover:bg-gray-100 transition">
+                    Comprar Membresía
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+        @endif
+
         <!-- Profile Information Section -->
         <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
             <div class="p-6 md:p-8">
@@ -491,25 +510,6 @@
             </div>
         </div>
         @endif
-        @endif
-
-        <!-- Upgrade CTA (if free user) -->
-        @if(!$user->hasFullAccess())
-        <div class="bg-gradient-to-br from-purple-600 via-pink-600 to-purple-700 rounded-lg shadow-lg overflow-hidden mb-6">
-            <div class="p-8 text-center text-white">
-                <svg class="w-16 h-16 mx-auto mb-4 opacity-90" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                </svg>
-                <h3 class="text-2xl font-bold mb-2">Mejora a Premium</h3>
-                <p class="text-white/90 mb-6">Desbloquea todo el contenido y accede a coreografías exclusivas</p>
-                <a href="{{ route('request-access') }}" wire:navigate class="inline-flex items-center px-6 py-3 bg-white text-purple-600 font-bold rounded-lg hover:bg-gray-100 transition">
-                    Solicitar Acceso Premium
-                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path>
-                    </svg>
-                </a>
-            </div>
-        </div>
         @endif
 
         <!-- Logout Section -->

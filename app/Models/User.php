@@ -29,6 +29,12 @@ class User extends Authenticatable
         'access_granted_at',
         'membership_expires_at',
         'membership_type',
+        // Billing fields
+        'document_type',
+        'document_number',
+        'first_name',
+        'last_name',
+        'phone',
     ];
 
     /**

@@ -1,9 +1,37 @@
-<div class="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
-    <div class="max-w-4xl mx-auto">
+<div class="min-h-screen bg-white py-8 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto">
+        <!-- Stepper -->
+        <div class="flex items-center justify-center mb-12">
+            <div class="flex items-center gap-4">
+                <!-- Step 1 - Active -->
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-purple-600 rounded-full flex items-center justify-center text-white font-bold shadow-lg">
+                        1
+                    </div>
+                    <span class="text-base font-semibold text-gray-900">Plan</span>
+                </div>
+
+                <!-- Divider -->
+                <div class="w-20 h-0.5 bg-gray-300"></div>
+
+                <!-- Step 2 - Inactive -->
+                <div class="flex items-center gap-2">
+                    <div class="w-10 h-10 bg-gray-200 rounded-full flex items-center justify-center">
+                        <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                        </svg>
+                    </div>
+                    <span class="text-base font-medium text-gray-400">Pago seguro</span>
+                </div>
+            </div>
+        </div>
+
         <!-- Header -->
-        <div class="text-center mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">Obtén Acceso Premium</h1>
-            <p class="text-sm sm:text-base text-gray-600">Desbloquea todo el contenido y clases exclusivas</p>
+        <div class="text-center mb-12">
+            <h1 class="text-4xl sm:text-5xl font-black text-gray-900 mb-3">Elige tu experiencia</h1>
+            <p class="text-base sm:text-lg text-gray-600 max-w-2xl mx-auto">
+                Selecciona el plan que mejor se adapte a tu ritmo y comienza a dominar el locking.
+            </p>
         </div>
 
         <!-- Error/Success Messages -->
@@ -19,141 +47,124 @@
             </div>
         @endif
 
-        <!-- Membership Plans Selection -->
-        @if (!$showPaymentForm)
-            <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
-                <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Selecciona tu Plan</h2>
+        <!-- Membership Plans -->
+        <div class="grid md:grid-cols-2 gap-6 mb-12">
+            @foreach ($membershipPlans as $plan)
+                <div wire:click="selectMembershipType('{{ $plan->type }}')"
+                     class="relative bg-white rounded-3xl overflow-hidden cursor-pointer transition-all hover:scale-[1.02] {{ $plan->type === 'quarterly' ? 'border-4 border-purple-600 shadow-2xl' : 'border-2 border-gray-200 shadow-lg hover:shadow-xl' }}">
 
-                <div class="grid md:grid-cols-2 gap-3 sm:gap-4">
-                    @foreach ($membershipPlans as $plan)
-                        <div wire:click="selectMembershipType('{{ $plan->type }}')"
-                             class="relative border-2 rounded-lg p-4 sm:p-6 cursor-pointer transition-all hover:shadow-md
-                                    {{ $selectedMembershipType === $plan->type ? 'border-purple-600 bg-purple-50' : 'border-gray-200 hover:border-purple-300' }}">
-
-                            @if ($plan->type === 'quarterly')
-                                <span class="absolute top-2 right-2 bg-green-500 text-white text-xs px-2 py-1 rounded-full">
-                                    ¡Ahorra S/ 10!
-                                </span>
-                            @endif
-
-                            <div class="mb-3 sm:mb-4">
-                                <h3 class="text-base sm:text-lg font-semibold text-gray-900">
-                                    {{ $plan->type === 'monthly' ? 'Plan Mensual' : 'Plan Trimestral' }}
-                                </h3>
-                                <p class="text-xs sm:text-sm text-gray-600 mt-1">{{ $plan->description }}</p>
-                            </div>
-
-                            <div class="mb-3 sm:mb-4">
-                                <span class="text-2xl sm:text-3xl font-bold text-gray-900">S/ {{ number_format($plan->price, 2) }}</span>
-                                <span class="text-sm sm:text-base text-gray-600">/ {{ $plan->type === 'monthly' ? 'mes' : '3 meses' }}</span>
-                            </div>
-
-                            <div class="flex items-center text-xs sm:text-sm text-gray-600">
-                                @if ($selectedMembershipType === $plan->type)
-                                    <svg class="w-4 h-4 sm:w-5 sm:h-5 text-purple-600 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    Plan Seleccionado
-                                @endif
-                            </div>
+                    @if ($plan->type === 'quarterly')
+                        <div class="absolute top-4 right-4 z-10">
+                            <span class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg uppercase">
+                                Recomendado
+                            </span>
                         </div>
-                    @endforeach
-                </div>
-            </div>
+                    @endif
 
-            <!-- Saved Cards Section -->
-            @if ($savedCards->count() > 0)
-                <div class="bg-white rounded-lg shadow-sm p-4 sm:p-6 mb-4 sm:mb-6">
-                    <h2 class="text-lg sm:text-xl font-bold text-gray-900 mb-3 sm:mb-4">Pagar con Tarjeta Guardada</h2>
+                    <!-- Image -->
+                    <div class="relative h-64 overflow-hidden">
+                        @if ($plan->type === 'monthly')
+                            <img src="{{ asset('images/imagen.jpg') }}"
+                                 alt="Plan Mensual"
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent to-white/90"></div>
+                        @else
+                            <img src="{{ asset('images/imagen4.jpg') }}"
+                                 alt="Plan Trimestral"
+                                 class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-purple-500/20 to-white"></div>
+                        @endif
+                    </div>
 
-                    <div class="space-y-2 sm:space-y-3">
-                        @foreach ($savedCards as $card)
-                            <div class="border border-gray-200 rounded-lg p-3 sm:p-4 hover:border-purple-300 transition-all">
-                                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                                    <div class="flex items-center space-x-3 sm:space-x-4">
-                                        <div class="w-10 h-7 sm:w-12 sm:h-8 bg-gradient-to-r from-purple-600 to-pink-600 rounded flex items-center justify-center text-white text-xs font-bold">
-                                            {{ strtoupper(substr($card->card_brand, 0, 4)) }}
-                                        </div>
-                                        <div>
-                                            <p class="text-sm sm:text-base font-semibold text-gray-900">{{ $card->card_brand_name }} •••• {{ $card->card_last_four }}</p>
-                                            <p class="text-xs sm:text-sm text-gray-600">Vence: {{ str_pad($card->card_expiry_month, 2, '0', STR_PAD_LEFT) }}/{{ $card->card_expiry_year }}</p>
-                                        </div>
+                    <div class="p-8 pb-10">
+                        <!-- Plan Title -->
+                        <h3 class="text-2xl font-black text-gray-900 text-center mb-3">
+                            {{ $plan->type === 'monthly' ? 'Mensual' : 'Trimestral' }}
+                        </h3>
+
+                        <!-- Price -->
+                        <div class="text-center mb-2">
+                            <div class="text-6xl font-black text-gray-900 tracking-tight" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-variant-numeric: tabular-nums;">S/ {{ number_format($plan->price, 2) }}</div>
+                            <p class="text-sm text-gray-500 mt-2">
+                                {{ $plan->type === 'monthly' ? 'facturado cada mes' : 'cada 3 meses' }}
+                                @if ($plan->type === 'quarterly')
+                                    <span class="text-purple-600 font-bold">(Ahorras 11%)</span>
+                                @endif
+                            </p>
+                        </div>
+
+                        <!-- Benefits -->
+                        <div class="space-y-3 my-8">
+                            @if ($plan->type === 'monthly')
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-5 h-5 rounded-full border-2 border-purple-600 flex items-center justify-center mt-0.5">
+                                        <div class="w-2 h-2 bg-purple-600 rounded-full"></div>
                                     </div>
-                                    <button wire:click="payWithSavedCard('{{ $card->id }}')"
-                                            class="w-full sm:w-auto px-4 py-2 bg-purple-600 text-white text-sm rounded-lg hover:bg-purple-700 transition-colors">
-                                        Pagar S/ {{ number_format($membershipPlans->where('type', $selectedMembershipType)->first()->price, 2) }}
-                                    </button>
+                                    <span class="text-sm text-gray-700">Acceso completo a videos</span>
                                 </div>
-                            </div>
-                        @endforeach
-                    </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-5 h-5 rounded-full border-2 border-purple-600 flex items-center justify-center mt-0.5">
+                                        <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Todas las clases básicas</span>
+                                </div>
+                            @else
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5">
+                                        <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Acceso <strong class="font-bold">ilimitado</strong></span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5">
+                                        <svg class="w-3 h-3 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-gray-700">Todas las clases y niveles</span>
+                                </div>
+                                <div class="flex items-start gap-3">
+                                    <div class="flex-shrink-0 w-5 h-5 rounded-full bg-purple-100 flex items-center justify-center mt-0.5">
+                                        <svg class="w-3 h-3 text-purple-600" fill="currentColor" viewBox="0 0 20 20">
+                                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                        </svg>
+                                    </div>
+                                    <span class="text-sm text-purple-600 font-bold">Mejor valor</span>
+                                </div>
+                            @endif
+                        </div>
 
-                    <div class="mt-3 sm:mt-4 text-center">
-                        <p class="text-xs sm:text-sm text-gray-600">o paga con una nueva tarjeta</p>
+                        <!-- CTA Button -->
+                        <button class="w-full py-4 rounded-xl font-bold text-base transition-all {{ $plan->type === 'quarterly' ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02]' : 'bg-gray-100 text-gray-900 hover:bg-gray-200' }}">
+                            {{ $plan->type === 'quarterly' ? 'Elegir plan trimestral' : 'Elegir plan mensual' }}
+                        </button>
                     </div>
                 </div>
-            @endif
+            @endforeach
+        </div>
 
-            <!-- Pay with New Card Button -->
-            <div class="text-center">
-                <button wire:click="createPaymentIntent"
-                        class="inline-flex items-center px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-purple-600 to-pink-600 text-white text-sm sm:text-base font-semibold rounded-lg hover:from-purple-700 hover:to-pink-700 transition-all shadow-lg">
-                    <svg class="w-4 h-4 sm:w-5 sm:h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
-                    </svg>
-                    {{ $savedCards->count() > 0 ? 'Pagar con Nueva Tarjeta' : 'Continuar al Pago' }}
-                </button>
-            </div>
-        @endif
-
-
-        <!-- Benefits Section -->
-        <div class="mt-6 sm:mt-8 bg-white rounded-lg shadow-sm p-4 sm:p-6">
-            <h3 class="text-base sm:text-lg font-bold text-gray-900 mb-3 sm:mb-4">Qué incluye tu Membresía Premium</h3>
-            <div class="grid md:grid-cols-2 gap-3 sm:gap-4">
-                <div class="flex items-start">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-500 mr-2 sm:mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <p class="text-sm sm:text-base font-semibold text-gray-900">Acceso Ilimitado</p>
-                        <p class="text-xs sm:text-sm text-gray-600">Todas las clases y contenido premium</p>
-                    </div>
-                </div>
-                <div class="flex items-start">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-500 mr-2 sm:mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <p class="text-sm sm:text-base font-semibold text-gray-900">Videos en HD</p>
-                        <p class="text-xs sm:text-sm text-gray-600">Calidad profesional garantizada</p>
-                    </div>
-                </div>
-                <div class="flex items-start">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-500 mr-2 sm:mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <p class="text-sm sm:text-base font-semibold text-gray-900">Nuevas Clases</p>
-                        <p class="text-xs sm:text-sm text-gray-600">Contenido actualizado semanalmente</p>
-                    </div>
-                </div>
-                <div class="flex items-start">
-                    <svg class="w-5 h-5 sm:w-6 sm:h-6 text-green-500 mr-2 sm:mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
-                    </svg>
-                    <div>
-                        <p class="text-sm sm:text-base font-semibold text-gray-900">Soporte Prioritario</p>
-                        <p class="text-xs sm:text-sm text-gray-600">Ayuda personalizada cuando la necesites</p>
-                    </div>
-                </div>
-            </div>
+        <!-- Support Info -->
+        <div class="text-center mb-6">
+            <p class="text-sm text-gray-600 flex items-center justify-center gap-2">
+                <svg class="w-5 h-5 text-pink-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M18 10c0 3.866-3.582 7-8 7a8.841 8.841 0 01-4.083-.98L2 17l1.338-3.123C2.493 12.767 2 11.434 2 10c0-3.866 3.582-7 8-7s8 3.134 8 7zM7 9H5v2h2V9zm8 0h-2v2h2V9zM9 9h2v2H9V9z" clip-rule="evenodd"/>
+                </svg>
+                ¿Dudas? Escríbenos por <a href="https://www.instagram.com/girls_lockers/" target="_blank" class="font-semibold text-gray-900 underline hover:text-purple-600 transition">Instagram</a>
+            </p>
         </div>
 
         <!-- Security Info -->
-        <div class="mt-4 sm:mt-6 text-center text-xs sm:text-sm text-gray-600">
-            <p>🔒 Pago 100% seguro con encriptación SSL</p>
-            <p class="mt-1">Cancela cuando quieras • Sin cargos ocultos</p>
+        <div class="text-center pb-8">
+            <p class="text-xs text-gray-500 flex items-center justify-center gap-2">
+                <svg class="w-4 h-4 text-yellow-500" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M5 9V7a5 5 0 0110 0v2a2 2 0 012 2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-5a2 2 0 012-2zm8-2v2H7V7a3 3 0 016 0z" clip-rule="evenodd"/>
+                </svg>
+                Pago 100% seguro • Cancela cuando quieras
+            </p>
         </div>
     </div>
 </div>

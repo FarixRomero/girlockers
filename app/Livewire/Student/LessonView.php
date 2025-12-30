@@ -21,9 +21,9 @@ class LessonView extends Component
     public function mount(Lesson $lesson)
     {
         // Check if user has access to this lesson
-        // If not, redirect to request access page
+        // If not, redirect to purchase membership page
         if (!$lesson->isAccessibleBy(auth()->user())) {
-            return redirect()->route('request-access');
+            return redirect()->route('purchase-membership');
         }
 
         $this->lesson = $lesson;

@@ -18,6 +18,9 @@
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
 
+        <!-- Livewire Styles -->
+        @livewireStyles
+
         <!-- Dynamic Brand Color -->
         <style>
             :root {
@@ -198,5 +201,8 @@
             </div>
         </div>
         @endif
+
+        <!-- Livewire Scripts -->
+        @livewireScripts
     </body>
 </html>

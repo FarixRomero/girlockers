@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         // Create admin user
         $this->call(AdminSeeder::class);
 
+        // Create membership plans
+        $this->call(MembershipPlanSeeder::class);
+
         // Create tags
         $this->call(TagSeeder::class);
 

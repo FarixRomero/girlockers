@@ -375,7 +375,7 @@
                     </div>
                 </div>
 
-                <!-- Renewal Button -->
+                <!-- Renewal Options -->
                 @if($user->isMembershipExpiringSoon() || $user->isMembershipExpired())
                     @if($hasPendingRenewal)
                         <div class="p-4 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
@@ -386,22 +386,111 @@
                             <p class="text-yellow-600 text-sm mt-1">El equipo te contactará pronto para procesar tu renovación</p>
                         </div>
                     @else
-                        <div class="p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg text-center">
-                            <svg class="w-12 h-12 text-purple-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                            </svg>
-                            <h4 class="text-lg font-bold text-gray-900 mb-2">¿Deseas renovar tu membresía?</h4>
-                            <p class="text-gray-600 mb-4">Continúa disfrutando de todo el contenido premium</p>
-                            <button
-                                wire:click="showRenewalForm"
-                                class="px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition">
-                                Solicitar Renovación
-                            </button>
+                        <div class="p-6 bg-gradient-to-r from-purple-50 to-pink-50 border border-purple-200 rounded-lg">
+                            <div class="text-center mb-4">
+                                <svg class="w-12 h-12 text-purple-600 mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                                </svg>
+                                <h4 class="text-lg font-bold text-gray-900 mb-2">¿Deseas renovar tu membresía?</h4>
+                                <p class="text-gray-600">Continúa disfrutando de todo el contenido premium</p>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row gap-3">
+                                <!-- Automatic Payment Option -->
+                                <a href="{{ route('purchase-membership') }}"
+                                   wire:navigate
+                                   class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-bold rounded-lg hover:from-purple-700 hover:to-pink-700 transition">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"/>
+                                    </svg>
+                                    Renovar con Tarjeta
+                                </a>
+
+                                <!-- Manual Request Option -->
+                                <button
+                                    wire:click="showRenewalForm"
+                                    class="flex-1 inline-flex items-center justify-center px-6 py-3 bg-white border-2 border-purple-300 text-purple-700 font-bold rounded-lg hover:bg-purple-50 transition">
+                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>
+                                    </svg>
+                                    Solicitud Manual
+                                </button>
+                            </div>
+
+                            <p class="text-center text-xs text-gray-600 mt-3">
+                                Paga con tarjeta para activación inmediata o solicita renovación manual para otros métodos de pago
+                            </p>
                         </div>
                     @endif
                 @endif
             </div>
         </div>
+
+        <!-- Payment History Section -->
+        @if($recentPayments->count() > 0)
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden mb-6">
+            <div class="p-6 md:p-8">
+                <div class="flex items-center justify-between mb-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-900">Historial de Pagos</h3>
+                        <p class="text-gray-600 text-sm">Tus últimos pagos de membresía</p>
+                    </div>
+                    <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/>
+                    </svg>
+                </div>
+
+                <div class="space-y-3">
+                    @foreach($recentPayments as $payment)
+                    <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg hover:bg-gray-100 transition">
+                        <div class="flex items-center space-x-4">
+                            <!-- Payment Icon -->
+                            <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center flex-shrink-0">
+                                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                </svg>
+                            </div>
+
+                            <!-- Payment Details -->
+                            <div>
+                                <p class="font-semibold text-gray-900">
+                                    Membresía {{ $payment->membership_type === 'quarterly' ? 'Trimestral (3 meses)' : 'Mensual (1 mes)' }}
+                                </p>
+                                <p class="text-sm text-gray-600">
+                                    {{ $payment->paid_at->format('d/m/Y H:i') }}
+                                </p>
+                                @if($payment->payment_method)
+                                <p class="text-xs text-gray-500 mt-1">
+                                    {{ $payment->payment_method }} •••• {{ $payment->card_last_four }}
+                                </p>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Amount and Status -->
+                        <div class="text-right">
+                            <p class="text-lg font-bold text-gray-900">S/ {{ number_format($payment->amount, 2) }}</p>
+                            <div class="flex items-center justify-end mt-1">
+                                <span class="inline-flex items-center px-2 py-1 bg-green-100 text-green-800 text-xs font-medium rounded-full">
+                                    <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                    </svg>
+                                    Completado
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                </div>
+
+                @if($recentPayments->count() >= 5)
+                <div class="mt-4 text-center">
+                    <p class="text-sm text-gray-500">Mostrando los últimos 5 pagos</p>
+                </div>
+                @endif
+            </div>
+        </div>
+        @endif
         @endif
 
         <!-- Upgrade CTA (if free user) -->

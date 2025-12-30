@@ -10,6 +10,8 @@ use App\Livewire\Student\LessonCatalog;
 use App\Livewire\Student\InstructorCatalog;
 use App\Livewire\Student\SavedContent;
 use App\Livewire\Student\WatchHistory;
+use App\Livewire\Student\PurchaseMembership;
+use App\Livewire\Student\PaymentSuccess;
 use App\Livewire\Admin\Dashboard as AdminDashboard;
 use App\Livewire\Admin\StudentManagement;
 use App\Livewire\Admin\CommentModeration;
@@ -50,6 +52,11 @@ Route::middleware(['auth'])->group(function () {
 
     // Profile
     Route::get('profile', \App\Livewire\Student\Profile::class)->name('profile');
+
+    // Membership Purchase
+    Route::get('purchase-membership', PurchaseMembership::class)->name('purchase-membership');
+    Route::get('payment/form/{paymentId}', [App\Http\Controllers\PaymentFormController::class, 'show'])->name('payment.form');
+    Route::get('payment/success', PaymentSuccess::class)->name('payment.success');
 });
 
 // Admin Routes
@@ -87,6 +94,16 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
 
     // Thumbnail upload (used by LessonCreate/LessonEdit)
     Route::post('api/upload-thumbnail', [App\Http\Controllers\Admin\BunnyUploadController::class, 'uploadThumbnail'])->name('api.upload-thumbnail');
+
+    // Admin - Membership Plans Management (placeholder - will be implemented in Phase 4)
+    // Route::get('membership-plans', \App\Livewire\Admin\MembershipPlanManagement::class)->name('membership-plans');
 });
+
+// Payment Callbacks (without CSRF protection - handled by Izipay)
+Route::post('payment/callback/success', [App\Http\Controllers\PaymentCallbackController::class, 'handleSuccess'])
+    ->name('payment.callback.success');
+
+Route::post('payment/callback/error', [App\Http\Controllers\PaymentCallbackController::class, 'handleError'])
+    ->name('payment.callback.error');
 
 require __DIR__.'/auth.php';

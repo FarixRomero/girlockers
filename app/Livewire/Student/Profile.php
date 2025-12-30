@@ -85,9 +85,17 @@ class Profile extends Component
             ->where('status', 'pending')
             ->exists();
 
+        // Load recent payment history
+        $recentPayments = $user->membershipPayments()
+            ->where('payment_status', 'completed')
+            ->latest('paid_at')
+            ->take(5)
+            ->get();
+
         return view('livewire.student.profile', [
             'user' => $user,
             'hasPendingRenewal' => $hasPendingRenewal,
+            'recentPayments' => $recentPayments,
         ]);
     }
 }

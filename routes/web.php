@@ -56,6 +56,7 @@ Route::middleware(['auth'])->group(function () {
     // Membership Purchase
     Route::get('purchase-membership', PurchaseMembership::class)->name('purchase-membership');
     Route::get('payment/form/{paymentId}', [App\Http\Controllers\PaymentFormController::class, 'show'])->name('payment.form');
+    Route::post('payment/pay-with-saved-card', [App\Http\Controllers\PaymentFormController::class, 'payWithSavedCard'])->name('payment.pay-with-saved-card');
     Route::get('payment/success', PaymentSuccess::class)->name('payment.success');
 });
 

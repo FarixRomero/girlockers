@@ -74,6 +74,17 @@
                         </div>
                     </div>
 
+                    @if(session('error'))
+                    <div class="mb-6 bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                            </svg>
+                            <p class="text-sm">{{ session('error') }}</p>
+                        </div>
+                    </div>
+                    @endif
+
                     @if($savedCards->count() > 0)
                     <!-- Tarjetas Guardadas -->
                     <div class="mb-6">
@@ -81,7 +92,7 @@
                         <div class="space-y-2">
                             @foreach($savedCards as $card)
                             <div class="border border-gray-200 rounded-lg p-3 hover:border-blue-500 hover:bg-blue-50 transition cursor-pointer"
-                                 onclick="alert('Función de pago con tarjeta guardada en desarrollo')">
+                                 onclick="selectSavedCard('{{ $card->id }}')">
                                 <div class="flex items-center space-x-3">
                                     <div class="w-10 h-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded flex items-center justify-center text-white text-xs font-bold">
                                         {{ strtoupper(substr($card->card_brand, 0, 4)) }}
@@ -96,6 +107,23 @@
                             </div>
                             @endforeach
                         </div>
+
+                        <div class="mt-4 flex items-center justify-center gap-4">
+                            <button id="pay-with-saved-card"
+                                    type="button"
+                                    class="px-5 py-2.5 rounded-lg bg-blue-600 text-white text-sm font-semibold hover:bg-blue-700 transition"
+                                    style="display:none;">
+                                Pagar con tarjeta seleccionada
+                            </button>
+                            <button id="use-new-card"
+                                    type="button"
+                                    class="px-5 py-2.5 rounded-lg bg-gray-100 text-gray-700 text-sm font-semibold hover:bg-gray-200 transition"
+                                    style="display:none;"
+                                    onclick="selectNewCard()">
+                                Usar nueva tarjeta
+                            </button>
+                        </div>
+
                         <div class="mt-3 text-center">
                             <p class="text-sm text-gray-500">o paga con una nueva tarjeta</p>
                         </div>
@@ -103,7 +131,7 @@
                     @endif
 
                     <!-- Formulario de pago embebido -->
-                    <div class="kr-embedded" kr-form-token="{{ $formToken }}"></div>
+                    <div id="new-card-form" class="kr-embedded" kr-form-token="{{ $formToken }}"></div>
 
                     <!-- Support & Security Info -->
                     <div class="mt-8 pt-8 border-t border-gray-100">
@@ -211,5 +239,52 @@
 
         </div>
     </div>
+
+    <script>
+        let selectedCardId = null;
+
+        function selectSavedCard(cardId) {
+            selectedCardId = cardId;
+            document.getElementById('new-card-form').style.display = 'none';
+            document.getElementById('pay-with-saved-card').style.display = 'inline-flex';
+            document.getElementById('use-new-card').style.display = 'inline-flex';
+        }
+
+        function selectNewCard() {
+            selectedCardId = null;
+            document.getElementById('new-card-form').style.display = 'block';
+            document.getElementById('pay-with-saved-card').style.display = 'none';
+            document.getElementById('use-new-card').style.display = 'none';
+        }
+
+        document.getElementById('pay-with-saved-card')?.addEventListener('click', function() {
+            if (!selectedCardId) return;
+
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '{{ route('payment.pay-with-saved-card') }}';
+
+            const csrfInput = document.createElement('input');
+            csrfInput.type = 'hidden';
+            csrfInput.name = '_token';
+            csrfInput.value = '{{ csrf_token() }}';
+            form.appendChild(csrfInput);
+
+            const cardInput = document.createElement('input');
+            cardInput.type = 'hidden';
+            cardInput.name = 'card_id';
+            cardInput.value = selectedCardId;
+            form.appendChild(cardInput);
+
+            const paymentInput = document.createElement('input');
+            paymentInput.type = 'hidden';
+            paymentInput.name = 'payment_id';
+            paymentInput.value = '{{ $payment->id }}';
+            form.appendChild(paymentInput);
+
+            document.body.appendChild(form);
+            form.submit();
+        });
+    </script>
 </body>
 </html>

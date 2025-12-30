@@ -101,9 +101,10 @@ class IzipayService
     public function createPaymentWithToken(array $paymentData): array
     {
         $endpoint = '/api-payment/V4/Charge/CreatePayment';
+        $amountInCents = (int) round(((float) $paymentData['amount']) * 100);
 
         $payload = [
-            'amount' => $paymentData['amount'] * 100, // Convertir a centavos
+            'amount' => $amountInCents, // Convertir a centavos
             'currency' => config('izipay.currency', 'PEN'),
             'orderId' => $paymentData['order_id'],
             'customer' => [
@@ -134,10 +135,17 @@ class IzipayService
 
             if ($response->successful()) {
                 $orderStatus = $data['answer']['orderStatus'] ?? null;
+                $errorMessage = $data['answer']['errorMessage'] ?? null;
+                $detailedErrorCode = $data['answer']['detailedErrorCode'] ?? null;
+                $isPaid = $orderStatus === 'PAID';
 
                 return [
-                    'success' => $orderStatus === 'PAID',
+                    'success' => $isPaid,
                     'orderStatus' => $orderStatus,
+                    'error' => $isPaid
+                        ? null
+                        : ($errorMessage ?: ($orderStatus ? "Pago no completado (estado: {$orderStatus})" : 'Pago no completado')),
+                    'detailedErrorCode' => $detailedErrorCode,
                     'response' => $data,
                 ];
             }

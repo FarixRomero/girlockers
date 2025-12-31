@@ -112,13 +112,22 @@ class IzipayService
                 'reference' => (string) $paymentData['customer']['reference'],
             ],
             'paymentMethodToken' => $paymentData['payment_method_token'],
+            // Indicar que es pago iniciado por el cliente pero SIN interacción adicional
+            // Esto hace que Izipay devuelva directamente un objeto Payment en lugar de formToken
+            'formAction' => 'SILENT', // Pago sin interacción del usuario (0-click)
         ];
 
         Log::info('Izipay CreatePaymentWithToken Request', [
             'endpoint' => $endpoint,
-            'payload' => array_merge($payload, [
-                'paymentMethodToken' => '***', // Ocultar token en logs
-            ]),
+            'order_id' => $payload['orderId'],
+            'amount' => $payload['amount'],
+            'currency' => $payload['currency'],
+            'customer_email' => $payload['customer']['email'],
+            'customer_reference' => $payload['customer']['reference'],
+            'has_payment_token' => !empty($payload['paymentMethodToken']),
+            'payment_token_preview' => substr($payload['paymentMethodToken'] ?? '', 0, 8) . '***',
+            'formAction' => 'SILENT',
+            'expected_response' => 'Direct Payment object (no formToken)',
         ]);
 
         try {
@@ -130,14 +139,32 @@ class IzipayService
 
             Log::info('Izipay CreatePaymentWithToken Response', [
                 'status' => $response->status(),
-                'data' => $data,
+                'orderStatus' => $data['answer']['orderStatus'] ?? null,
+                'hasFormToken' => isset($data['answer']['formToken']),
+                'errorMessage' => $data['answer']['errorMessage'] ?? null,
+                'detailedErrorCode' => $data['answer']['detailedErrorCode'] ?? null,
+                'detailedErrorMessage' => $data['answer']['detailedErrorMessage'] ?? null,
+                'full_data' => $data,
             ]);
 
             if ($response->successful()) {
                 $orderStatus = $data['answer']['orderStatus'] ?? null;
+                $formToken = $data['answer']['formToken'] ?? null;
                 $errorMessage = $data['answer']['errorMessage'] ?? null;
                 $detailedErrorCode = $data['answer']['detailedErrorCode'] ?? null;
                 $isPaid = $orderStatus === 'PAID';
+
+                // Si devuelve formToken, significa que requiere interacción del usuario (CVV/3DS)
+                if ($formToken && !$isPaid) {
+                    return [
+                        'success' => false,
+                        'requires_interaction' => true,
+                        'formToken' => $formToken,
+                        'orderStatus' => $orderStatus,
+                        'error' => 'El pago requiere ingresar el código de seguridad (CVV)',
+                        'response' => $data,
+                    ];
+                }
 
                 return [
                     'success' => $isPaid,

@@ -23,11 +23,29 @@ class PaymentFormController extends Controller
             ->where('is_active', true)
             ->get();
 
-        // Generar formToken si no existe
+        // Obtener formToken (desde sesión si viene de pago con token, o generarlo)
         $izipayService = app(IzipayService::class);
-        $formToken = null;
+        $formToken = session('formToken'); // Desde redirect de pago con token
 
-        if (!isset($payment->izipay_response['formToken'])) {
+        \Log::info('PaymentFormController - formToken sources', [
+            'from_session' => $formToken ? 'yes' : 'no',
+            'from_session_value' => $formToken ? substr($formToken, 0, 20) . '...' : null,
+            'from_payment' => isset($payment->izipay_response['formToken']) ? 'yes' : 'no',
+            'session_all_keys' => array_keys(session()->all()),
+        ]);
+
+        // Si no hay formToken en sesión, intentar obtenerlo del pago guardado
+        if (!$formToken && isset($payment->izipay_response['formToken'])) {
+            $formToken = $payment->izipay_response['formToken'];
+        }
+
+        // Si aún no hay formToken, generar uno nuevo
+        if (!$formToken) {
+            \Log::info('Generating new formToken for payment', [
+                'payment_id' => $payment->id,
+                'reason' => 'No formToken in session or payment record',
+            ]);
+
             $result = $izipayService->createPayment([
                 'order_id' => $payment->order_id,
                 'amount' => $payment->amount,
@@ -45,6 +63,8 @@ class PaymentFormController extends Controller
                 $payment->update([
                     'izipay_response' => array_merge($payment->izipay_response ?? [], [
                         'formToken' => $formToken,
+                        'formToken_created_at' => now()->toIso8601String(),
+                        'formToken_type' => 'new_card',
                     ]),
                 ]);
             } else {
@@ -60,8 +80,13 @@ class PaymentFormController extends Controller
                     ->with('error', 'Error al procesar el pago: ' . ($result['error'] ?? 'Error desconocido. Por favor intenta de nuevo.'));
             }
         } else {
-            $formToken = $payment->izipay_response['formToken'];
+            \Log::info('Using existing formToken', [
+                'source' => session('formToken') ? 'session' : 'payment_record',
+                'token_preview' => substr($formToken, 0, 20) . '...',
+            ]);
         }
+
+        \Log::info('Using formToken', ['has_token' => !empty($formToken)]);
 
         return view('payment.form', [
             'payment' => $payment,

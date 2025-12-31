@@ -130,6 +130,17 @@
                     </div>
                     @endif
 
+                    @if(session('info'))
+                    <div class="mb-6 bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg">
+                        <div class="flex items-center">
+                            <svg class="w-5 h-5 mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            <p class="text-sm">{{ session('info') }}</p>
+                        </div>
+                    </div>
+                    @endif
+
                     <!-- Formulario de pago embebido -->
                     <div id="new-card-form" class="kr-embedded" kr-form-token="{{ $formToken }}"></div>
 
@@ -267,20 +278,44 @@
     <script>
         let selectedCardId = null;
 
+        // Mostrar el formulario siempre visible
+        window.addEventListener('DOMContentLoaded', function() {
+            console.log('Página cargada, formulario de pago siempre visible');
+            const formElement = document.getElementById('new-card-form');
+            if (formElement) {
+                formElement.style.display = 'block';
+            }
+        });
+
+        // Seleccionar tarjeta guardada (sin ocultar el formulario)
         function selectSavedCard(cardId) {
             selectedCardId = cardId;
-            document.getElementById('new-card-form').style.display = 'none';
-            document.getElementById('pay-with-saved-card').style.display = 'inline-flex';
-            document.getElementById('use-new-card').style.display = 'inline-flex';
+            // Mostrar botón para pagar con tarjeta seleccionada
+            const payButton = document.getElementById('pay-with-saved-card');
+            if (payButton) {
+                payButton.style.display = 'inline-flex';
+            }
+            const newCardButton = document.getElementById('use-new-card');
+            if (newCardButton) {
+                newCardButton.style.display = 'inline-flex';
+            }
         }
 
+        // Deseleccionar tarjeta guardada (usar nueva tarjeta)
         function selectNewCard() {
             selectedCardId = null;
-            document.getElementById('new-card-form').style.display = 'block';
-            document.getElementById('pay-with-saved-card').style.display = 'none';
-            document.getElementById('use-new-card').style.display = 'none';
+            // Ocultar botones
+            const payButton = document.getElementById('pay-with-saved-card');
+            if (payButton) {
+                payButton.style.display = 'none';
+            }
+            const newCardButton = document.getElementById('use-new-card');
+            if (newCardButton) {
+                newCardButton.style.display = 'none';
+            }
         }
 
+        // Pagar con tarjeta guardada seleccionada
         document.getElementById('pay-with-saved-card')?.addEventListener('click', function() {
             if (!selectedCardId) return;
 

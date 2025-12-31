@@ -53,12 +53,12 @@
             <!-- Desktop Sidebar -->
             <aside x-data="{ collapsed: false }" :class="collapsed ? 'w-20' : 'w-64'" class="hidden lg:flex lg:flex-col bg-gray-900 border-r border-gray-800 transition-all duration-300">
                 <!-- Logo & Toggle -->
-                <div class="flex items-center justify-between h-16 px-4 border-b border-gray-800">
-                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center overflow-hidden">
+                <div class="relative flex items-center h-16 px-4 border-b border-gray-800" :class="collapsed ? 'justify-center' : 'justify-center'">
+                    <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center justify-center overflow-hidden">
                         <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="!collapsed" x-transition class="h-14 w-auto object-contain">
                         <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="collapsed" x-transition class="h-10 w-10 object-contain">
                     </a>
-                    <button @click="collapsed = !collapsed" class="p-1 hover:bg-gray-800 rounded transition flex-shrink-0" :title="collapsed ? 'Expandir' : 'Colapsar'">
+                    <button @click="collapsed = !collapsed" class="absolute right-2 p-1.5 hover:bg-gray-800 rounded transition" :title="collapsed ? 'Expandir' : 'Colapsar'">
                         <svg class="w-5 h-5 text-gray-400 hover:text-white transition-transform duration-300" :class="collapsed ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
                         </svg>

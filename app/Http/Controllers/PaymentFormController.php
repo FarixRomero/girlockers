@@ -31,6 +31,7 @@ class PaymentFormController extends Controller
             $result = $izipayService->createPayment([
                 'order_id' => $payment->order_id,
                 'amount' => $payment->amount,
+                'currency' => $payment->currency,
                 'customer' => [
                     'email' => auth()->user()->email,
                     'reference' => auth()->user()->id,
@@ -46,6 +47,17 @@ class PaymentFormController extends Controller
                         'formToken' => $formToken,
                     ]),
                 ]);
+            } else {
+                // Error al crear el pago en Izipay
+                \Log::error('Failed to create Izipay payment', [
+                    'payment_id' => $payment->id,
+                    'error' => $result['error'] ?? 'Unknown error',
+                    'response' => $result['response'] ?? null,
+                ]);
+
+                return redirect()
+                    ->route('purchase-membership')
+                    ->with('error', 'Error al procesar el pago: ' . ($result['error'] ?? 'Error desconocido. Por favor intenta de nuevo.'));
             }
         } else {
             $formToken = $payment->izipay_response['formToken'];
@@ -94,6 +106,7 @@ class PaymentFormController extends Controller
         $result = $izipayService->createPaymentWithToken([
             'order_id' => $payment->order_id,
             'amount' => $payment->amount,
+            'currency' => $payment->currency,
             'customer' => [
                 'email' => auth()->user()->email,
                 'reference' => auth()->user()->id,

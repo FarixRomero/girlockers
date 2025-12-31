@@ -20,6 +20,7 @@ use App\Livewire\Admin\ModuleManagement;
 use App\Livewire\Admin\InstructorManagement;
 use App\Livewire\Admin\TagManagement;
 use App\Livewire\Admin\LandingConfig;
+use App\Livewire\Admin\MembershipManagement;
 use App\Http\Controllers\VideoStreamController;
 use Illuminate\Support\Facades\Route;
 
@@ -70,6 +71,7 @@ Route::middleware(['auth', 'admin'])->prefix('admin')->name('admin.')->group(fun
     Route::get('dashboard', AdminDashboard::class)->name('dashboard');
     Route::get('users', StudentManagement::class)->name('users.index');
     Route::get('comments', CommentModeration::class)->name('comments.index');
+    Route::get('memberships', MembershipManagement::class)->name('memberships');
     Route::get('profile', \App\Livewire\Admin\AdminProfile::class)->name('profile');
     Route::get('courses', CourseManagement::class)->name('courses.index');
     Route::get('courses/{courseId}/modules', ModuleManagement::class)->name('courses.modules');

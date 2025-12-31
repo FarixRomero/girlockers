@@ -10,11 +10,6 @@ class HomePage extends Component
 {
     public function render()
     {
-        $featuredCourses = Course::where('is_published', true)
-            ->with('modules')
-            ->take(3)
-            ->get();
-
         // Load all landing configs
         $config = [];
         $allConfigs = LandingConfig::all();
@@ -31,7 +26,6 @@ class HomePage extends Component
         }
 
         return view('livewire.landing.home-page', [
-            'featuredCourses' => $featuredCourses,
             'config' => $config,
         ])->layout('layouts.master');
     }

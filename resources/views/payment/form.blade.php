@@ -191,7 +191,15 @@
                                 </p>
                             </div>
                             <div class="text-right">
-                                <p class="text-xl font-bold text-blue-600">S/ {{ number_format($amount, 2) }}</p>
+                                <p class="text-xl font-bold text-blue-600">
+                                    @if($payment->currency === 'USD')
+                                        ${{ number_format($amount, 2) }}
+                                    @elseif($payment->currency === 'EUR')
+                                        €{{ number_format($amount, 2) }}
+                                    @else
+                                        S/ {{ number_format($amount, 2) }}
+                                    @endif
+                                </p>
                             </div>
                         </div>
 
@@ -222,7 +230,15 @@
                     <div class="border-t border-gray-200 pt-4 space-y-3">
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Subtotal</span>
-                            <span class="text-gray-900">S/ {{ number_format($amount, 2) }}</span>
+                            <span class="text-gray-900">
+                                @if($payment->currency === 'USD')
+                                    ${{ number_format($amount, 2) }}
+                                @elseif($payment->currency === 'EUR')
+                                    €{{ number_format($amount, 2) }}
+                                @else
+                                    S/ {{ number_format($amount, 2) }}
+                                @endif
+                            </span>
                         </div>
                         <div class="flex justify-between text-sm">
                             <span class="text-gray-600">Impuesto (IGV 18%)</span>
@@ -230,7 +246,15 @@
                         </div>
                         <div class="flex justify-between items-center pt-3 border-t border-gray-200">
                             <span class="text-base font-bold text-gray-900">Total a pagar hoy</span>
-                            <span class="text-2xl font-bold text-gray-900">S/ {{ number_format($amount, 2) }}</span>
+                            <span class="text-2xl font-bold text-gray-900">
+                                @if($payment->currency === 'USD')
+                                    ${{ number_format($amount, 2) }}
+                                @elseif($payment->currency === 'EUR')
+                                    €{{ number_format($amount, 2) }}
+                                @else
+                                    S/ {{ number_format($amount, 2) }}
+                                @endif
+                            </span>
                         </div>
                     </div>
 

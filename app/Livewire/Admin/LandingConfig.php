@@ -13,7 +13,6 @@ class LandingConfig extends Component
     public $groups = [
         'hero' => 'Hero Section',
         'pricing' => 'Precios',
-        'videos' => 'Videos de la Bóveda',
         'testimonials' => 'Testimonios',
         'stats' => 'Estadísticas',
         'social' => 'Redes Sociales',

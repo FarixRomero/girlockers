@@ -24,8 +24,14 @@ class PurchaseMembership extends Component
 
     public function mount()
     {
-        // Cargar planes activos
-        $this->membershipPlans = MembershipPlan::where('is_active', true)->get();
+        // Determinar la moneda según el país del usuario
+        $userCountry = auth()->user()->country ?? 'PE';
+        $currency = $userCountry === 'PE' ? 'PEN' : 'USD';
+
+        // Cargar planes activos en la moneda correspondiente
+        $this->membershipPlans = MembershipPlan::where('is_active', true)
+            ->where('currency', $currency)
+            ->get();
 
         // Cargar tarjetas guardadas del usuario
         $this->savedCards = auth()->user()->paymentTokens;

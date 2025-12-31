@@ -165,7 +165,7 @@
                             <a href="{{ route('lessons.show', $upcomingLesson) }}" wire:navigate class="block">
                                 <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($upcomingLesson->thumbnail)
-                                        <img src="{{ $upcomingLesson->thumbnail_url }}" alt="{{ $upcomingLesson->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ $upcomingLesson->thumbnail_url }}" alt="{{ $upcomingLesson->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                             <div class="absolute inset-0 flex items-center justify-center">
@@ -251,7 +251,7 @@
                             <a href="{{ route('lessons.show', $similarLesson) }}" wire:navigate class="block">
                                 <div class="aspect-video relative rounded-lg overflow-hidden">
                                     @if($similarLesson->thumbnail)
-                                        <img src="{{ $similarLesson->thumbnail_url }}" alt="{{ $similarLesson->title }}" class="w-full h-full object-cover">
+                                        <img src="{{ $similarLesson->thumbnail_url }}" alt="{{ $similarLesson->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                             <div class="absolute inset-0 flex items-center justify-center">

@@ -32,16 +32,24 @@ class MembershipService
      */
     public function createPendingPayment(User $user, string $membershipType): MembershipPayment
     {
-        $amount = $this->getMembershipPrice($membershipType);
+        // Determinar la moneda según el país del usuario
+        $userCountry = $user->country ?? 'PE';
+        $currency = $userCountry === 'PE' ? 'PEN' : 'USD';
 
-        if ($amount <= 0) {
-            throw new \Exception("Plan de membresía '{$membershipType}' no encontrado o inactivo.");
+        // Obtener el plan activo para este tipo y moneda
+        $plan = MembershipPlan::where('type', $membershipType)
+            ->where('currency', $currency)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$plan) {
+            throw new \Exception("Plan de membresía '{$membershipType}' no encontrado o inactivo para la moneda {$currency}.");
         }
 
         $payment = MembershipPayment::create([
             'user_id' => $user->id,
-            'amount' => $amount,
-            'currency' => config('izipay.currency', 'PEN'),
+            'amount' => $plan->price,
+            'currency' => $plan->currency, // Siempre usar PEN en Izipay hasta que se habilite multi-moneda
             'membership_type' => $membershipType,
             'payment_status' => 'pending',
         ]);
@@ -49,7 +57,8 @@ class MembershipService
         Log::info('Pending payment created', [
             'payment_id' => $payment->id,
             'user_id' => $user->id,
-            'amount' => $amount,
+            'amount' => $plan->price,
+            'currency' => $plan->currency,
             'membership_type' => $membershipType,
         ]);
 

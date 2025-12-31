@@ -135,6 +135,52 @@
                         </div>
                     </div>
 
+                    <!-- Country -->
+                    <div>
+                        <label for="country" class="block text-sm font-semibold text-gray-900 mb-2">País</label>
+                        <select
+                            wire:model="country"
+                            id="country"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition"
+                            required
+                        >
+                            <option value="PE">🇵🇪 Perú</option>
+                            <option value="AR">🇦🇷 Argentina</option>
+                            <option value="BO">🇧🇴 Bolivia</option>
+                            <option value="BR">🇧🇷 Brasil</option>
+                            <option value="CL">🇨🇱 Chile</option>
+                            <option value="CO">🇨🇴 Colombia</option>
+                            <option value="CR">🇨🇷 Costa Rica</option>
+                            <option value="CU">🇨🇺 Cuba</option>
+                            <option value="EC">🇪🇨 Ecuador</option>
+                            <option value="SV">🇸🇻 El Salvador</option>
+                            <option value="GT">🇬🇹 Guatemala</option>
+                            <option value="HN">🇭🇳 Honduras</option>
+                            <option value="MX">🇲🇽 México</option>
+                            <option value="NI">🇳🇮 Nicaragua</option>
+                            <option value="PA">🇵🇦 Panamá</option>
+                            <option value="PY">🇵🇾 Paraguay</option>
+                            <option value="DO">🇩🇴 República Dominicana</option>
+                            <option value="UY">🇺🇾 Uruguay</option>
+                            <option value="VE">🇻🇪 Venezuela</option>
+                            <option value="US">🇺🇸 Estados Unidos</option>
+                            <option value="CA">🇨🇦 Canadá</option>
+                            <option value="ES">🇪🇸 España</option>
+                            <option value="FR">🇫🇷 Francia</option>
+                            <option value="DE">🇩🇪 Alemania</option>
+                            <option value="IT">🇮🇹 Italia</option>
+                            <option value="GB">🇬🇧 Reino Unido</option>
+                            <option value="PT">🇵🇹 Portugal</option>
+                            <option value="JP">🇯🇵 Japón</option>
+                            <option value="CN">🇨🇳 China</option>
+                            <option value="KR">🇰🇷 Corea del Sur</option>
+                            <option value="AU">🇦🇺 Australia</option>
+                            <option value="NZ">🇳🇿 Nueva Zelanda</option>
+                        </select>
+                        @error('country') <span class="text-red-500 text-sm mt-1">{{ $message }}</span> @enderror
+                        <p class="text-xs text-gray-500 mt-2">Esto nos ayuda a mostrarte los planes de membresía en tu moneda local.</p>
+                    </div>
+
                     <!-- Save Button -->
                     <div class="flex justify-end pt-4 border-t border-gray-200">
                         <button

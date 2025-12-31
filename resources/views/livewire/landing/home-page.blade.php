@@ -36,10 +36,6 @@
                        class="px-10 py-5 bg-purple-primary hover:bg-purple-dark text-white font-bold text-lg rounded-lg shadow-purple-glow-lg transition-all duration-300 transform hover:scale-105">
                         {{ $config['hero_button_primary'] ?? 'ÚNETE A LA COMUNIDAD' }}
                     </a>
-                    <a href="#boveda"
-                       class="px-10 py-5 bg-white/20 backdrop-blur-sm border-2 border-white text-white hover:bg-white hover:text-purple-primary font-bold text-lg rounded-lg transition-all duration-300">
-                        {{ $config['hero_button_secondary'] ?? 'EXPLORA LA BÓVEDA' }}
-                    </a>
                 </div>
             </div>
         </div>
@@ -219,7 +215,7 @@
                     </div>
                 </div>
 
-                <!-- Columna 2: La Bóveda de Recursos -->
+                <!-- Columna 2: Método que Funciona (Destacado) -->
                 <div class="feature-card-2 bg-gradient-to-br from-purple-primary to-purple-dark rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform hover:-translate-y-4 md:scale-105 relative overflow-hidden group">
                     <!-- Efecto de estrellas -->
                     <div class="absolute inset-0 opacity-20">
@@ -232,28 +228,36 @@
                         <div class="flex justify-center mb-6">
                             <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-300">
                                 <svg class="w-12 h-12 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path>
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                                 </svg>
                             </div>
                         </div>
                         <h3 class="font-display font-black text-3xl text-white text-center mb-4 tracking-tight">
-                            La Bóveda de<br>Recursos
+                            El Método que<br>Funciona
                         </h3>
                         <p class="text-white/90 text-center text-lg leading-relaxed font-medium mb-6">
-                            Accede a nuestra colección curada de videos clásicos y entrevistas para nutrir tu cultura locker.
+                            No es solo aprender pasos. Es entender el locking como lenguaje.
                         </p>
                         <ul class="space-y-4">
                             <li class="flex items-center text-white font-semibold">
                                 <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Historia del locking</span>
+                                <span>Fundamentos sólidos</span>
                             </li>
                             <li class="flex items-center text-white font-semibold">
                                 <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Batallas icónicas</span>
+                                <span>Combos y variaciones</span>
                             </li>
                             <li class="flex items-center text-white font-semibold">
                                 <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Videos clásicos curados</span>
+                                <span>Estilo personal</span>
+                            </li>
+                            <li class="flex items-center text-white font-semibold">
+                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
+                                <span>Clean moves y performance</span>
+                            </li>
+                            <li class="flex items-center text-white font-semibold">
+                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
+                                <span>Mentalidad de cypher y escenario</span>
                             </li>
                         </ul>
                     </div>
@@ -295,152 +299,6 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- La Bóveda de Recursos - Showcase -->
-    <section class="py-24 bg-white relative overflow-hidden" id="boveda">
-        <!-- Blobs grandes animados -->
-        <div class="absolute top-1/4 -left-32 w-[700px] h-[700px] bg-purple-primary/5 rounded-full filter blur-3xl animate-blob"></div>
-        <div class="absolute bottom-1/4 -right-32 w-[600px] h-[600px] bg-purple-light/5 rounded-full filter blur-3xl animate-blob-slow" style="animation-delay: 2s;"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-purple-dark/5 rounded-full filter blur-3xl animate-blob-slower"></div>
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16">
-                <h2 class="font-display font-black text-4xl md:text-5xl text-black mb-6">
-                    La <span class="text-purple-primary">Bóveda</span> de Recursos
-                </h2>
-                <p class="text-gray-dark text-lg max-w-3xl mx-auto">
-                    Descubre la colección más completa de contenido de locking curado especialmente para ti
-                </p>
-            </div>
-
-            <!-- Cursos Destacados -->
-            <div class="mb-16">
-                <h3 class="font-display font-bold text-2xl text-purple-primary mb-8 flex items-center">
-                    <span class="bg-purple-ultralight p-3 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
-                        </svg>
-                    </span>
-                    Cursos Destacados
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    @if($featuredCourses && $featuredCourses->count() > 0)
-                        @foreach($featuredCourses->take(3) as $course)
-                        <a href="{{ route('login') }}" wire:navigate class="group">
-                            <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-purple-glow transition-all duration-300 transform hover:-translate-y-1 border border-gray-light">
-                                <div class="relative h-48 bg-gray-ultralight overflow-hidden">
-                                    @if($course->image_url)
-                                        <img src="{{ $course->image_url }}" alt="{{ $course->title }}" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300">
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-purple-primary to-purple-light">
-                                            <svg class="w-16 h-16 text-white/30" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                            </svg>
-                                        </div>
-                                    @endif
-                                    <div class="absolute top-3 right-3">
-                                        <span class="bg-purple-primary text-white text-xs font-bold px-3 py-1 rounded-full uppercase">
-                                            {{ $course->level === 'beginner' ? 'Principiante' : ($course->level === 'intermediate' ? 'Intermedio' : 'Avanzado') }}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="p-6">
-                                    <h4 class="font-display font-bold text-xl text-black mb-2 group-hover:text-purple-primary transition-colors">
-                                        {{ $course->title }}
-                                    </h4>
-                                    <p class="text-gray-dark text-sm line-clamp-2">
-                                        {{ $course->description }}
-                                    </p>
-                                </div>
-                            </div>
-                        </a>
-                        @endforeach
-                    @else
-                        <!-- Placeholder si no hay cursos -->
-                        @for($i = 1; $i <= 3; $i++)
-                        <div class="bg-white rounded-xl overflow-hidden shadow-lg border border-gray-light">
-                            <div class="h-48 bg-gradient-to-br from-purple-primary to-purple-light flex items-center justify-center">
-                                <div class="text-center text-white">
-                                    <svg class="w-16 h-16 mx-auto mb-2 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path>
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                    </svg>
-                                    <p class="font-bold">Clase {{ $i }}</p>
-                                </div>
-                            </div>
-                            <div class="p-6">
-                                <h4 class="font-display font-bold text-xl text-black mb-2">
-                                    Próximamente
-                                </h4>
-                                <p class="text-gray-dark text-sm">
-                                    Estamos preparando contenido increíble para ti
-                                </p>
-                            </div>
-                        </div>
-                        @endfor
-                    @endif
-                </div>
-            </div>
-
-            <!-- Videos Clave de YouTube -->
-            <div class="mb-16">
-                <h3 class="font-display font-bold text-2xl text-black mb-8 flex items-center">
-                    <span class="bg-purple-ultralight p-3 rounded-lg mr-4">
-                        <svg class="w-6 h-6 text-purple-primary" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                        </svg>
-                    </span>
-                    Historia del Locking & Batallas Icónicas
-                </h3>
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <!-- Video 1 -->
-                    <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-purple-glow transition-all duration-300 border border-gray-light">
-                        <div class="aspect-video">
-                            <iframe
-                                class="w-full h-full"
-                                src="https://www.youtube.com/embed/{{ $config['video_1_url'] ?? 'HefC_rMCs-Q' }}"
-                                title="{{ $config['video_1_title'] ?? 'Historia del Locking' }}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="p-6">
-                            <span class="inline-block bg-purple-ultralight text-purple-primary text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">
-                                {{ $config['video_1_tag'] ?? 'Historia' }}
-                            </span>
-                            <h4 class="font-display font-bold text-lg text-black">
-                                {{ $config['video_1_title'] ?? 'Los Orígenes del Locking' }}
-                            </h4>
-                        </div>
-                    </div>
-
-                    <!-- Video 2 -->
-                    <div class="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-purple-glow transition-all duration-300 border border-gray-light">
-                        <div class="aspect-video">
-                            <iframe
-                                class="w-full h-full"
-                                src="https://www.youtube.com/embed/{{ $config['video_2_url'] ?? '8b18KD5O3y8' }}"
-                                title="{{ $config['video_2_title'] ?? 'Batalla Icónica' }}"
-                                frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                            </iframe>
-                        </div>
-                        <div class="p-6">
-                            <span class="inline-block bg-purple-ultralight text-purple-primary text-xs font-bold px-3 py-1 rounded-full uppercase mb-3">
-                                {{ $config['video_2_tag'] ?? 'Batalla' }}
-                            </span>
-                            <h4 class="font-display font-bold text-lg text-black">
-                                {{ $config['video_2_title'] ?? 'Momentos Legendarios' }}
-                            </h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </section>
 
@@ -761,14 +619,10 @@
             <p class="text-white/90 text-xl md:text-2xl max-w-2xl mx-auto mb-12 font-medium">
                 Únete a cientos de lockers que ya están dominando su arte
             </p>
-            <div class="flex flex-col sm:flex-row gap-6 justify-center">
+            <div class="flex justify-center">
                 <a href="{{ route('register') }}" wire:navigate
                    class="px-12 py-6 bg-white hover:bg-gray-ultralight text-purple-primary font-bold text-xl rounded-lg shadow-2xl transition-all duration-300 transform hover:scale-105">
                     COMIENZA TU VIAJE LOCKER
-                </a>
-                <a href="#boveda"
-                   class="px-12 py-6 bg-black/20 backdrop-blur-sm border-2 border-white hover:bg-white hover:text-purple-primary text-white font-bold text-xl rounded-lg shadow-xl transition-all duration-300">
-                    EXPLORA GRATIS
                 </a>
             </div>
 
@@ -814,7 +668,6 @@
                     <ul class="space-y-2">
                         <li><a href="{{ route('register') }}" wire:navigate class="text-gray-dark hover:text-purple-primary transition-colors">Registrarse</a></li>
                         <li><a href="{{ route('login') }}" wire:navigate class="text-gray-dark hover:text-purple-primary transition-colors">Iniciar Sesión</a></li>
-                        <li><a href="#boveda" class="text-gray-dark hover:text-purple-primary transition-colors">La Bóveda</a></li>
                     </ul>
                 </div>
 

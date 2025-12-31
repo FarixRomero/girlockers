@@ -119,7 +119,7 @@
                 <a href="{{ route('lessons.show', $lesson) }}" wire:navigate class="block">
                     <div class="aspect-video relative rounded-lg overflow-hidden">
                         @if($lesson->thumbnail_url)
-                            <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover">
+                            <img src="{{ $lesson->thumbnail_url }}" alt="{{ $lesson->title }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
                         @else
                             <div class="w-full h-full bg-gradient-to-br from-purple-500 to-pink-500">
                                 <div class="absolute inset-0 flex items-center justify-center">

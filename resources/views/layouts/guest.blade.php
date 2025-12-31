@@ -28,7 +28,7 @@
                         alt="Girls Lockers Logo"
                         class="h-24 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-lg"
                     >
-                    <p class="text-center text-sm text-gray-600 mt-4 font-medium">Aprende, practica y brilla</p>
+                    <p class="text-center text-sm text-gray-600 mt-4 font-medium">Aprende, practica y empodera</p>
                 </a>
             </div>
 

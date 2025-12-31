@@ -14,6 +14,7 @@ class MembershipPlanSeeder extends Seeder
     public function run(): void
     {
         $plans = [
+            // Planes en PEN (Soles Peruanos) - Para usuarios de Perú
             [
                 'type' => 'monthly',
                 'price' => 30.00,
@@ -28,11 +29,26 @@ class MembershipPlanSeeder extends Seeder
                 'is_active' => true,
                 'description' => 'Membresía trimestral (3 meses) con acceso completo. ¡Ahorra S/ 10!',
             ],
+            // Planes en USD (Dólares) - Para usuarios de otros países
+            [
+                'type' => 'monthly',
+                'price' => 8.00,
+                'currency' => 'USD',
+                'is_active' => true,
+                'description' => 'Monthly membership with full access to all classes and premium content.',
+            ],
+            [
+                'type' => 'quarterly',
+                'price' => 21.00,
+                'currency' => 'USD',
+                'is_active' => true,
+                'description' => 'Quarterly membership (3 months) with full access. Save $3!',
+            ],
         ];
 
         foreach ($plans as $plan) {
             MembershipPlan::updateOrCreate(
-                ['type' => $plan['type']],
+                ['type' => $plan['type'], 'currency' => $plan['currency']],
                 $plan
             );
         }

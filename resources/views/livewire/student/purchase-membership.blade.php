@@ -84,7 +84,15 @@
 
                         <!-- Price -->
                         <div class="text-center mb-2">
-                            <div class="text-6xl font-black text-gray-900 tracking-tight" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-variant-numeric: tabular-nums;">S/ {{ number_format($plan->price, 2) }}</div>
+                            <div class="text-6xl font-black text-gray-900 tracking-tight" style="font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-variant-numeric: tabular-nums;">
+                                @if($plan->currency === 'USD')
+                                    ${{ number_format($plan->price, 2) }}
+                                @elseif($plan->currency === 'EUR')
+                                    €{{ number_format($plan->price, 2) }}
+                                @else
+                                    S/ {{ number_format($plan->price, 2) }}
+                                @endif
+                            </div>
                             <p class="text-sm text-gray-500 mt-2">
                                 {{ $plan->type === 'monthly' ? 'facturado cada mes' : 'cada 3 meses' }}
                                 @if ($plan->type === 'quarterly')

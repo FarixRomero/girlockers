@@ -35,7 +35,7 @@ class IzipayService
 
         $payload = [
             'amount' => $paymentData['amount'] * 100, // Convertir a centavos
-            'currency' => config('izipay.currency', 'PEN'),
+            'currency' => $paymentData['currency'] ?? config('izipay.currency', 'PEN'),
             'orderId' => $paymentData['order_id'],
             'customer' => [
                 'email' => $paymentData['customer']['email'],
@@ -105,7 +105,7 @@ class IzipayService
 
         $payload = [
             'amount' => $amountInCents, // Convertir a centavos
-            'currency' => config('izipay.currency', 'PEN'),
+            'currency' => $paymentData['currency'] ?? config('izipay.currency', 'PEN'),
             'orderId' => $paymentData['order_id'],
             'customer' => [
                 'email' => $paymentData['customer']['email'],

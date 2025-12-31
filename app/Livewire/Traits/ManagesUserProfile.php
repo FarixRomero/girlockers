@@ -18,6 +18,7 @@ trait ManagesUserProfile
     public string $email = '';
     public $avatar;
     public ?string $existingAvatar = null;
+    public string $country = 'PE';
     public string $current_password = '';
     public string $password = '';
     public string $password_confirmation = '';
@@ -31,6 +32,7 @@ trait ManagesUserProfile
         $this->name = $user->name;
         $this->email = $user->email;
         $this->existingAvatar = $user->avatar;
+        $this->country = $user->country ?? 'PE';
     }
 
     /**
@@ -44,6 +46,7 @@ trait ManagesUserProfile
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique(User::class)->ignore($user->id)],
             'avatar' => ['nullable', 'image', 'max:10240'], // 10MB max
+            'country' => ['required', 'string', 'size:2'],
         ]);
 
         // Handle avatar upload

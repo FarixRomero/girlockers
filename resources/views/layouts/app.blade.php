@@ -13,7 +13,7 @@
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
@@ -53,10 +53,10 @@
             <!-- Desktop Sidebar -->
             <aside x-data="{ collapsed: false }" :class="collapsed ? 'w-20' : 'w-64'" class="hidden lg:flex lg:flex-col bg-gray-900 border-r border-gray-800 transition-all duration-300">
                 <!-- Logo & Toggle -->
-                <div class="relative flex items-center h-16 px-4 border-b border-gray-800" :class="collapsed ? 'justify-center' : 'justify-center'">
+                <div class="relative flex items-center h-16 px-4 py-3 border-b border-gray-800" :class="collapsed ? 'justify-center' : 'justify-center'">
                     <a href="{{ route('dashboard') }}" wire:navigate class="flex items-center justify-center overflow-hidden">
-                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="!collapsed" x-transition class="h-14 w-auto object-contain">
-                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="collapsed" x-transition class="h-10 w-10 object-contain">
+                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="!collapsed" x-transition class="h-10 w-auto object-contain">
+                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" x-show="collapsed" x-transition class="h-8 w-8 object-contain">
                     </a>
                     <button @click="collapsed = !collapsed" class="absolute right-2 p-1.5 hover:bg-gray-800 rounded transition" :title="collapsed ? 'Expandir' : 'Colapsar'">
                         <svg class="w-5 h-5 text-gray-400 hover:text-white transition-transform duration-300" :class="collapsed ? 'rotate-180' : ''" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -105,9 +105,13 @@
                     <!-- User Info (when expanded) -->
                     <div x-show="!collapsed" x-transition class="mb-4">
                         <a href="{{ route('profile') }}" wire:navigate class="flex items-center space-x-3 p-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition cursor-pointer">
-                            <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
-                                {{ substr(auth()->user()->name, 0, 1) }}
-                            </div>
+                            @if(auth()->user()->avatar_url)
+                                <img src="{{ auth()->user()->avatar_url }}" alt="{{ auth()->user()->name }}" class="w-10 h-10 rounded-full object-cover">
+                            @else
+                                <div class="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-semibold">
+                                    {{ substr(auth()->user()->name, 0, 1) }}
+                                </div>
+                            @endif
                             <div class="flex-1 min-w-0">
                                 <p class="text-sm font-semibold text-white truncate">{{ auth()->user()->name }}</p>
                                 <p class="text-xs text-gray-400 truncate">{{ auth()->user()->email }}</p>

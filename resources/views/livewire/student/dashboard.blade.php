@@ -76,7 +76,7 @@
     @endif
 
     <!-- Hero Section - Bienvenida con estadísticas (unified design for mobile and desktop) -->
-    <div class="bg-gradient-to-br from-purple-100 via-pink-50 to-purple-50 py-6 px-4">
+    <div class="bg-white py-6 px-4">
         <!-- Header con logo y notificación (solo móvil) -->
         <div class="md:hidden flex items-center justify-between mb-6">
             <a href="{{ route('dashboard') }}" wire:navigate>
@@ -86,10 +86,10 @@
         </div>
 
         <!-- Título de bienvenida -->
-        <h1 class="text-2xl md:text-4xl font-bold text-gray-900 mb-1">
-            Bienvenido, {{ $stats['name'] }}
+        <h1 class="font-sans text-2xl md:text-3xl font-semibold text-gray-900 mb-1">
+            Bienvenida de nuevo
         </h1>
-        <p class="text-gray-600 mb-6 md:text-lg">¡Baila, aprende y brilla con nosotras!</p>
+        <p class="font-sans text-sm md:text-base text-gray-500 mb-6">Aquí tienes tus clases y progreso</p>
 
         <!-- Stats Cards -->
         <div class="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-4">
@@ -155,8 +155,8 @@
 
     <!-- Recent Lessons Carousel -->
     @if($recentLessons->count() > 0)
-    <div class="px-4 py-3 md:py-4">
-        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Últimas Clases</h2>
+    <div class="px-6 py-3 md:py-4">
+        <h2 class="font-sans text-xl font-bold md:text-3xl text-gray-900 mb-3 md:mb-4">Últimas Clases</h2>
         <div class="relative overflow-hidden">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="recent-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
@@ -211,9 +211,9 @@
 
                                 <!-- Info abajo sin background -->
                                 <div class="pt-2">
-                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                    <h3 class="font-sans text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                                     @if($lesson->instructor)
-                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                        <p class="font-sans text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                                     @endif
                                 </div>
                             </a>
@@ -239,8 +239,8 @@
 
     <!-- Coreografía Carousel -->
     @if($coreografiaLessons->count() > 0)
-    <div class="px-4 py-3 md:py-4">
-        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Coreografía</h2>
+    <div class="px-6 py-3 md:py-4">
+        <h2 class="font-sans text-xl font-bold md:text-3xl text-gray-900 mb-3 md:mb-4">Coreografía</h2>
         <div class="relative overflow-hidden">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="coreografia-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
@@ -295,9 +295,9 @@
 
                                 <!-- Info abajo sin background -->
                                 <div class="pt-2">
-                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                    <h3 class="font-sans text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                                     @if($lesson->instructor)
-                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                        <p class="font-sans text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                                     @endif
                                 </div>
                             </a>
@@ -323,8 +323,8 @@
 
     <!-- Saved Lessons Carousel -->
     @if($savedLessons->count() > 0)
-    <div class="px-4 py-3 md:py-4">
-        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Tus Clases Guardadas</h2>
+    <div class="px-6 py-3 md:py-4">
+        <h2 class="font-sans text-xl font-bold md:text-3xl text-gray-900 mb-3 md:mb-4">Tus Clases Guardadas</h2>
         <div class="relative overflow-hidden">
             <div class="overflow-x-auto pb-4 -mx-4 px-4 scroll-smooth scrollbar-hide" id="saved-carousel">
                 <div class="flex gap-3 md:gap-6" style="width: max-content;">
@@ -379,9 +379,9 @@
 
                                 <!-- Info abajo sin background -->
                                 <div class="pt-2">
-                                    <h3 class="text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
+                                    <h3 class="font-sans text-gray-900 font-semibold text-sm line-clamp-2 mb-1">{{ $lesson->title }}</h3>
                                     @if($lesson->instructor)
-                                        <p class="text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
+                                        <p class="font-sans text-gray-500 text-xs font-normal">{{ $lesson->instructor->name }}</p>
                                     @endif
                                 </div>
                             </a>
@@ -407,8 +407,8 @@
 
     <!-- Trending Courses -->
     @if($trendingCourses->count() > 0)
-    <div class="px-4 py-3 md:py-4 pb-8">
-        <h2 class="text-xl font-black md:text-5xl md:font-bold text-gray-900 mb-3 md:mb-4 tracking-tight">Cursos</h2>
+    <div class="px-6 py-3 md:py-4 pb-8">
+        <h2 class="font-sans text-xl font-bold md:text-3xl text-gray-900 mb-3 md:mb-4">Cursos Destacados</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($trendingCourses as $course)
                 <a href="{{ route('courses.show', $course) }}" wire:navigate class="group bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-xl transition">
@@ -431,7 +431,7 @@
 
                         <!-- Overlay with info -->
                         <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-6">
-                            <h3 class="text-white font-bold text-2xl mb-2">{{ $course->title }}</h3>
+                            <h3 class="font-sans text-white font-bold text-2xl mb-2">{{ $course->title }}</h3>
                             <div class="flex items-center gap-4 text-white/80 text-sm">
                                 <span class="flex items-center">
                                     <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
@@ -455,7 +455,7 @@
                     </div>
                     @if($course->description)
                     <div class="p-6">
-                        <p class="text-gray-700 line-clamp-3">{{ $course->description }}</p>
+                        <p class="font-sans text-gray-700 line-clamp-3">{{ $course->description }}</p>
                     </div>
                     @endif
                 </a>

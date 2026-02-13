@@ -18,7 +18,6 @@ class HomePage extends Component
             'currency_symbol' => 'S/',
             'monthly' => 30,
             'quarterly' => 50,
-            'quarterly_original' => 60,
         ];
 
         try {

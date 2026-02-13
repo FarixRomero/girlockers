@@ -22,3 +22,4 @@ yarn-error.log
 /.zed
 
 ssh-mb-api.pem
+.env.prd

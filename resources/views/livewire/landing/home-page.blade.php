@@ -1,723 +1,461 @@
-<div class="min-h-screen bg-white">
-    <!-- Hero Section - Video con Máscara Oscura -->
-    <section class="relative min-h-screen flex items-center justify-center overflow-hidden" id="hero">
-        <!-- Background Video de YouTube -->
-        <div class="absolute inset-0">
-            <!-- Video de YouTube en modo autoplay y loop -->
-            <iframe
-                class="absolute top-1/2 left-1/2 w-[177.77777778vh] h-[56.25vw] min-h-screen min-w-full -translate-x-1/2 -translate-y-1/2"
-                src="https://www.youtube.com/embed/{{ $config['hero_video_url'] ?? 'HefC_rMCs-Q' }}?autoplay=1&mute=1&loop=1&playlist={{ $config['hero_video_url'] ?? 'HefC_rMCs-Q' }}&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
-                title="Girls Lockers Hero Video"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen>
-            </iframe>
-            <!-- Máscara degradado oscura para contraste -->
-            <div class="absolute inset-0 bg-gradient-to-b from-black/70 via-black/60 to-black/80"></div>
-        </div>
+@php
+    $fmtPrice = fn ($value) => rtrim(rtrim(number_format((float) $value, 2, '.', ''), '0'), '.');
+    $monthly = $pricing['monthly'] ?? 30;
+    $quarterly = $pricing['quarterly'] ?? 50;
+    $quarterlyOriginal = $pricing['quarterly_original'] ?? 60;
+    $currencySymbol = $pricing['currency_symbol'] ?? 'S/';
+    $savings = max(0, (float) $quarterlyOriginal - (float) $quarterly);
+@endphp
 
-        <div class="relative z-10 container mx-auto px-4 py-20 text-center">
-            <div class="max-w-4xl mx-auto">
-                <!-- Titular Principal en Blanco -->
-                <h1 class="font-display font-black text-5xl md:text-7xl lg:text-8xl mb-6 leading-tight page-enter">
-                    <span class="text-white">{{ $config['hero_title_1'] ?? 'TU ESPACIO.' }}</span>
-                    <br>
-                    <span class="text-white">{{ $config['hero_title_2'] ?? 'TU RITMO.' }}</span>
-                    <br>
-                    <span class="text-purple-light">{{ $config['hero_title_3'] ?? 'TU PODER.' }}</span>
-                </h1>
+<div class="min-h-screen bg-white text-gray-900 selection:bg-purple-primary selection:text-white">
+    <header class="bg-white/90 backdrop-blur-md border-b border-gray-100 sticky top-0 z-50 shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex justify-between h-16 items-center">
+                <a href="#inicio" class="flex items-center">
+                    <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-12 w-auto object-contain">
+                </a>
 
-                <p class="text-white/90 text-xl md:text-2xl max-w-3xl mx-auto mb-12 page-enter font-medium" style="animation-delay: 0.1s;">
-                    {{ $config['hero_subtitle'] ?? 'La primera comunidad y plataforma de aprendizaje de locking, creada por y para mujeres.' }}
-                </p>
+                <nav class="hidden md:flex space-x-10 items-center">
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-600" href="#inicio">Inicio</a>
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-600" href="#clases">Clases</a>
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-600" href="#instructoras">Instructoras</a>
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-600" href="#planes">Precios</a>
 
-                <div class="flex flex-col sm:flex-row gap-6 justify-center page-enter" style="animation-delay: 0.2s;">
-                    <a href="{{ route('register') }}" wire:navigate
-                       class="px-10 py-5 bg-purple-primary hover:bg-purple-dark text-white font-bold text-lg rounded-lg shadow-purple-glow-lg transition-all duration-300 transform hover:scale-105">
-                        {{ $config['hero_button_primary'] ?? 'ÚNETE A LA COMUNIDAD' }}
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-700" href="{{ route('login') }}" wire:navigate>
+                        Ingresar
+                    </a>
+                    <a class="bg-purple-primary hover:bg-purple-dark text-white px-5 py-2.5 rounded-xl transition-all duration-300 text-sm font-bold shadow-lg shadow-purple-100 hover:shadow-xl"
+                       href="{{ route('register') }}" wire:navigate>
+                        Empezar ahora
+                    </a>
+                </nav>
+
+                <div class="md:hidden flex items-center gap-3">
+                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-700"
+                       href="{{ route('login') }}" wire:navigate>
+                        Ingresar
+                    </a>
+                    <a class="bg-purple-primary hover:bg-purple-dark text-white px-4 py-2 rounded-xl transition-all duration-300 text-sm font-bold shadow-lg shadow-purple-100"
+                       href="{{ route('register') }}" wire:navigate>
+                        Empezar
                     </a>
                 </div>
             </div>
         </div>
+    </header>
 
-        <!-- Scroll Indicator -->
-        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-            <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path>
-            </svg>
-        </div>
-    </section>
+    <main>
+        <section class="relative h-[700px] flex items-center overflow-hidden" id="inicio">
+            <div class="absolute inset-0 z-0">
+                <div class="absolute inset-0 bg-white/20 z-10"></div>
+                <img alt="Grupo de bailarinas entrenando locking" class="w-full h-full object-cover grayscale opacity-20" src="{{ asset('images/imagen4.jpg') }}">
+                <div class="absolute inset-0 bg-gradient-to-r from-white/95 via-white/70 to-white/40 z-20"></div>
+            </div>
 
-    <!-- Nuestra Misión Section - Fondo con Gradiente -->
-    <section class="py-24 bg-gradient-to-br from-purple-ultralight via-white to-gray-ultralight relative overflow-hidden" id="mission">
-        <!-- Background Pattern de Gotas -->
-        <div class="absolute inset-0 opacity-5">
-            <svg class="w-full h-full" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <pattern id="drops" x="0" y="0" width="100" height="100" patternUnits="userSpaceOnUse">
-                        <!-- Gotas -->
-                        <ellipse cx="20" cy="30" rx="8" ry="12" fill="currentColor" class="text-purple-primary"/>
-                        <ellipse cx="60" cy="15" rx="6" ry="10" fill="currentColor" class="text-purple-primary"/>
-                        <ellipse cx="45" cy="60" rx="7" ry="11" fill="currentColor" class="text-purple-primary"/>
-                        <ellipse cx="80" cy="75" rx="9" ry="13" fill="currentColor" class="text-purple-primary"/>
-                        <ellipse cx="15" cy="85" rx="5" ry="9" fill="currentColor" class="text-purple-primary"/>
-                    </pattern>
-                </defs>
-                <rect width="100%" height="100%" fill="url(#drops)"/>
-            </svg>
-        </div>
-
-        <!-- Liquid Blobs Animados con Motion -->
-        <div class="mission-blob-1 absolute top-20 -left-20 w-96 h-96 bg-purple-primary/5 rounded-full filter blur-3xl"></div>
-        <div class="mission-blob-2 absolute top-40 -right-20 w-96 h-96 bg-purple-light/5 rounded-full filter blur-3xl"></div>
-        <div class="mission-blob-3 absolute -bottom-20 left-1/3 w-96 h-96 bg-purple-dark/5 rounded-full filter blur-3xl"></div>
-
-        <!-- Emoticones de Candados Decorativos con Motion -->
-        <div class="mission-lock-1 absolute top-10 left-10 text-6xl opacity-10">🔒</div>
-        <div class="mission-lock-2 absolute top-32 right-20 text-5xl opacity-10">🔓</div>
-        <div class="mission-lock-3 absolute bottom-20 left-32 text-7xl opacity-10">🔒</div>
-        <div class="mission-lock-4 absolute bottom-40 right-16 text-4xl opacity-10">🔓</div>
-        <div class="mission-lock-5 absolute top-1/2 left-1/4 text-5xl opacity-10">🔒</div>
-        <div class="mission-lock-6 absolute top-1/3 right-1/3 text-6xl opacity-10">🔓</div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="max-w-7xl mx-auto">
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-                    <!-- Grid de Imágenes Animadas - Solo visible en pantalla grande -->
-                    <div class="order-2 lg:order-1 hidden lg:block">
-                        <div class="mission-gallery grid grid-cols-2 gap-4">
-                            <!-- Imagen 1 -->
-                            <div class="mission-gallery-item-1 relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5] group cursor-pointer">
-                                <img src="{{ asset('images/girlslockers.jpg') }}"
-                                     alt="Girls Lockers Community 1"
-                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-purple-primary/60 to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
-                            </div>
-
-                            <!-- Imagen 2 -->
-                            <div class="mission-gallery-item-2 relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5] group cursor-pointer mt-8">
-                                <img src="{{ asset('images/girlslockers.jpg') }}"
-                                     alt="Girls Lockers Community 2"
-                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-purple-light/60 to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
-                            </div>
-
-                            <!-- Imagen 3 -->
-                            <div class="mission-gallery-item-3 relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5] group cursor-pointer -mt-4">
-                                <img src="{{ asset('images/girlslockers.jpg') }}"
-                                     alt="Girls Lockers Community 3"
-                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-purple-dark/60 to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
-                            </div>
-
-                            <!-- Imagen 4 -->
-                            <div class="mission-gallery-item-4 relative rounded-2xl overflow-hidden shadow-xl aspect-[4/5] group cursor-pointer mt-4">
-                                <img src="{{ asset('images/girlslockers.jpg') }}"
-                                     alt="Girls Lockers Community 4"
-                                     class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
-                                <div class="absolute inset-0 bg-gradient-to-t from-purple-primary/60 to-transparent opacity-80 group-hover:opacity-40 transition-opacity"></div>
-                            </div>
+            <div class="relative z-30 container mx-auto px-4 w-full">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+                    <div class="max-w-3xl border-l-4 border-purple-primary pl-8 py-4">
+                    <p class="text-purple-primary font-bold tracking-[0.2em] mb-4 uppercase text-sm page-enter">
+                        Academia online de Locking
+                    </p>
+                    <h1 class="font-display font-bold text-5xl md:text-7xl text-black mb-6 leading-tight page-enter" style="animation-delay: 0.05s;">
+                        Aprende <span class="italic font-normal text-purple-primary">locking</span> con cursos estructurados
+                    </h1>
+                    <p class="text-lg md:text-xl text-gray-600 mb-10 font-medium max-w-xl leading-relaxed page-enter" style="animation-delay: 0.1s;">
+                        Aprende desde cero, a tu ritmo. Entrena fundamentos, grooves, combos y freestyle con una ruta clara.
+                    </p>
+                        <div class="flex flex-col sm:flex-row gap-6 page-enter" style="animation-delay: 0.15s;">
+                            <a class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl"
+                               href="{{ route('register') }}" wire:navigate>
+                                Empezar ahora
+                            </a>
+                            <a class="group border border-gray-200 text-gray-900 px-8 py-4 rounded-xl font-semibold text-center hover:border-purple-primary hover:text-purple-primary transition duration-300 flex items-center justify-center gap-3 text-sm bg-white/70 backdrop-blur-sm"
+                               href="#video-demo">
+                                <span class="inline-flex items-center justify-center w-6 h-6 border border-black/15 group-hover:border-purple-primary rounded-full">
+                                    <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                                </span>
+                                Ver demo
+                            </a>
                         </div>
                     </div>
 
-                    <!-- Imagen única para móvil -->
-                    <div class="order-2 lg:order-1 lg:hidden">
-                        <div class="mission-image relative rounded-2xl overflow-hidden shadow-2xl">
-                            <img src="{{ asset('images/girlslockers.jpg') }}"
-                                 alt="Girls Lockers Fundadoras"
-                                 class="w-full h-[500px] object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-purple-primary/30 to-transparent"></div>
+                    <div class="hidden lg:block page-enter" style="animation-delay: 0.1s;">
+                        <div class="rounded-3xl overflow-hidden border border-gray-100 shadow-2xl shadow-gray-200 bg-black">
+                            <div class="relative aspect-video">
+                                <iframe
+                                    class="absolute inset-0 w-full h-full"
+                                    src="https://www.youtube.com/embed/oMY7XiHefVM?autoplay=1&mute=1&loop=1&playlist=oMY7XiHefVM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+                                    title="Preview clase"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 bg-white" id="clases">
+            <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-16 items-start">
+                <div class="lg:w-5/12 lg:sticky lg:top-24 page-enter">
+                    <h2 class="font-display font-bold text-4xl md:text-5xl mb-8 text-black leading-tight">
+                        Clases con estructura <span class="italic text-purple-primary font-normal">y progreso real</span>
+                    </h2>
+                    <p class="text-gray-600 font-medium text-lg leading-relaxed max-w-xl">
+                        Las clases son claras y prácticas, pensadas para que entrenes hoy y mañana estés mejor. Para personas que quieren empezar o subir de nivel sin presión.
+                    </p>
+
+                    <div class="mt-10 space-y-3 border-t border-gray-100 pt-8">
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
+                            <p class="text-gray-700 font-medium">Fundamentos, grooves, combos, musicalidad y freestyle</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
+                            <p class="text-gray-700 font-medium">Para personas que quieren empezar o subir de nivel sin presión</p>
+                        </div>
+                        <div class="flex items-start gap-3">
+                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
+                            <p class="text-gray-700 font-medium">Clases claras + práctica guiada + repetición para dominar</p>
                         </div>
                     </div>
 
-                    <!-- Texto de la misión -->
-                    <div class="order-1 lg:order-2">
-                        <h2 class="mission-title font-display font-black text-5xl md:text-7xl text-black mb-8 leading-tight">
-                            Nuestra <span class="text-purple-primary">Misión</span>
+                    <div class="mt-10">
+                        <a href="{{ route('register') }}" wire:navigate
+                           class="inline-flex items-center justify-center px-8 py-4 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:shadow-xl transition duration-300">
+                            Empezar ahora
+                        </a>
+                    </div>
+                </div>
+
+                <div class="lg:w-7/12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                    @foreach([
+                        ['title' => 'Fundamentos', 'meta' => 'Lo esencial para empezar', 'text' => 'Postura, timing, control y moves base para construir seguridad.', 'bullets' => ['Moves esenciales', 'Postura y líneas', 'Timing y musicalidad'], 'icon' => 'M10 6a2 2 0 012-2h0a2 2 0 012 2v2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2v2a2 2 0 01-2 2h0a2 2 0 01-2-2v-2H8a2 2 0 01-2-2v0a2 2 0 012-2h2V6z'],
+                        ['title' => 'Grooves & musicalidad', 'meta' => 'Que se sienta vivo', 'text' => 'Grooves entrenables para conectar con la música y soltar el cuerpo.', 'bullets' => ['Grooves base', 'Acentos y pausas', 'Energía y actitud'], 'icon' => 'M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z'],
+                        ['title' => 'Combos & variaciones', 'meta' => 'Sube de nivel', 'text' => 'Secuencias para mejorar coordinación, limpieza y variaciones con sabor.', 'bullets' => ['Combos guiados', 'Variaciones', 'Limpieza y control'], 'icon' => 'M8 5v14l11-7z'],
+                        ['title' => 'Freestyle & coreos', 'meta' => 'Escenario y cypher', 'text' => 'Herramientas para improvisar y rutinas para presencia y performance.', 'bullets' => ['Freestyle tools', 'Coreografías', 'Presencia y performance'], 'icon' => 'M12 21a9 9 0 100-18 9 9 0 000 18zm0-4a1 1 0 110-2 1 1 0 010 2zm1-12h-2v8h2V5z'],
+                    ] as $card)
+                        <div class="group flex flex-col p-6 bg-white border border-gray-100 hover:border-purple-primary/40 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl page-enter">
+                            <div class="p-3 bg-gray-50 text-purple-primary rounded-xl w-fit mb-4 group-hover:bg-purple-primary group-hover:text-white transition-colors duration-300">
+                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="{{ $card['icon'] }}"/></svg>
+                            </div>
+                            <h3 class="font-display font-bold text-lg text-gray-900 mb-1">{{ $card['title'] }}</h3>
+                            <p class="text-xs text-purple-primary font-bold uppercase tracking-wider mb-3">{{ $card['meta'] }}</p>
+                            <p class="text-gray-600 font-medium leading-relaxed text-sm">{{ $card['text'] }}</p>
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        </section>
+
+        <section class="py-24 bg-gray-50 border-y border-gray-100" id="video-demo">
+            <div class="container mx-auto px-4">
+                <div class="flex flex-col lg:flex-row items-center gap-16">
+                    <div class="lg:w-5/12 space-y-8 order-2 lg:order-1 page-enter">
+                        <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm">Aprende a tu manera</p>
+                        <h2 class="font-display font-bold text-4xl md:text-5xl text-black leading-tight">
+                            Entrena a <span class="text-purple-primary italic font-normal">tu ritmo</span>
                         </h2>
-                        <div class="space-y-8 text-gray-dark text-2xl md:text-3xl leading-relaxed font-bold">
-                            <p class="mission-text-1">
-                                Un espacio seguro para <span class="text-purple-primary">aprender</span> y <span class="text-purple-primary">dominar</span> el locking.
+                        <p class="text-gray-600 font-medium text-lg leading-relaxed">
+                            Clases diseñadas para que practiques de verdad. Repite cada clase las veces que necesites, corrige detalles y avanza con seguridad.
+                        </p>
+                        <ul class="space-y-5 mt-8 border-t border-gray-100 pt-8">
+                            <li class="flex items-start gap-4 text-gray-900">
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold block">Sin horarios fijos</span>
+                                    <span class="text-gray-600 text-sm">Entrena cuando quieras y repite cada clase sin límite</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 text-gray-900">
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold block">Ruta clara por nivel</span>
+                                    <span class="text-gray-600 text-sm">De fundamentos a freestyle, paso a paso</span>
+                                </div>
+                            </li>
+                            <li class="flex items-start gap-4 text-gray-900">
+                                <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
+                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                </div>
+                                <div>
+                                    <span class="font-bold block">Progreso real</span>
+                                    <span class="text-gray-600 text-sm">Técnica, groove, musicalidad y presencia escénica</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="lg:w-7/12 w-full order-1 lg:order-2 page-enter" style="animation-delay: 0.05s;">
+                        <div class="relative bg-black rounded-2xl overflow-hidden shadow-2xl shadow-gray-200 aspect-video group border border-gray-100">
+                            <iframe
+                                class="absolute inset-0 w-full h-full"
+                                src="https://www.youtube.com/embed/8b18KD5O3y8?rel=0&modestbranding=1"
+                                title="Fragmento de clase"
+                                frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                allowfullscreen></iframe>
+                        </div>
+
+                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
+                                <iframe
+                                    class="w-full h-full"
+                                    src="https://www.youtube.com/embed/sE9yBbvekb0?rel=0&modestbranding=1"
+                                    title="Fragmento de entrenamiento"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
+                            <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
+                                <iframe
+                                    class="w-full h-full"
+                                    src="https://www.youtube.com/embed/oMY7XiHefVM?rel=0&modestbranding=1"
+                                    title="Fragmento de entrenamiento"
+                                    frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                                    allowfullscreen></iframe>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Instructoras -->
+        <section class="py-24 bg-white" id="instructoras">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16 page-enter">
+                    <h2 class="font-display font-bold text-4xl mb-4 text-gray-900">Instructoras</h2>
+                </div>
+
+                @php
+                    $instructorName = 'Tatiana Cerna';
+                    $instructorPhoto = asset('images/imagen2.jpg');
+                    $instructorIg = 'https://www.instagram.com/girls_lockers/';
+                @endphp
+
+                <div class="bg-white rounded-3xl shadow-[0_4px_20px_-4px_rgba(0,0,0,0.1)] border border-gray-100 overflow-hidden page-enter">
+                    <div class="flex flex-col lg:flex-row">
+                        <div class="lg:w-5/12 relative h-[420px] lg:h-auto">
+                            <img alt="{{ $instructorName }}" class="w-full h-full object-cover object-center grayscale hover:grayscale-0 transition-all duration-700" src="{{ $instructorPhoto }}">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:bg-gradient-to-r lg:from-transparent lg:to-black/10"></div>
+                        </div>
+                        <div class="lg:w-7/12 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+                            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                                <div>
+                                    <h3 class="font-display font-bold text-4xl md:text-5xl text-gray-900 mb-2">{{ $instructorName }}</h3>
+                                    <div class="flex items-center text-purple-primary font-bold tracking-wider text-xs uppercase">
+                                        Lima - Perú 🇵🇪
+                                    </div>
+                                </div>
+                                <div class="hidden md:block">
+                                    <span class="text-6xl text-purple-primary/20">“</span>
+                                </div>
+                            </div>
+
+                            <p class="text-lg md:text-xl text-gray-600 font-medium mb-8 italic border-l-4 border-purple-primary pl-6 py-2">
+                                Bailarina profesional peruana con una trayectoria de más de 12 años de experiencia. Maestra especializada en el estilo Locking.
                             </p>
-                            <p class="mission-text-2 text-black text-3xl md:text-4xl">
-                                Una comunidad.<br>Una familia.<br>Un movimiento.
-                            </p>
-                        </div>
 
-                        <!-- Stats pequeñas -->
-                        <div class="grid grid-cols-3 gap-4 mt-8">
-                            <div class="mission-stat-1 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_lockers'] ?? '500+' }}</div>
-                                <div class="text-gray-dark text-sm uppercase tracking-wider">Lockers</div>
-                            </div>
-                            <div class="mission-stat-2 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_lessons'] ?? '50+' }}</div>
-                                <div class="text-gray-dark text-sm uppercase tracking-wider">Lecciones</div>
-                            </div>
-                            <div class="mission-stat-3 text-center p-4 bg-purple-ultralight rounded-xl cursor-pointer">
-                                <div class="text-3xl font-black text-purple-primary mb-1">{{ $config['stat_access'] ?? '24/7' }}</div>
-                                <div class="text-gray-dark text-sm uppercase tracking-wider">Acceso</div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- ¿Qué Encontrarás en Girls Lockers? - Fondo Gris Claro -->
-    <section class="py-24 bg-gray-ultralight relative overflow-hidden" id="features">
-        <!-- Blobs de fondo -->
-        <div class="absolute -top-20 right-0 w-[600px] h-[600px] bg-purple-primary/5 rounded-full filter blur-3xl animate-blob-slower"></div>
-        <div class="absolute bottom-0 -left-20 w-[500px] h-[500px] bg-purple-light/5 rounded-full filter blur-3xl animate-blob" style="animation-delay: 4s;"></div>
-        <div class="container mx-auto px-4">
-            <h2 class="features-title font-display font-black text-5xl md:text-7xl text-center text-black mb-6 leading-tight">
-                ¿Qué Encontrarás en <span class="font-script text-purple-primary bg-gradient-to-r from-purple-primary to-purple-light bg-clip-text text-transparent italic text-6xl md:text-8xl">Girls Lockers</span>?
-            </h2>
-            <p class="features-subtitle text-gray-dark text-center text-xl md:text-2xl mb-20 max-w-3xl mx-auto font-bold tracking-wide">
-                Todo lo que necesitas para dominar el locking, en un solo lugar
-            </p>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-                <!-- Columna 1: Clases Exclusivas -->
-                <div class="feature-card-1 bg-white rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-4 border border-gray-light relative overflow-hidden group">
-                    <!-- Efecto de brillo animado -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-primary/0 via-purple-primary/5 to-purple-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    <div class="relative z-10">
-                        <div class="flex justify-center mb-6">
-                            <div class="w-24 h-24 bg-gradient-to-br from-purple-primary to-purple-light rounded-2xl flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h3 class="font-display font-black text-3xl text-black text-center mb-4 tracking-tight group-hover:text-purple-primary transition-colors duration-300">
-                            Clases<br>Exclusivas
-                        </h3>
-                        <p class="text-gray-dark text-center text-lg leading-relaxed font-medium mb-6">
-                            Aprende desde los fundamentos hasta combos avanzados con nuestras instructoras expertas. Contenido nuevo cada semana.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Progresión estructurada</span>
-                            </li>
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Videos en alta calidad</span>
-                            </li>
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Acceso ilimitado</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Columna 2: Método que Funciona (Destacado) -->
-                <div class="feature-card-2 bg-gradient-to-br from-purple-primary to-purple-dark rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform hover:-translate-y-4 md:scale-105 relative overflow-hidden group">
-                    <!-- Efecto de estrellas -->
-                    <div class="absolute inset-0 opacity-20">
-                        <div class="absolute top-4 right-4 text-3xl">✨</div>
-                        <div class="absolute top-16 left-8 text-2xl">⭐</div>
-                        <div class="absolute bottom-8 right-12 text-2xl">💫</div>
-                    </div>
-
-                    <div class="relative z-10">
-                        <div class="flex justify-center mb-6">
-                            <div class="w-24 h-24 bg-white rounded-2xl flex items-center justify-center shadow-2xl transform group-hover:scale-110 group-hover:-rotate-3 transition-all duration-300">
-                                <svg class="w-12 h-12 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h3 class="font-display font-black text-3xl text-white text-center mb-4 tracking-tight">
-                            El Método que<br>Funciona
-                        </h3>
-                        <p class="text-white/90 text-center text-lg leading-relaxed font-medium mb-6">
-                            No es solo aprender pasos. Es entender el locking como lenguaje.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center text-white font-semibold">
-                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Fundamentos sólidos</span>
-                            </li>
-                            <li class="flex items-center text-white font-semibold">
-                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Combos y variaciones</span>
-                            </li>
-                            <li class="flex items-center text-white font-semibold">
-                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Estilo personal</span>
-                            </li>
-                            <li class="flex items-center text-white font-semibold">
-                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Clean moves y performance</span>
-                            </li>
-                            <li class="flex items-center text-white font-semibold">
-                                <span class="text-2xl text-purple-ultralight mr-3">✓</span>
-                                <span>Mentalidad de cypher y escenario</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Columna 3: Conecta y Comparte -->
-                <div class="feature-card-3 bg-white rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-4 border border-gray-light relative overflow-hidden group">
-                    <!-- Efecto de brillo animado -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-light/0 via-purple-light/5 to-purple-light/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    <div class="relative z-10">
-                        <div class="flex justify-center mb-6">
-                            <div class="w-24 h-24 bg-gradient-to-br from-purple-light to-purple-primary rounded-2xl flex items-center justify-center shadow-lg transform group-hover:scale-110 group-hover:rotate-3 transition-all duration-300">
-                                <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
-                                </svg>
-                            </div>
-                        </div>
-                        <h3 class="font-display font-black text-3xl text-black text-center mb-4 tracking-tight group-hover:text-purple-primary transition-colors duration-300">
-                            Conecta y<br>Comparte
-                        </h3>
-                        <p class="text-gray-dark text-center text-lg leading-relaxed font-medium mb-6">
-                            Forma parte de nuestro cypher digital. Comparte tu progreso, recibe feedback y participa en retos con lockers de todo el mundo.
-                        </p>
-                        <ul class="space-y-4">
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Comunidad global</span>
-                            </li>
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Feedback constructivo</span>
-                            </li>
-                            <li class="flex items-center text-gray-dark font-semibold">
-                                <span class="text-2xl text-purple-primary mr-3">✓</span>
-                                <span>Challenges mensuales</span>
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonios Section -->
-    <section class="py-32 bg-gradient-to-br from-gray-ultralight via-white to-purple-ultralight relative overflow-hidden" id="testimonials">
-        <!-- Blobs de testimonios animados -->
-        <div class="absolute top-0 left-0 w-[500px] h-[500px] bg-purple-primary/10 rounded-full filter blur-3xl animate-blob-slower"></div>
-        <div class="absolute bottom-0 right-0 w-[450px] h-[450px] bg-purple-light/10 rounded-full filter blur-3xl animate-blob" style="animation-delay: 3s;"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-purple-dark/5 rounded-full filter blur-3xl animate-blob-slow"></div>
-
-        <!-- Elementos decorativos -->
-        <div class="absolute top-20 right-20 text-6xl opacity-10 animate-float">💜</div>
-        <div class="absolute bottom-32 left-16 text-5xl opacity-10 animate-float-slow" style="animation-delay: 1s;">✨</div>
-        <div class="absolute top-1/3 left-10 text-4xl opacity-10 animate-float" style="animation-delay: 2s;">🎵</div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-20">
-                <h2 class="testimonials-title font-display font-black text-5xl md:text-7xl text-black mb-6 leading-tight">
-                    Lo Que Dicen Nuestras<br>
-                    <span class="bg-gradient-to-r from-purple-primary via-purple-light to-purple-primary bg-clip-text text-transparent">Lockers</span>
-                </h2>
-                <p class="testimonials-subtitle text-gray-dark text-xl md:text-2xl max-w-3xl mx-auto font-bold italic tracking-wide">
-                    Historias reales de mujeres que están transformando su baile y su confianza
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-7xl mx-auto">
-                <!-- Testimonio 1 -->
-                <div class="testimonial-card-1 bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg border-4 border-purple-primary/20 hover:border-purple-primary transition-all duration-500 relative overflow-hidden group transform hover:-rotate-1">
-                    <!-- Efecto de destello -->
-                    <div class="absolute -top-24 -right-24 w-48 h-48 bg-purple-primary/20 rounded-full filter blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-
-                    <div class="relative z-10">
-                        <!-- Quote decorativa -->
-                        <div class="absolute -top-4 -left-4 w-20 h-20 opacity-10">
-                            <svg class="w-full h-full text-purple-primary" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                            </svg>
-                        </div>
-
-                        <div class="flex items-center mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-primary via-purple-light to-purple-primary flex items-center justify-center text-white font-black text-2xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                                {{ $config['testimonial_1']['initials'] ?? 'MG' }}
-                            </div>
-                            <div class="ml-5">
-                                <p class="text-black font-black text-xl tracking-tight">{{ $config['testimonial_1']['username'] ?? '@LockerGirl_Lima' }}</p>
-                                <p class="text-purple-primary font-bold text-sm flex items-center mt-1">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    {{ $config['testimonial_1']['location'] ?? 'Lima, Perú' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <p class="text-gray-dark text-lg leading-relaxed font-medium">
-                            <span class="text-5xl text-purple-primary/30 leading-none">"</span>
-                            {!! nl2br(e($config['testimonial_1']['text'] ?? 'Aquí encontré la confianza para empezar a batallar. La comunidad es increíble y las instructoras son top nivel.')) !!}
-                            <span class="text-5xl text-purple-primary/30 leading-none">"</span>
-                        </p>
-
-                        <!-- Estrellas de rating -->
-                        <div class="flex gap-1 mt-6">
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonio 2 - Destacado -->
-                <div class="testimonial-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg border-4 border-purple-light md:scale-105 transition-all duration-500 relative overflow-hidden group">
-                    <!-- Efecto de brillo -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    <!-- Estrellas decorativas -->
-                    <div class="absolute top-4 right-4 text-4xl animate-pulse">✨</div>
-                    <div class="absolute bottom-8 left-6 text-3xl animate-pulse" style="animation-delay: 0.5s;">💫</div>
-
-                    <div class="relative z-10">
-                        <!-- Quote decorativa -->
-                        <div class="absolute -top-4 -left-4 w-20 h-20 opacity-20">
-                            <svg class="w-full h-full text-white" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                            </svg>
-                        </div>
-
-                        <div class="flex items-center mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-white flex items-center justify-center text-purple-primary font-black text-2xl shadow-2xl transform group-hover:scale-110 group-hover:-rotate-6 transition-all duration-300">
-                                {{ $config['testimonial_2']['initials'] ?? 'SK' }}
-                            </div>
-                            <div class="ml-5">
-                                <p class="text-white font-black text-xl tracking-tight">{{ $config['testimonial_2']['username'] ?? '@Soul_Locker_Mx' }}</p>
-                                <p class="text-purple-ultralight font-bold text-sm flex items-center mt-1">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    {{ $config['testimonial_2']['location'] ?? 'Ciudad de México' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <p class="text-white text-lg leading-relaxed font-medium">
-                            <span class="text-5xl text-white/30 leading-none">"</span>
-                            {!! nl2br(e($config['testimonial_2']['text'] ?? 'Por fin un espacio donde puedo ser yo misma. Las lecciones son claras y la progresión es perfecta para principiantes.')) !!}
-                            <span class="text-5xl text-white/30 leading-none">"</span>
-                        </p>
-
-                        <!-- Estrellas de rating -->
-                        <div class="flex gap-1 mt-6">
-                            <span class="text-yellow-300 text-2xl">⭐</span>
-                            <span class="text-yellow-300 text-2xl">⭐</span>
-                            <span class="text-yellow-300 text-2xl">⭐</span>
-                            <span class="text-yellow-300 text-2xl">⭐</span>
-                            <span class="text-yellow-300 text-2xl">⭐</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Testimonio 3 -->
-                <div class="testimonial-card-3 bg-white/90 backdrop-blur-sm rounded-3xl p-8 shadow-2xl hover:shadow-purple-glow-lg border-4 border-purple-light/20 hover:border-purple-light transition-all duration-500 relative overflow-hidden group transform hover:rotate-1">
-                    <!-- Efecto de destello -->
-                    <div class="absolute -top-24 -left-24 w-48 h-48 bg-purple-light/20 rounded-full filter blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-
-                    <div class="relative z-10">
-                        <!-- Quote decorativa -->
-                        <div class="absolute -top-4 -left-4 w-20 h-20 opacity-10">
-                            <svg class="w-full h-full text-purple-light" fill="currentColor" viewBox="0 0 24 24">
-                                <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                            </svg>
-                        </div>
-
-                        <div class="flex items-center mb-6">
-                            <div class="w-20 h-20 rounded-2xl bg-gradient-to-br from-purple-light via-purple-primary to-purple-light flex items-center justify-center text-white font-black text-2xl shadow-xl transform group-hover:scale-110 group-hover:rotate-6 transition-all duration-300">
-                                {{ $config['testimonial_3']['initials'] ?? 'LP' }}
-                            </div>
-                            <div class="ml-5">
-                                <p class="text-black font-black text-xl tracking-tight">{{ $config['testimonial_3']['username'] ?? '@LaPunkera' }}</p>
-                                <p class="text-purple-primary font-bold text-sm flex items-center mt-1">
-                                    <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"/>
-                                    </svg>
-                                    {{ $config['testimonial_3']['location'] ?? 'Buenos Aires' }}
-                                </p>
-                            </div>
-                        </div>
-
-                        <p class="text-gray-dark text-lg leading-relaxed font-medium">
-                            <span class="text-5xl text-purple-light/30 leading-none">"</span>
-                            {!! nl2br(e($config['testimonial_3']['text'] ?? 'La bóveda de recursos es oro puro. Videos históricos que nunca había visto. Esto es cultura locker de verdad.')) !!}
-                            <span class="text-5xl text-purple-light/30 leading-none">"</span>
-                        </p>
-
-                        <!-- Estrellas de rating -->
-                        <div class="flex gap-1 mt-6">
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                            <span class="text-yellow-400 text-2xl">⭐</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section con Candado 3D -->
-    <section class="py-32 bg-white relative overflow-hidden" id="pricing">
-        <!-- Blobs de fondo -->
-        <div class="absolute top-0 right-0 w-[600px] h-[600px] bg-purple-primary/5 rounded-full filter blur-3xl animate-blob-slower"></div>
-        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-light/5 rounded-full filter blur-3xl animate-blob" style="animation-delay: 2s;"></div>
-
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16">
-                <!-- Icono de candado decorativo -->
-                <div class="flex justify-center mb-6">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-purple-primary/20 blur-2xl rounded-full"></div>
-                        <div class="relative bg-gradient-to-br from-purple-primary to-purple-dark p-6 rounded-2xl shadow-2xl transform hover:scale-110 transition-all duration-300">
-                            <svg class="w-12 h-12 md:w-16 md:h-16 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                            </svg>
-                        </div>
-                    </div>
-                </div>
-
-                <h2 class="pricing-title font-display font-black text-5xl md:text-7xl text-black mb-6 leading-tight">
-                    Elige Tu <span class="text-purple-primary">Plan</span>
-                </h2>
-                <p class="pricing-subtitle text-gray-dark text-xl md:text-2xl max-w-3xl mx-auto font-bold flex items-center justify-center gap-3">
-                    <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                    </svg>
-                    Desbloquea todo tu potencial locker
-                    <svg class="w-6 h-6 md:w-8 md:h-8 text-purple-primary animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24" style="animation-delay: 0.5s;">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M8 11V7a4 4 0 118 0m-4 8v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2z" />
-                    </svg>
-                </p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
-                <!-- Plan Mensual -->
-                <div class="pricing-card-1 bg-white rounded-3xl p-8 md:p-10 shadow-2xl hover:shadow-purple-glow transition-all duration-500 transform hover:-translate-y-2 border-2 border-gray-light relative overflow-hidden group">
-                    <!-- Efecto de brillo -->
-                    <div class="absolute inset-0 bg-gradient-to-br from-purple-primary/0 via-purple-primary/5 to-purple-primary/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    <div class="relative z-10">
-                        <div class="text-center mb-6">
-                            <div class="inline-block bg-purple-ultralight text-purple-primary text-sm font-bold px-5 py-2 rounded-full uppercase mb-4">
-                                Plan Mensual
-                            </div>
-                            <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl md:text-7xl font-black text-black">S/{{ $config['pricing_monthly_price'] ?? '30' }}</span>
-                                <span class="text-gray-dark text-xl font-medium mb-3">/mes</span>
-                            </div>
-                            <p class="text-gray-dark text-sm">Perfecto para empezar</p>
-                        </div>
-
-                        <ul class="space-y-4 mb-8">
-                            @if(isset($config['pricing_monthly_features']) && is_array($config['pricing_monthly_features']))
-                                @foreach($config['pricing_monthly_features'] as $feature)
-                                    <li class="flex items-start text-gray-dark">
-                                        <svg class="w-6 h-6 text-purple-primary mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="font-medium">{{ $feature }}</span>
-                                    </li>
+                            <div class="mt-10 grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8">
+                                @foreach([
+                                    'Líder de @reler_crew, Creadora y directora de @girls_lockers (Espacio de empoderamiento Locking).',
+                                    'Creadora y directora del evento @seminario_locking.',
+                                    'Graduada en la 4ta promoción de Escenik en la carrera profesional de danza moderna.',
+                                    'Participación como bailarina profesional en la Ceremonia de Inauguración de los juegos panamericanos / LIMA2019.',
+                                    'Participaciones en diferentes competencias de freestyle y coreográficas.',
+                                    'Jueza y tallerista en festivales nacionales e internacionales.',
+                                ] as $item)
+                                    <div class="flex items-start">
+                                        <span class="text-purple-primary mr-3 mt-1 text-xl">✓</span>
+                                        <span class="text-gray-700 text-sm font-medium">{{ $item }}</span>
+                                    </div>
                                 @endforeach
-                            @endif
-                        </ul>
+                            </div>
 
+                            <div class="mt-8 bg-gray-50 border border-gray-100 rounded-2xl p-6">
+                                <p class="text-xs font-bold uppercase tracking-wider text-purple-primary mb-2">Capacitada por</p>
+                                <p class="text-gray-700 text-sm font-medium leading-relaxed">
+                                    Don Campbell (EEUU), Jimmy Scoo B doo (EEUU), Tash (CANADÁ), Sundance (EEUU), Toni Gogo (EEUU), Willow (FRA), P lock (FRA), Locking Khan (COR), Rubén Chi (NETH), Firelock (EEUU), Vovan (RUSIA), Gemini (FRA), Hurrikane (EEUU), entre otros.
+                                </p>
+                            </div>
+
+                            <div class="mt-10 flex flex-col sm:flex-row gap-4">
+                                <a href="{{ route('register') }}" wire:navigate
+                                   class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl">
+                                    Empezar ahora
+                                </a>
+                                @if($instructorIg)
+                                    <a class="border border-gray-200 text-gray-900 px-8 py-4 rounded-xl font-semibold text-center hover:border-purple-primary hover:text-purple-primary transition duration-300 text-sm bg-white"
+                                       href="{{ $instructorIg }}" target="_blank" rel="noopener noreferrer">
+                                        Instagram
+                                    </a>
+                                @endif
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Planes -->
+        <section class="py-24 bg-white" id="planes">
+            <div class="container mx-auto px-4">
+                <div class="text-center mb-16 page-enter">
+                    <h2 class="font-display font-bold text-4xl mb-4 text-gray-900">Membresía</h2>
+                    <p class="text-gray-600 font-medium text-lg">Invierte en tu formación y entrena con estructura.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <div class="bg-white p-10 border-2 border-gray-100 transition duration-300 relative flex flex-col shadow-lg hover:shadow-xl rounded-3xl overflow-hidden page-enter">
+                        <div class="mb-6">
+                            <span class="bg-gray-100 text-gray-800 text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-full">Plan Mensual</span>
+                            <h3 class="mt-6 font-display font-bold text-5xl text-gray-900">
+                                {{ $currencySymbol }}{{ $fmtPrice($monthly) }}<span class="text-lg font-normal text-gray-500 ml-1">/mes</span>
+                            </h3>
+                            <p class="text-sm text-gray-600 mt-2 font-medium">Flexible para empezar</p>
+                        </div>
+                        <hr class="my-6 border-gray-100"/>
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Entrena cuando quieras y repite las clases las veces que necesites
+                            </li>
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Ruta clara por nivel: básico → intermedio → coreos → freestyle
+                            </li>
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Enfocado en progreso real (técnica + groove + musicalidad)
+                            </li>
+                        </ul>
                         <a href="{{ route('register') }}" wire:navigate
-                           class="block w-full px-8 py-4 bg-gradient-to-r from-purple-primary to-purple-light hover:from-purple-dark hover:to-purple-primary text-white font-bold text-lg rounded-xl text-center transition-all duration-300 transform group-hover:scale-105 shadow-lg">
-                            COMENZAR AHORA
+                           class="w-full py-4 rounded-xl font-bold text-base transition-all bg-gray-100 text-gray-900 hover:bg-gray-200 text-center">
+                            Elegir plan mensual
                         </a>
                     </div>
-                </div>
 
-                <!-- Plan Trimestral (Destacado) -->
-                <div class="pricing-card-2 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary rounded-3xl p-8 md:p-10 shadow-2xl hover:shadow-purple-glow-lg transition-all duration-500 transform md:scale-105 hover:-translate-y-2 border-4 border-purple-light relative overflow-hidden group">
-                    <!-- Badge de ahorro -->
-                    @php
-                        $savings = ($config['pricing_quarterly_original_price'] ?? 60) - ($config['pricing_quarterly_price'] ?? 50);
-                    @endphp
-                    <div class="absolute top-4 right-4 bg-gradient-to-r from-yellow-400 to-orange-400 text-black text-xs font-black px-4 py-2 rounded-full uppercase shadow-lg transform rotate-3 z-20">
-                        ¡Ahorra S/{{ $savings }}!
-                    </div>
-
-                    <!-- Efecto de brillo -->
-                    <div class="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/10 to-white/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-
-                    <!-- Estrellas decorativas -->
-                    <div class="absolute top-4 right-4 text-4xl animate-pulse">✨</div>
-                    <div class="absolute bottom-8 left-6 text-3xl animate-pulse" style="animation-delay: 0.5s;">💫</div>
-
-                    <div class="relative z-10">
-                        <div class="text-center mb-6">
-                            <div class="inline-block bg-white text-purple-primary text-sm font-bold px-5 py-2 rounded-full uppercase mb-4">
-                                Plan Trimestral
-                            </div>
-                            <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-gray-light line-through text-xl font-bold">S/{{ $config['pricing_quarterly_original_price'] ?? '60' }}</span>
-                            </div>
-                            <div class="flex items-end justify-center gap-2 mb-2">
-                                <span class="text-6xl md:text-7xl font-black text-white">S/{{ $config['pricing_quarterly_price'] ?? '50' }}</span>
-                                <span class="text-purple-ultralight text-xl font-medium mb-3">/3 meses</span>
-                            </div>
-                            <p class="text-purple-ultralight text-sm font-medium">¡Mejor valor!</p>
+                    <div class="bg-white p-10 border-4 border-purple-600 shadow-2xl relative flex flex-col rounded-3xl overflow-hidden page-enter">
+                        <div class="absolute top-4 right-4 z-10">
+                            <span class="bg-gradient-to-r from-purple-600 to-pink-600 text-white text-xs font-bold px-4 py-2 rounded-full shadow-lg uppercase">
+                            Recomendado
+                            </span>
                         </div>
-
-                        <ul class="space-y-4 mb-8">
-                            @if(isset($config['pricing_quarterly_features']) && is_array($config['pricing_quarterly_features']))
-                                @foreach($config['pricing_quarterly_features'] as $index => $feature)
-                                    <li class="flex items-start text-white">
-                                        <svg class="w-6 h-6 {{ $index >= 4 ? 'text-yellow-300' : 'text-purple-ultralight' }} mr-3 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"></path>
-                                        </svg>
-                                        <span class="{{ $index >= 4 ? 'font-bold' : 'font-medium' }}">{{ $feature }}</span>
-                                    </li>
-                                @endforeach
+                        <div class="mb-6">
+                            <span class="bg-purple-50 text-purple-700 text-xs font-bold px-3 py-1 uppercase tracking-wider rounded-full">Plan Trimestral</span>
+                            <h3 class="mt-6 font-display font-bold text-5xl text-gray-900">
+                                {{ $currencySymbol }}{{ $fmtPrice($quarterly) }}<span class="text-lg font-normal text-gray-500 ml-1">/3 meses</span>
+                            </h3>
+                            @if($savings > 0)
+                                <p class="text-sm text-purple-600 mt-2 font-semibold">Ahorra {{ $currencySymbol }}{{ $fmtPrice($savings) }}</p>
                             @endif
+                        </div>
+                        <hr class="my-6 border-gray-100"/>
+                        <ul class="space-y-4 mb-8 flex-1">
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> <span class="font-bold text-gray-900">Todo lo del plan mensual</span>
+                            </li>
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> Profundizas en variaciones, limpieza y performance
+                            </li>
+                            <li class="flex items-start text-gray-700 text-sm">
+                                <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> Constancia real: 12 semanas para ver un antes y un después
+                            </li>
                         </ul>
-
                         <a href="{{ route('register') }}" wire:navigate
-                           class="block w-full px-8 py-4 bg-white hover:bg-gray-ultralight text-purple-primary font-bold text-lg rounded-xl text-center transition-all duration-300 transform group-hover:scale-105 shadow-2xl">
-                            OBTENER DESCUENTO
+                           class="w-full py-4 rounded-xl font-bold text-base transition-all bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg hover:shadow-xl hover:scale-[1.02] text-center">
+                            Elegir plan trimestral
                         </a>
                     </div>
                 </div>
             </div>
+        </section>
 
-            <!-- Garantía -->
-            <div class="mt-16 text-center">
-                <div class="inline-flex items-center gap-3 bg-purple-ultralight px-8 py-4 rounded-full">
-                    <svg class="w-8 h-8 text-purple-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
-                    </svg>
-                    <span class="text-purple-primary font-bold text-lg">Garantía de satisfacción de 7 días</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- CTA Final -->
-    <section class="py-24 bg-gradient-to-br from-purple-primary via-purple-dark to-purple-primary relative overflow-hidden">
-        <!-- Pattern overlay -->
-        <div class="absolute inset-0 opacity-10">
-            <div class="absolute inset-0" style="background-image: repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px);"></div>
-        </div>
-
-        <div class="container mx-auto px-4 text-center relative z-10">
-            <h2 class="font-display font-black text-5xl md:text-7xl text-white mb-6 leading-tight">
-                ¿Lista para el <span class="text-purple-ultralight">lock</span>?
-            </h2>
-            <p class="text-white/90 text-xl md:text-2xl max-w-2xl mx-auto mb-12 font-medium">
-                Únete a cientos de lockers que ya están dominando su arte
-            </p>
-            <div class="flex justify-center">
-                <a href="{{ route('register') }}" wire:navigate
-                   class="px-12 py-6 bg-white hover:bg-gray-ultralight text-purple-primary font-bold text-xl rounded-lg shadow-2xl transition-all duration-300 transform hover:scale-105">
-                    COMIENZA TU VIAJE LOCKER
-                </a>
+        <!-- Comunidad / misión (refuerzo emocional) -->
+        <section class="py-24 relative overflow-hidden bg-white" id="mission">
+            <div class="absolute inset-0 bg-white">
+                <div class="absolute top-0 left-0 w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-purple-primary/10 via-white to-white opacity-70"></div>
             </div>
 
-            <!-- Social Proof -->
-            <div class="mt-16 flex flex-wrap justify-center items-center gap-8 text-white/90">
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path>
-                    </svg>
-                    <span class="font-bold">500+ Estudiantes Felices</span>
-                </div>
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M6.267 3.455a3.066 3.066 0 001.745-.723 3.066 3.066 0 013.976 0 3.066 3.066 0 001.745.723 3.066 3.066 0 012.812 2.812c.051.643.304 1.254.723 1.745a3.066 3.066 0 010 3.976 3.066 3.066 0 00-.723 1.745 3.066 3.066 0 01-2.812 2.812 3.066 3.066 0 00-1.745.723 3.066 3.066 0 01-3.976 0 3.066 3.066 0 00-1.745-.723 3.066 3.066 0 01-2.812-2.812 3.066 3.066 0 00-.723-1.745 3.066 3.066 0 010-3.976 3.066 3.066 0 00.723-1.745 3.066 3.066 0 012.812-2.812zm7.44 5.252a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="font-bold">Instructoras Certificadas</span>
-                </div>
-                <div class="flex items-center">
-                    <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path>
-                    </svg>
-                    <span class="font-bold">Acceso 24/7</span>
+            <div class="relative z-10 container mx-auto px-4">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div class="page-enter">
+                        <h2 class="mission-title font-display font-bold text-4xl md:text-6xl text-gray-900 leading-tight">
+                            Aprende desde <span class="text-purple-primary italic font-normal">cero</span>
+                        </h2>
+                        <p class="mission-text-1 text-gray-600 text-lg md:text-2xl mt-6 font-medium leading-relaxed">
+                            Ya sea que estés empezando o tengas experiencia, encuentra el curso adecuado para tu nivel y sigue creciendo.
+                        </p>
+                        <div class="mt-10">
+                            <a href="{{ route('register') }}" wire:navigate
+                               class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl inline-flex">
+                                Empezar ahora
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="page-enter" style="animation-delay: 0.05s;">
+                        <div class="rounded-2xl overflow-hidden shadow-2xl border border-gray-100">
+                            <img src="{{ asset('images/aprende-desde-cero.jpg') }}" alt="Aprende locking desde cero" class="w-full h-[360px] md:h-[480px] object-cover">
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
-    <footer class="py-12 bg-white border-t border-gray-light">
-        <div class="container mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <!-- Logo y descripción -->
-                <div>
-                    <h3 class="font-script text-3xl font-bold text-purple-primary mb-4 italic">Girls Lockers</h3>
-                    <p class="text-gray-dark text-sm leading-relaxed">
-                        La primera comunidad de locking por y para mujeres. Empoderando lockers en todo el mundo.
+        <!-- Footer -->
+        <footer class="py-12 bg-white border-t border-gray-100">
+            <div class="container mx-auto px-4">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                    <div>
+                        <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" class="h-10 w-auto object-contain mb-4">
+                    </div>
+
+                    <div>
+                        <h4 class="font-display font-bold text-gray-900 mb-4">Enlaces</h4>
+                        <ul class="space-y-2">
+                            <li><a href="#instructoras" class="text-gray-600 hover:text-purple-primary transition-colors font-medium">Instructoras</a></li>
+                            <li><a href="#planes" class="text-gray-600 hover:text-purple-primary transition-colors font-medium">Planes</a></li>
+                            <li><a href="#video-demo" class="text-gray-600 hover:text-purple-primary transition-colors font-medium">Demo</a></li>
+                        </ul>
+                    </div>
+
+                    <div>
+                        <h4 class="font-display font-bold text-gray-900 mb-4">Cuenta</h4>
+                        <ul class="space-y-2">
+                            <li><a href="{{ route('register') }}" wire:navigate class="text-gray-600 hover:text-purple-primary transition-colors font-medium">Registrarse</a></li>
+                            <li><a href="{{ route('login') }}" wire:navigate class="text-gray-600 hover:text-purple-primary transition-colors font-medium">Iniciar sesión</a></li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="border-t border-gray-100 pt-8 text-center">
+                    <p class="text-gray-500 text-sm mb-2">
+                        © {{ date('Y') }}. Todos los derechos reservados.
                     </p>
                 </div>
-
-                <!-- Links rápidos -->
-                <div>
-                    <h4 class="font-display font-bold text-black mb-4">Enlaces Rápidos</h4>
-                    <ul class="space-y-2">
-                        <li><a href="{{ route('register') }}" wire:navigate class="text-gray-dark hover:text-purple-primary transition-colors">Registrarse</a></li>
-                        <li><a href="{{ route('login') }}" wire:navigate class="text-gray-dark hover:text-purple-primary transition-colors">Iniciar Sesión</a></li>
-                    </ul>
-                </div>
-
-                <!-- Social -->
-                <div>
-                    <h4 class="font-display font-bold text-black mb-4">Síguenos</h4>
-                    <div class="flex gap-4">
-                        <a href="{{ $config['social_instagram'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></svg>
-                        </a>
-                        <a href="{{ $config['social_tiktok'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-5.2 1.74 2.89 2.89 0 012.31-4.64 2.93 2.93 0 01.88.13V9.4a6.84 6.84 0 00-1-.05A6.33 6.33 0 005 20.1a6.34 6.34 0 0010.86-4.43v-7a8.16 8.16 0 004.77 1.52v-3.4a4.85 4.85 0 01-1-.1z"/></svg>
-                        </a>
-                        <a href="{{ $config['social_youtube'] ?? '#' }}" class="w-10 h-10 bg-purple-ultralight hover:bg-purple-primary text-purple-primary hover:text-white rounded-full flex items-center justify-center transition-colors">
-                            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
-                        </a>
-                    </div>
-                </div>
             </div>
-
-            <div class="border-t border-gray-light pt-8 text-center">
-                <p class="text-gray-dark text-sm mb-2">
-                    © 2025 <span class="font-script font-bold text-purple-primary text-2xl italic">Girls Lockers</span>. Todos los derechos reservados.
-                </p>
-                <p class="text-gray-medium text-xs">
-                    Empoderando chicas lockers en todo el mundo 💪✨
-                </p>
-            </div>
-        </div>
-    </footer>
+        </footer>
+    </main>
 </div>
 
 @push('scripts')
 @vite(['resources/js/landing-animations.js'])
 <script type="module">
-    // Smooth scroll for anchor links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
+            const href = this.getAttribute('href');
+            const target = href ? document.querySelector(href) : null;
+            if (!target) return;
             e.preventDefault();
-            const target = document.querySelector(this.getAttribute('href'));
-            if (target) {
-                target.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'start'
-                });
-            }
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
     });
 
-    // Page enter animations
     const observerOptions = {
         threshold: 0.1,
         rootMargin: '0px 0px -100px 0px'
@@ -731,8 +469,6 @@
         });
     }, observerOptions);
 
-    document.querySelectorAll('.page-enter').forEach(el => {
-        observer.observe(el);
-    });
+    document.querySelectorAll('.page-enter').forEach(el => observer.observe(el));
 </script>
 @endpush

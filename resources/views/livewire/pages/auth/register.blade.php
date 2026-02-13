@@ -139,7 +139,7 @@ new #[Layout('layouts.guest')] class extends Component
         <a
             href="{{ route('login') }}"
             wire:navigate
-            class="inline-block px-8 py-3 text-base font-semibold text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-full transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 hover:shadow-md"
+            class="inline-block px-8 py-3 text-base font-semibold text-purple-600 bg-purple-50 hover:bg-purple-100 rounded-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 hover:shadow-md"
         >
             Iniciar Sesión
         </a>

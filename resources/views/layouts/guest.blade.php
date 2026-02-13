@@ -13,12 +13,14 @@
         <!-- Google Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-        <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Montserrat:wght@400;500;600;700;800;900&family=Dancing+Script:wght@400;500;600;700&family=Satisfy&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+        @livewireStyles
     </head>
-    <body class="font-body antialiased bg-gradient-to-br from-purple-50 via-white to-pink-50">
+    <body class="font-body antialiased bg-white">
         <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 px-4 py-12">
             <!-- Logo Section -->
             <div class="mb-10">
@@ -26,15 +28,14 @@
                     <img
                         src="{{ asset('images/girls_lockers_logo.png') }}"
                         alt="Girls Lockers Logo"
-                        class="h-24 w-auto transition-all duration-300 group-hover:scale-105 drop-shadow-lg"
+                        class="h-20 w-auto transition-all duration-300 group-hover:scale-105"
                     >
-                    <p class="text-center text-sm text-gray-600 mt-4 font-medium">Aprende, practica y empodera</p>
                 </a>
             </div>
 
             <!-- Card Container -->
             <div class="w-full sm:max-w-md">
-                <div class="bg-white rounded-2xl shadow-xl shadow-purple-100 p-8 sm:p-10 border border-purple-100 transition-all duration-300 hover:shadow-2xl hover:shadow-purple-200">
+                <div class="bg-white rounded-2xl shadow-xl shadow-gray-200 p-8 sm:p-10 border border-gray-100">
                     {{ $slot }}
                 </div>
             </div>
@@ -44,5 +45,7 @@
                 <p>&copy; {{ date('Y') }} Girls Lockers. Todos los derechos reservados.</p>
             </div>
         </div>
+
+        @livewireScripts
     </body>
 </html>

@@ -28,15 +28,95 @@
                     </a>
                 </nav>
 
-                <div class="md:hidden flex items-center gap-3">
-                    <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-700"
-                       href="{{ route('login') }}" wire:navigate>
-                        Ingresar
-                    </a>
-                    <a class="bg-purple-primary hover:bg-purple-dark text-white px-4 py-2 rounded-xl transition-all duration-300 text-sm font-bold shadow-lg shadow-purple-100"
-                       href="{{ route('register') }}" wire:navigate>
-                        Empezar
-                    </a>
+                <div class="md:hidden flex items-center" x-data="{ open: false }">
+                    <!-- Hamburger button -->
+                    <button @click="open = !open"
+                            class="p-2 rounded-lg text-gray-600 hover:text-purple-primary hover:bg-purple-50 transition-colors"
+                            aria-label="Menú">
+                        <svg x-show="!open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                        </svg>
+                        <svg x-show="open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                        </svg>
+                    </button>
+
+                    <!-- Mobile menu fullscreen (teleportado al body para evitar problemas de stacking context) -->
+                    <template x-teleport="body">
+                        <div x-show="open"
+                             x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 translate-x-full"
+                             x-transition:enter-end="opacity-100 translate-x-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-x-0"
+                             x-transition:leave-end="opacity-0 translate-x-full"
+                             style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:#ffffff;z-index:9999;display:flex;flex-direction:column;">
+
+                            <!-- Header del menú -->
+                            <div style="display:flex;justify-content:space-between;align-items:center;padding:0 1.5rem;height:4rem;border-bottom:1px solid #f3f4f6;">
+                                <a href="#inicio" @click="open = false">
+                                    <img src="{{ asset('images/girls_lockers_logo.png') }}" alt="Girls Lockers" style="height:2.5rem;width:auto;object-fit:contain;">
+                                </a>
+                                <button @click="open = false"
+                                        class="p-2 rounded-lg text-gray-600 hover:text-purple-primary hover:bg-purple-50 transition-colors"
+                                        aria-label="Cerrar menú">
+                                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                                    </svg>
+                                </button>
+                            </div>
+
+                            <!-- Links de navegación -->
+                            <nav class="flex-1 flex flex-col justify-center px-8 gap-2">
+                                <a @click="open = false" href="#inicio"
+                                   class="text-2xl font-bold text-gray-800 hover:text-purple-primary py-4 border-b border-gray-100 transition-colors text-center">
+                                    Inicio
+                                </a>
+                                <a @click="open = false" href="#clases"
+                                   class="text-2xl font-bold text-gray-800 hover:text-purple-primary py-4 border-b border-gray-100 transition-colors text-center">
+                                    Clases
+                                </a>
+                                <a @click="open = false" href="#instructoras"
+                                   class="text-2xl font-bold text-gray-800 hover:text-purple-primary py-4 border-b border-gray-100 transition-colors text-center">
+                                    Instructoras
+                                </a>
+                                <a @click="open = false" href="#planes"
+                                   class="text-2xl font-bold text-gray-800 hover:text-purple-primary py-4 border-b border-gray-100 transition-colors text-center">
+                                    Precios
+                                </a>
+                            </nav>
+
+                            <!-- Botones de acción -->
+                            <div class="px-8 flex flex-col gap-3">
+                                <a href="{{ route('login') }}" wire:navigate
+                                   class="w-full text-center py-4 rounded-xl border-2 border-purple-primary text-purple-primary font-bold text-base hover:bg-purple-50 transition-colors">
+                                    Ingresar
+                                </a>
+                                <a href="{{ route('register') }}" wire:navigate
+                                   class="w-full text-center py-4 rounded-xl bg-purple-primary hover:bg-purple-dark text-white font-bold text-base shadow-lg shadow-purple-100 transition-all duration-300">
+                                    Empezar ahora
+                                </a>
+                            </div>
+
+                            <!-- Footer con redes sociales -->
+                            <div class="px-8 py-6 flex justify-center gap-6 border-t border-gray-100 mt-4">
+                                <a href="https://www.instagram.com/girls_lockers/" target="_blank"
+                                   class="flex items-center gap-2 text-gray-500 hover:text-pink-500 transition-colors">
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                                    </svg>
+                                    <span class="text-sm font-semibold">@girls_lockers</span>
+                                </a>
+                                <a href="https://www.youtube.com/@Girls_Lockers" target="_blank"
+                                   class="flex items-center gap-2 text-gray-500 hover:text-red-500 transition-colors">
+                                    <svg class="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                                        <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+                                    </svg>
+                                    <span class="text-sm font-semibold">@Girls_Lockers</span>
+                                </a>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
         </div>

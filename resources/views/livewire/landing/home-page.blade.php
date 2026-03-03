@@ -161,7 +161,7 @@
                             <div class="relative aspect-video">
                                 <iframe
                                     class="absolute inset-0 w-full h-full"
-                                    src="https://www.youtube.com/embed/oMY7XiHefVM?autoplay=1&mute=1&loop=1&playlist=oMY7XiHefVM&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
+                                    src="https://www.youtube.com/embed/HefC_rMCs-Q?autoplay=1&mute=1&loop=1&playlist=HefC_rMCs-Q&controls=0&showinfo=0&rel=0&modestbranding=1&iv_load_policy=3&playsinline=1"
                                     title="Preview clase"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"

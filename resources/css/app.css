@@ -9,6 +9,7 @@
 
 @layer base {
     :root {
+        color-scheme: light;
         /* Primary Colors */
         --gl-pink-vibrant: #FF7BA9;
         --gl-pink-light: #FFB3D1;

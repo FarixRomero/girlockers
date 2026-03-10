@@ -136,7 +136,7 @@
                         Academia online de Locking
                     </p>
                     <h1 class="font-display font-bold text-5xl md:text-7xl text-white mb-6 leading-tight page-enter" style="animation-delay: 0.05s;">
-                        Aprende <span class="font-script font-normal text-purple-light text-6xl md:text-8xl">locking</span> con cursos estructurados
+                        Aprende <span class="font-bold text-purple-light">locking</span> con cursos estructurados
                     </h1>
                     <p class="text-lg md:text-xl text-gray-300 mb-10 font-medium max-w-xl leading-relaxed page-enter" style="animation-delay: 0.1s;">
                         Aprende desde cero, a tu ritmo. Entrena fundamentos, grooves, combos y freestyle con una ruta clara.
@@ -175,26 +175,27 @@
 
         <section class="py-24 bg-white" id="clases">
             <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-16 items-start">
-                <div class="lg:w-5/12 lg:sticky lg:top-24 page-enter">
-                    <h2 class="font-display font-bold text-4xl md:text-5xl mb-8 text-black leading-tight">
-                        Clases con estructura <span class="font-script text-purple-primary font-normal text-5xl md:text-6xl">y progreso real</span>
+                <div class="lg:w-5/12 page-enter">
+                    <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm mb-3">Primer curso</p>
+                    <h2 class="font-display font-bold text-4xl md:text-5xl mb-6 text-black leading-tight">
+                        Locking desde cero
                     </h2>
                     <p class="text-gray-600 font-medium text-lg leading-relaxed max-w-xl">
-                        Las clases son claras y prácticas, pensadas para que entrenes hoy y mañana estés mejor. Para personas que quieren empezar o subir de nivel sin presión.
+                        Ya sea que estés empezando o tengas experiencia, aquí encontrarás las herramientas que te ayudarán a avanzar en tu danza.
                     </p>
 
                     <div class="mt-10 space-y-3 border-t border-gray-100 pt-8">
                         <div class="flex items-start gap-3">
                             <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Fundamentos, grooves, combos, musicalidad y freestyle</p>
+                            <p class="text-gray-700 font-medium">Módulo I disponible ahora — 10 sesiones</p>
                         </div>
                         <div class="flex items-start gap-3">
                             <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Para personas que quieren empezar o subir de nivel sin presión</p>
+                            <p class="text-gray-700 font-medium">Repite cada sesión las veces que necesites</p>
                         </div>
                         <div class="flex items-start gap-3">
                             <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Clases claras + práctica guiada + repetición para dominar</p>
+                            <p class="text-gray-700 font-medium">Técnica, timing, groove y performance</p>
                         </div>
                     </div>
 
@@ -206,20 +207,39 @@
                     </div>
                 </div>
 
-                <div class="lg:w-7/12 grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Módulos -->
+                <div class="lg:w-7/12 space-y-2 lg:pt-[2.1rem]">
                     @foreach([
-                        ['title' => 'Fundamentos', 'meta' => 'Lo esencial para empezar', 'text' => 'Postura, timing, control y moves base para construir seguridad.', 'bullets' => ['Moves esenciales', 'Postura y líneas', 'Timing y musicalidad'], 'icon' => 'M10 6a2 2 0 012-2h0a2 2 0 012 2v2h2a2 2 0 012 2v0a2 2 0 01-2 2h-2v2a2 2 0 01-2 2h0a2 2 0 01-2-2v-2H8a2 2 0 01-2-2v0a2 2 0 012-2h2V6z'],
-                        ['title' => 'Grooves & musicalidad', 'meta' => 'Que se sienta vivo', 'text' => 'Grooves entrenables para conectar con la música y soltar el cuerpo.', 'bullets' => ['Grooves base', 'Acentos y pausas', 'Energía y actitud'], 'icon' => 'M12 2l3 7h7l-5.5 4 2 7L12 16l-6.5 4 2-7L2 9h7z'],
-                        ['title' => 'Combos & variaciones', 'meta' => 'Sube de nivel', 'text' => 'Secuencias para mejorar coordinación, limpieza y variaciones con sabor.', 'bullets' => ['Combos guiados', 'Variaciones', 'Limpieza y control'], 'icon' => 'M8 5v14l11-7z'],
-                        ['title' => 'Freestyle & coreos', 'meta' => 'Escenario y cypher', 'text' => 'Herramientas para improvisar y rutinas para presencia y performance.', 'bullets' => ['Freestyle tools', 'Coreografías', 'Presencia y performance'], 'icon' => 'M12 21a9 9 0 100-18 9 9 0 000 18zm0-4a1 1 0 110-2 1 1 0 010 2zm1-12h-2v8h2V5z'],
-                    ] as $card)
-                        <div class="group flex flex-col p-6 bg-white border border-gray-100 hover:border-purple-primary/40 transition-all duration-300 rounded-2xl shadow-lg hover:shadow-xl page-enter">
-                            <div class="p-3 bg-gray-50 text-purple-primary rounded-xl w-fit mb-4 group-hover:bg-purple-primary group-hover:text-white transition-colors duration-300">
-                                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor"><path d="{{ $card['icon'] }}"/></svg>
+                        ['num' => 'I',   'name' => 'Pasos Fundamentales',                    'level' => 'Básico',         'sessions' => '10 sesiones', 'active' => true],
+                        ['num' => 'II',  'name' => 'Pasos Compuestos y Complementarios',      'level' => 'Intermedio',     'sessions' => null,          'active' => false],
+                        ['num' => 'III', 'name' => 'Power Moves & Tricks',                    'level' => 'Avanzado',       'sessions' => null,          'active' => false],
+                        ['num' => '✦',  'name' => 'Acondicionamiento, cultura y comunidad',   'level' => 'Complementario', 'sessions' => null,          'active' => false],
+                    ] as $mod)
+                        <div class="flex items-center gap-4 px-4 py-3 rounded-xl border page-enter transition-all duration-200
+                            {{ $mod['active']
+                                ? 'bg-purple-primary border-purple-primary text-white shadow-lg shadow-purple-primary/20'
+                                : 'bg-white border-gray-100 text-gray-700 hover:border-gray-200 hover:shadow-sm' }}">
+                            <span class="text-xs font-black w-6 text-center shrink-0 {{ $mod['active'] ? 'text-white/50' : 'text-gray-300' }}">{{ $mod['num'] }}</span>
+                            <div class="flex-1 min-w-0">
+                                <p class="text-sm font-semibold truncate">{{ $mod['name'] }}</p>
                             </div>
-                            <h3 class="font-display font-bold text-lg text-gray-900 mb-1">{{ $card['title'] }}</h3>
-                            <p class="text-xs text-purple-primary font-bold uppercase tracking-wider mb-3">{{ $card['meta'] }}</p>
-                            <p class="text-gray-600 font-medium leading-relaxed text-sm">{{ $card['text'] }}</p>
+                            <div class="flex items-center gap-3 shrink-0">
+                                <span class="text-xs font-medium {{ $mod['active'] ? 'text-purple-200' : 'text-gray-400' }}">{{ $mod['level'] }}</span>
+                                @if($mod['sessions'])
+                                    <span class="text-xs font-bold {{ $mod['active'] ? 'text-white/80' : 'text-gray-400' }}">· {{ $mod['sessions'] }}</span>
+                                @endif
+                                @if($mod['active'])
+                                    <a href="{{ route('register') }}" wire:navigate
+                                       class="text-xs font-bold bg-white text-purple-primary px-2.5 py-1 rounded-lg hover:bg-purple-50 transition-colors">
+                                        Empezar
+                                    </a>
+                                @else
+                                    <a href="{{ route('login') }}" wire:navigate
+                                       class="text-xs text-purple-primary font-semibold hover:underline transition-colors">
+                                        Descubre más
+                                    </a>
+                                @endif
+                            </div>
                         </div>
                     @endforeach
                 </div>
@@ -232,7 +252,7 @@
                     <div class="lg:w-5/12 space-y-8 order-2 lg:order-1 page-enter">
                         <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm">Aprende a tu manera</p>
                         <h2 class="font-display font-bold text-4xl md:text-5xl text-black leading-tight">
-                            Entrena a <span class="font-script text-purple-primary font-normal text-5xl md:text-6xl">tu ritmo</span>
+                            Entrena a <span class="text-purple-primary font-bold">tu ritmo</span>
                         </h2>
                         <p class="text-gray-600 font-medium text-lg leading-relaxed">
                             Clases diseñadas para que practiques de verdad. Repite cada clase las veces que necesites, corrige detalles y avanza con seguridad.
@@ -313,7 +333,7 @@
 
                 @php
                     $instructorName = 'Tatiana Cerna';
-                    $instructorPhoto = asset('images/imagen2.jpg');
+                    $instructorPhoto = asset('images/tatiana.png');
                     $instructorIg = 'https://www.instagram.com/girls_lockers/';
                 @endphp
 
@@ -336,7 +356,7 @@
                                 </div>
                             </div>
 
-                            <p class="text-lg md:text-xl text-gray-600 font-medium mb-8 italic border-l-4 border-purple-primary pl-6 py-2">
+                            <p class="text-lg md:text-xl text-gray-600 font-medium mb-8 border-l-4 border-purple-primary pl-6 py-2">
                                 Bailarina profesional peruana con una trayectoria de más de 12 años de experiencia. Maestra especializada en el estilo Locking.
                             </p>
 
@@ -386,7 +406,7 @@
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16 page-enter">
                     <h2 class="font-display font-bold text-4xl mb-4 text-white">Membresía</h2>
-                    <p class="text-gray-400 font-medium text-lg">Invierte en tu formación y entrena con estructura.</p>
+                    <p class="text-gray-400 font-medium text-lg">Elige el plan que se adapte a ti y empieza a entrenar hoy.</p>
                 </div>
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -459,7 +479,7 @@
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="page-enter">
                         <h2 class="mission-title font-display font-bold text-4xl md:text-6xl text-gray-900 leading-tight">
-                            Aprende desde <span class="font-script text-purple-primary font-normal text-5xl md:text-7xl">cero</span>
+                            Aprende desde <span class="text-purple-primary font-bold">cero</span>
                         </h2>
                         <p class="mission-text-1 text-gray-600 text-lg md:text-2xl mt-6 font-medium leading-relaxed">
                             Ya sea que estés empezando o tengas experiencia, encuentra el curso adecuado para tu nivel y sigue creciendo.

@@ -1,7 +1,7 @@
 @php
     $fmtPrice = fn ($value) => rtrim(rtrim(number_format((float) $value, 2, '.', ''), '0'), '.');
-    $monthly = $pricing['monthly'] ?? 30;
-    $quarterly = $pricing['quarterly'] ?? 50;
+    $monthly = $pricing['monthly'] ?? 40;
+    $quarterly = $pricing['quarterly'] ?? 100;
     $currencySymbol = $pricing['currency_symbol'] ?? 'S/';
 @endphp
 
@@ -139,7 +139,7 @@
                         Aprende <span class="font-bold text-purple-light">locking</span> con cursos estructurados
                     </h1>
                     <p class="text-lg md:text-xl text-gray-300 mb-10 font-medium max-w-xl leading-relaxed page-enter" style="animation-delay: 0.1s;">
-                        Aprende desde cero, a tu ritmo. Entrena fundamentos, grooves, combos y freestyle con una ruta clara.
+                        Aprende desde cero, a tu ritmo. Entrena fundamentos, compuestos, combos y freestyle con una ruta clara donde estes.
                     </p>
                         <div class="flex flex-col sm:flex-row gap-6 page-enter" style="animation-delay: 0.15s;">
                             <a class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-primary/30 hover:shadow-xl"
@@ -184,18 +184,18 @@
                         Ya sea que estés empezando o tengas experiencia, aquí encontrarás las herramientas que te ayudarán a avanzar en tu danza.
                     </p>
 
-                    <div class="mt-10 space-y-3 border-t border-gray-100 pt-8">
-                        <div class="flex items-start gap-3">
-                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Módulo I disponible ahora — 10 sesiones</p>
+                    <div class="mt-6 space-y-2 border-t border-gray-100 pt-5">
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-purple-primary font-black text-sm">✓</span>
+                            <p class="text-gray-700 text-sm font-medium">Módulo I disponible ahora — 10 sesiones</p>
                         </div>
-                        <div class="flex items-start gap-3">
-                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Repite cada sesión las veces que necesites</p>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-purple-primary font-black text-sm">✓</span>
+                            <p class="text-gray-700 text-sm font-medium">Repite cada sesión las veces que necesites</p>
                         </div>
-                        <div class="flex items-start gap-3">
-                            <span class="mt-0.5 text-purple-primary font-black">✓</span>
-                            <p class="text-gray-700 font-medium">Técnica, timing, groove y performance</p>
+                        <div class="flex items-center gap-2.5">
+                            <span class="text-purple-primary font-black text-sm">✓</span>
+                            <p class="text-gray-700 text-sm font-medium">Técnica, timing, groove y performance</p>
                         </div>
                     </div>
 
@@ -208,40 +208,76 @@
                 </div>
 
                 <!-- Módulos -->
-                <div class="lg:w-7/12 space-y-2 lg:pt-[2.1rem]">
+                <div class="lg:w-7/12 space-y-3 lg:pt-[2.1rem]">
+
+                    <!-- Módulo I — destacado -->
+                    <div class="bg-white border border-purple-primary/30 rounded-2xl overflow-hidden shadow-xl shadow-purple-primary/10 page-enter">
+
+                        <!-- Header -->
+                        <div class="relative px-6 pt-6 pb-5 border-b border-gray-100">
+                            <div class="absolute top-0 left-0 right-0 h-0.5 bg-gradient-to-r from-purple-primary via-purple-light to-transparent rounded-t-2xl"></div>
+                            <span class="inline-flex items-center gap-1.5 text-[10px] font-bold uppercase tracking-widest text-purple-primary bg-purple-50 px-2.5 py-1 rounded-full mb-3">
+                                <span class="w-1.5 h-1.5 rounded-full bg-purple-primary"></span>
+                                Módulo I · Disponible
+                            </span>
+                            <h3 class="font-display font-bold text-gray-900 text-xl mb-1">Pasos Fundamentales</h3>
+                            <p class="text-xs text-gray-400 font-medium">Básico &nbsp;·&nbsp; 10 sesiones</p>
+                        </div>
+
+                        <!-- Sesiones -->
+                        <div class="px-6 py-4">
+                            <p class="text-[10px] font-bold uppercase tracking-widest text-gray-400 mb-3">Contenido del módulo</p>
+                            <ul class="grid grid-cols-2 gap-x-4 gap-y-2">
+                                @foreach([
+                                    ['Lock',             '01'],
+                                    ['Keeping Time',     '02'],
+                                    ['Wrist Roll',       '03'],
+                                    ['Point',            '04'],
+                                    ['Back Clap',        '05'],
+                                    ['Lock Lock',        '06'],
+                                    ['Give Yourself Five','07'],
+                                    ['y más...',         '08'],
+                                ] as [$move, $n])
+                                    <li class="flex items-center gap-2.5">
+                                        <span class="text-[10px] font-bold text-gray-300 w-4 shrink-0">{{ $n }}</span>
+                                        <span class="text-sm text-gray-700 font-medium">{{ $move }}</span>
+                                    </li>
+                                @endforeach
+                            </ul>
+                            <p class="text-xs text-gray-400 mt-3">+ Coreografía y freestyle con los 8 fundamentos</p>
+                        </div>
+
+                        <!-- CTA -->
+                        <div class="px-6 pb-6">
+                            <a href="{{ route('register') }}" wire:navigate
+                               class="flex items-center justify-center gap-2 w-full py-3 bg-purple-primary hover:bg-purple-dark text-white text-sm font-bold rounded-xl transition duration-300 group">
+                                Empezar curso
+                                <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Módulos secundarios -->
                     @foreach([
-                        ['num' => 'I',   'name' => 'Pasos Fundamentales',                    'level' => 'Básico',         'sessions' => '10 sesiones', 'active' => true],
-                        ['num' => 'II',  'name' => 'Pasos Compuestos y Complementarios',      'level' => 'Intermedio',     'sessions' => null,          'active' => false],
-                        ['num' => 'III', 'name' => 'Power Moves & Tricks',                    'level' => 'Avanzado',       'sessions' => null,          'active' => false],
-                        ['num' => '✦',  'name' => 'Acondicionamiento, cultura y comunidad',   'level' => 'Complementario', 'sessions' => null,          'active' => false],
+                        ['num' => 'II',  'name' => 'Pasos Compuestos y Complementarios', 'level' => 'Intermedio'],
+                        ['num' => 'III', 'name' => 'Power Moves & Tricks',               'level' => 'Avanzado'],
+                        ['num' => '✦',  'name' => 'Acondicionamiento, cultura y comunidad', 'level' => 'Complementario'],
                     ] as $mod)
-                        <div class="flex items-center gap-4 px-4 py-3 rounded-xl border page-enter transition-all duration-200
-                            {{ $mod['active']
-                                ? 'bg-purple-primary border-purple-primary text-white shadow-lg shadow-purple-primary/20'
-                                : 'bg-white border-gray-100 text-gray-700 hover:border-gray-200 hover:shadow-sm' }}">
-                            <span class="text-xs font-black w-6 text-center shrink-0 {{ $mod['active'] ? 'text-white/50' : 'text-gray-300' }}">{{ $mod['num'] }}</span>
-                            <div class="flex-1 min-w-0">
-                                <p class="text-sm font-semibold truncate">{{ $mod['name'] }}</p>
+                        <div class="flex items-center justify-between px-4 py-3 rounded-xl bg-gray-50 border border-gray-100 page-enter">
+                            <div class="flex items-center gap-3">
+                                <span class="text-xs font-bold text-gray-300 w-5 text-center">{{ $mod['num'] }}</span>
+                                <div>
+                                    <p class="text-sm font-semibold text-gray-700">{{ $mod['name'] }}</p>
+                                    <p class="text-xs text-gray-400 font-medium">{{ $mod['level'] }}</p>
+                                </div>
                             </div>
-                            <div class="flex items-center gap-3 shrink-0">
-                                <span class="text-xs font-medium {{ $mod['active'] ? 'text-purple-200' : 'text-gray-400' }}">{{ $mod['level'] }}</span>
-                                @if($mod['sessions'])
-                                    <span class="text-xs font-bold {{ $mod['active'] ? 'text-white/80' : 'text-gray-400' }}">· {{ $mod['sessions'] }}</span>
-                                @endif
-                                @if($mod['active'])
-                                    <a href="{{ route('register') }}" wire:navigate
-                                       class="text-xs font-bold bg-white text-purple-primary px-2.5 py-1 rounded-lg hover:bg-purple-50 transition-colors">
-                                        Empezar
-                                    </a>
-                                @else
-                                    <a href="{{ route('login') }}" wire:navigate
-                                       class="text-xs text-purple-primary font-semibold hover:underline transition-colors">
-                                        Descubre más
-                                    </a>
-                                @endif
-                            </div>
+                            <a href="{{ route('login') }}" wire:navigate
+                               class="text-xs text-purple-primary font-semibold hover:underline shrink-0">
+                                Descubrir →
+                            </a>
                         </div>
                     @endforeach
+
                 </div>
             </div>
         </section>
@@ -255,7 +291,7 @@
                             Entrena a <span class="text-purple-primary font-bold">tu ritmo</span>
                         </h2>
                         <p class="text-gray-600 font-medium text-lg leading-relaxed">
-                            Clases diseñadas para que practiques de verdad. Repite cada clase las veces que necesites, corrige detalles y avanza con seguridad.
+                            Clases diseñadas para que practiques y entrenes. Repite cada clase las veces que necesites, corrige detalles y avanza con seguridad.
                         </p>
                         <ul class="space-y-5 mt-8 border-t border-gray-100 pt-8">
                             <li class="flex items-start gap-4 text-gray-900">
@@ -273,7 +309,7 @@
                                 </div>
                                 <div>
                                     <span class="font-bold block">Ruta clara por nivel</span>
-                                    <span class="text-gray-600 text-sm">De fundamentos a freestyle, paso a paso</span>
+                                    <span class="text-gray-600 text-sm">De fundamentos a compuestos y power moves, paso a paso</span>
                                 </div>
                             </li>
                             <li class="flex items-start gap-4 text-gray-900">
@@ -282,7 +318,7 @@
                                 </div>
                                 <div>
                                     <span class="font-bold block">Progreso real</span>
-                                    <span class="text-gray-600 text-sm">Técnica, groove, musicalidad y presencia escénica</span>
+                                    <span class="text-gray-600 text-sm">Aprende los pasos, sus nombres y la base del locking</span>
                                 </div>
                             </li>
                         </ul>
@@ -292,7 +328,7 @@
                         <div class="relative bg-black rounded-2xl overflow-hidden shadow-2xl shadow-gray-200 aspect-video group border border-gray-100">
                             <iframe
                                 class="absolute inset-0 w-full h-full"
-                                src="https://www.youtube.com/embed/8b18KD5O3y8?rel=0&modestbranding=1"
+                                src="https://www.youtube.com/embed/q6sA7DxgI6Q?si=8qJTWtTGwxMSpn-C&autoplay=1&mute=1&rel=0&modestbranding=1"
                                 title="Fragmento de clase"
                                 frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -303,7 +339,7 @@
                             <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
                                 <iframe
                                     class="w-full h-full"
-                                    src="https://www.youtube.com/embed/sE9yBbvekb0?rel=0&modestbranding=1"
+                                    src="https://www.youtube.com/embed/8b18KD5O3y8?rel=0&modestbranding=1&autoplay=1&mute=1&rel=0&modestbranding=1"
                                     title="Fragmento de entrenamiento"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -312,7 +348,7 @@
                             <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
                                 <iframe
                                     class="w-full h-full"
-                                    src="https://www.youtube.com/embed/oMY7XiHefVM?rel=0&modestbranding=1"
+                                    src="https://www.youtube.com/embed/oMY7XiHefVM?rel=0&modestbranding=1&autoplay=1&mute=1&rel=0&modestbranding=1"
                                     title="Fragmento de entrenamiento"
                                     frameborder="0"
                                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
@@ -424,10 +460,10 @@
                                 <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Entrena cuando quieras y repite las clases las veces que necesites
                             </li>
                             <li class="flex items-start text-gray-700 text-sm">
-                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Ruta clara por nivel: básico → intermedio → coreos → freestyle
+                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Ruta clara por nivel: fundamentos → compuestos → danzas sociales → power moves
                             </li>
                             <li class="flex items-start text-gray-700 text-sm">
-                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Enfocado en progreso real (técnica + groove + musicalidad)
+                                <span class="text-purple-primary text-lg mr-3 mt-0.5">✓</span> Enfocado en progreso real
                             </li>
                         </ul>
                         <a href="{{ route('register') }}" wire:navigate
@@ -454,7 +490,7 @@
                                 <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> <span class="font-bold text-gray-900">Todo lo del plan mensual</span>
                             </li>
                             <li class="flex items-start text-gray-700 text-sm">
-                                <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> Profundizas en variaciones, limpieza y performance
+                                <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> Profundizas en variaciones, limpieza y fundamentos.
                             </li>
                             <li class="flex items-start text-gray-700 text-sm">
                                 <span class="text-purple-600 text-lg mr-3 mt-0.5">✓</span> Constancia real: 12 semanas para ver un antes y un después

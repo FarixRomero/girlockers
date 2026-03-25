@@ -136,22 +136,22 @@
                         Academia online de Locking
                     </p>
                     <h1 class="font-display font-bold text-5xl md:text-7xl text-white mb-6 leading-tight page-enter" style="animation-delay: 0.05s;">
-                        Aprende <span class="font-bold text-purple-light">locking</span> con cursos estructurados
+                        Aprende <span class="font-bold text-purple-light">locking</span> paso a paso
                     </h1>
                     <p class="text-lg md:text-xl text-gray-300 mb-10 font-medium max-w-xl leading-relaxed page-enter" style="animation-delay: 0.1s;">
-                        Aprende desde cero, a tu ritmo. Entrena fundamentos, compuestos, combos y freestyle con una ruta clara donde estes.
+                        Entrena a tu ritmo, desarrolla tu estilo y descubre tu esencia mientras construyes seguridad, disciplina y confianza.
                     </p>
                         <div class="flex flex-col sm:flex-row gap-6 page-enter" style="animation-delay: 0.15s;">
                             <a class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-primary/30 hover:shadow-xl"
                                href="{{ route('register') }}" wire:navigate>
-                                Empezar ahora
+                                Empezar hoy
                             </a>
                             <a class="group border border-white/30 text-white px-8 py-4 rounded-xl font-semibold text-center hover:border-purple-light hover:text-purple-light transition duration-300 flex items-center justify-center gap-3 text-sm bg-white/10 backdrop-blur-sm"
                                href="#video-demo">
                                 <span class="inline-flex items-center justify-center w-6 h-6 border border-white/30 group-hover:border-purple-light rounded-full">
                                     <svg class="w-4 h-4 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
                                 </span>
-                                Ver demo
+                                Ver demostraciones
                             </a>
                         </div>
                     </div>
@@ -186,15 +186,15 @@
 
                     <div class="mt-6 space-y-2 border-t border-gray-100 pt-5">
                         <div class="flex items-center gap-2.5">
-                            <span class="text-purple-primary font-black text-sm">✓</span>
-                            <p class="text-gray-700 text-sm font-medium">Módulo I disponible ahora — 10 sesiones</p>
+                            <span class="text-purple-primary font-black text-sm">✓ </span>
+                            <p class="text-gray-700 text-sm font-medium">Desarrolla tu estilo con una guía clara y progresiva.</p>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <span class="text-purple-primary font-black text-sm">✓</span>
+                            <span class="text-purple-primary font-black text-sm">✓ </span>
                             <p class="text-gray-700 text-sm font-medium">Repite cada sesión las veces que necesites</p>
                         </div>
                         <div class="flex items-center gap-2.5">
-                            <span class="text-purple-primary font-black text-sm">✓</span>
+                            <span class="text-purple-primary font-black text-sm">✓ </span>
                             <p class="text-gray-700 text-sm font-medium">Técnica, timing, groove y performance</p>
                         </div>
                     </div>

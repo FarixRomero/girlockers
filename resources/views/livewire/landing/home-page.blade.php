@@ -174,8 +174,8 @@
         </section>
 
         <section class="py-24 bg-white" id="clases">
-            <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-16 items-start">
-                <div class="lg:w-5/12 page-enter">
+            <div class="container mx-auto px-4 flex flex-col lg:flex-row gap-16 items-center">
+                <div class="lg:w-1/2 page-enter">
                     <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm mb-3">Primer curso</p>
                     <h2 class="font-display font-bold text-4xl md:text-5xl mb-6 text-black leading-tight">
                         Locking desde <span class="text-brand-dark">cero</span>
@@ -208,7 +208,7 @@
                 </div>
 
                 <!-- Módulos -->
-                <div class="lg:w-7/12 space-y-3 lg:pt-[2.1rem]">
+                <div class="lg:w-1/2 space-y-3">
 
                     <!-- Módulo I — destacado -->
                     <div class="bg-white border border-purple-primary/30 rounded-2xl overflow-hidden shadow-xl shadow-purple-primary/10 page-enter">

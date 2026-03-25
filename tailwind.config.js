@@ -13,6 +13,7 @@ export default {
         extend: {
             colors: {
                 // Paleta Girls Lockers - Light Theme
+                'brand-dark': '#6B21A8', // Morado oscuro marca - Textos fuertes
                 'purple-primary': '#8B5CF6', // Morado principal - Color primario
                 'purple-dark': '#6D28D9', // Morado oscuro - Hover states
                 'purple-light': '#A78BFA', // Morado claro - Acentos suaves

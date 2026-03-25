@@ -22,7 +22,7 @@
                     <a class="text-sm font-semibold hover:text-purple-primary transition-colors text-gray-700" href="{{ route('login') }}" wire:navigate>
                         Ingresar
                     </a>
-                    <a class="bg-purple-primary hover:bg-purple-dark text-white px-5 py-2.5 rounded-xl transition-all duration-300 text-sm font-bold shadow-lg shadow-purple-100 hover:shadow-xl"
+                    <a class="bg-brand-dark hover:bg-purple-dark text-white px-5 py-2.5 rounded-xl transition-all duration-300 text-sm font-bold shadow-lg shadow-purple-100 hover:shadow-xl"
                        href="{{ route('register') }}" wire:navigate>
                         Empezar ahora
                     </a>
@@ -93,7 +93,7 @@
                                     Ingresar
                                 </a>
                                 <a href="{{ route('register') }}" wire:navigate
-                                   class="w-full text-center py-4 rounded-xl bg-purple-primary hover:bg-purple-dark text-white font-bold text-base shadow-lg shadow-purple-100 transition-all duration-300">
+                                   class="w-full text-center py-4 rounded-xl bg-brand-dark hover:bg-purple-dark text-white font-bold text-base shadow-lg shadow-purple-100 transition-all duration-300">
                                     Empezar ahora
                                 </a>
                             </div>
@@ -142,7 +142,7 @@
                         Entrena a tu ritmo, desarrolla tu estilo y descubre tu esencia mientras construyes seguridad, disciplina y confianza.
                     </p>
                         <div class="flex flex-col sm:flex-row gap-6 page-enter" style="animation-delay: 0.15s;">
-                            <a class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-primary/30 hover:shadow-xl"
+                            <a class="bg-brand-dark hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-primary/30 hover:shadow-xl"
                                href="{{ route('register') }}" wire:navigate>
                                 Empezar hoy
                             </a>
@@ -178,7 +178,7 @@
                 <div class="lg:w-5/12 page-enter">
                     <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm mb-3">Primer curso</p>
                     <h2 class="font-display font-bold text-4xl md:text-5xl mb-6 text-black leading-tight">
-                        Locking desde cero
+                        Locking desde <span class="text-brand-dark">cero</span>
                     </h2>
                     <p class="text-gray-600 font-medium text-lg leading-relaxed max-w-xl">
                         Ya sea que estés empezando o tengas experiencia, aquí encontrarás las herramientas que te ayudarán a avanzar en tu danza.
@@ -201,7 +201,7 @@
 
                     <div class="mt-10">
                         <a href="{{ route('register') }}" wire:navigate
-                           class="inline-flex items-center justify-center px-8 py-4 bg-purple-primary hover:bg-purple-dark text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:shadow-xl transition duration-300">
+                           class="inline-flex items-center justify-center px-8 py-4 bg-brand-dark hover:bg-purple-dark text-white font-bold rounded-xl shadow-lg shadow-purple-100 hover:shadow-xl transition duration-300">
                             Empezar ahora
                         </a>
                     </div>
@@ -222,6 +222,11 @@
                             </span>
                             <h3 class="font-display font-bold text-gray-900 text-xl mb-1">Pasos Fundamentales</h3>
                             <p class="text-xs text-gray-400 font-medium">Básico &nbsp;·&nbsp; 10 sesiones</p>
+                        </div>
+
+                        <!-- Imagen destacada -->
+                        <div class="overflow-hidden h-64">
+                            <img src="{{ asset('images/imagen.jpg') }}" alt="Pasos Fundamentales" class="w-full h-full object-cover object-center">
                         </div>
 
                         <!-- Sesiones -->
@@ -250,7 +255,7 @@
                         <!-- CTA -->
                         <div class="px-6 pb-6">
                             <a href="{{ route('register') }}" wire:navigate
-                               class="flex items-center justify-center gap-2 w-full py-3 bg-purple-primary hover:bg-purple-dark text-white text-sm font-bold rounded-xl transition duration-300 group">
+                               class="flex items-center justify-center gap-2 w-full py-3 bg-brand-dark hover:bg-purple-dark text-white text-sm font-bold rounded-xl transition duration-300 group">
                                 Empezar curso
                                 <svg class="w-4 h-4 group-hover:translate-x-0.5 transition-transform" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
                             </a>
@@ -282,39 +287,44 @@
             </div>
         </section>
 
-        <section class="py-24 bg-gray-50 border-y border-gray-100" id="video-demo">
-            <div class="container mx-auto px-4">
+        <section class="py-24 border-y border-gray-100 relative overflow-hidden" id="video-demo">
+            <!-- Fondo con degradado suave -->
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-ultralight via-white to-gray-50 pointer-events-none"></div>
+            <!-- Glow central -->
+            <div class="absolute top-1/2 left-1/4 -translate-y-1/2 w-[600px] h-[600px] bg-purple-primary/10 rounded-full blur-[120px] pointer-events-none"></div>
+            <div class="absolute top-1/2 right-1/4 -translate-y-1/2 w-[400px] h-[400px] bg-brand-dark/8 rounded-full blur-[100px] pointer-events-none"></div>
+            <div class="relative z-10 container mx-auto px-4">
                 <div class="flex flex-col lg:flex-row items-center gap-16">
                     <div class="lg:w-5/12 space-y-8 order-2 lg:order-1 page-enter">
-                        <p class="text-purple-primary font-bold tracking-[0.2em] uppercase text-sm">Aprende a tu manera</p>
-                        <h2 class="font-display font-bold text-4xl md:text-5xl text-black leading-tight">
-                            Entrena a <span class="text-purple-primary font-bold">tu ritmo</span>
+                        <p class="text-brand-dark font-bold tracking-[0.2em] uppercase text-sm">Aprende a tu manera</p>
+                        <h2 class="font-display font-bold text-4xl md:text-5xl text-brand-dark leading-tight">
+                            Entrena a <span class="font-bold">tu ritmo</span>
                         </h2>
                         <p class="text-gray-600 font-medium text-lg leading-relaxed">
                             Clases diseñadas para que practiques y entrenes. Repite cada clase las veces que necesites, corrige detalles y avanza con seguridad.
                         </p>
                         <ul class="space-y-5 mt-8 border-t border-gray-100 pt-8">
-                            <li class="flex items-start gap-4 text-gray-900">
+                            <li class="flex items-start gap-4 text-brand-dark">
                                 <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
-                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                                    <svg class="w-5 h-5 text-brand-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
                                 </div>
                                 <div>
                                     <span class="font-bold block">Sin horarios fijos</span>
                                     <span class="text-gray-600 text-sm">Entrena cuando quieras y repite cada clase sin límite</span>
                                 </div>
                             </li>
-                            <li class="flex items-start gap-4 text-gray-900">
+                            <li class="flex items-start gap-4 text-brand-dark">
                                 <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
-                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                                    <svg class="w-5 h-5 text-brand-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
                                 </div>
                                 <div>
                                     <span class="font-bold block">Ruta clara por nivel</span>
                                     <span class="text-gray-600 text-sm">De fundamentos a compuestos y power moves, paso a paso</span>
                                 </div>
                             </li>
-                            <li class="flex items-start gap-4 text-gray-900">
+                            <li class="flex items-start gap-4 text-brand-dark">
                                 <div class="bg-white p-2.5 rounded-xl border border-gray-100 shadow-sm shrink-0">
-                                    <svg class="w-5 h-5 text-purple-primary" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                                    <svg class="w-5 h-5 text-brand-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                                 </div>
                                 <div>
                                     <span class="font-bold block">Progreso real</span>
@@ -364,7 +374,7 @@
         <section class="py-24 bg-white" id="instructoras">
             <div class="container mx-auto px-4">
                 <div class="text-center mb-16 page-enter">
-                    <h2 class="font-display font-bold text-4xl mb-4 text-gray-900">Instructoras</h2>
+                    <h2 class="font-display font-bold text-4xl mb-4 text-brand-dark">Instructoras</h2>
                 </div>
 
                 @php
@@ -421,7 +431,7 @@
 
                             <div class="mt-10 flex flex-col sm:flex-row gap-4">
                                 <a href="{{ route('register') }}" wire:navigate
-                                   class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl">
+                                   class="bg-brand-dark hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl">
                                     Empezar ahora
                                 </a>
                                 @if($instructorIg)
@@ -438,8 +448,12 @@
         </section>
 
         <!-- Planes -->
-        <section class="py-24 bg-gray-900" id="planes">
-            <div class="container mx-auto px-4">
+        <section class="py-24 relative overflow-hidden" id="planes">
+            <div class="absolute inset-0 z-0">
+                <img src="{{ asset('images/imagen2.jpg') }}" alt="" class="w-full h-full object-cover object-center">
+                <div class="absolute inset-0 bg-black/75"></div>
+            </div>
+            <div class="relative z-10 container mx-auto px-4">
                 <div class="text-center mb-16 page-enter">
                     <h2 class="font-display font-bold text-4xl mb-4 text-white">Membresía</h2>
                     <p class="text-gray-400 font-medium text-lg">Elige el plan que se adapte a ti y empieza a entrenar hoy.</p>
@@ -522,7 +536,7 @@
                         </p>
                         <div class="mt-10">
                             <a href="{{ route('register') }}" wire:navigate
-                               class="bg-purple-primary hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl inline-flex">
+                               class="bg-brand-dark hover:bg-purple-dark text-white px-8 py-4 rounded-xl font-bold text-center transition duration-300 shadow-lg shadow-purple-100 hover:shadow-xl inline-flex">
                                 Empezar ahora
                             </a>
                         </div>

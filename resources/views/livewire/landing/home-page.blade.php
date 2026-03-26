@@ -236,12 +236,7 @@
                                 @foreach([
                                     ['Lock',             '01'],
                                     ['Keeping Time',     '02'],
-                                    ['Wrist Roll',       '03'],
-                                    ['Point',            '04'],
-                                    ['Back Clap',        '05'],
-                                    ['Lock Lock',        '06'],
-                                    ['Give Yourself Five','07'],
-                                    ['y más...',         '08'],
+                                    ['y más...',         '03'],
                                 ] as [$move, $n])
                                     <li class="flex items-center gap-2.5">
                                         <span class="text-[10px] font-bold text-gray-300 w-4 shrink-0">{{ $n }}</span>
@@ -345,26 +340,6 @@
                                 allowfullscreen></iframe>
                         </div>
 
-                        <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
-                                <iframe
-                                    class="w-full h-full"
-                                    src="https://www.youtube.com/embed/8b18KD5O3y8?rel=0&modestbranding=1&autoplay=1&mute=1&rel=0&modestbranding=1"
-                                    title="Fragmento de entrenamiento"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
-                            </div>
-                            <div class="rounded-2xl overflow-hidden border border-gray-100 bg-black shadow-xl aspect-video">
-                                <iframe
-                                    class="w-full h-full"
-                                    src="https://www.youtube.com/embed/oMY7XiHefVM?rel=0&modestbranding=1&autoplay=1&mute=1&rel=0&modestbranding=1"
-                                    title="Fragmento de entrenamiento"
-                                    frameborder="0"
-                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                                    allowfullscreen></iframe>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
